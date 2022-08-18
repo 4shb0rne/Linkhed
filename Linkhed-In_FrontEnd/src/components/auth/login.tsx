@@ -1,6 +1,24 @@
 import "../../styles/auth.scss";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios"
 
 const login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const submit = () =>{
+    const data = {
+      email: email,
+      password: password
+    }
+    axios.post('http://localhost:8080/login', data).then((response)=>{
+    const status = response.status
+    if(status == 201){ //success
+      navigate('/');
+    } 
+  })
+  }
   return (
     <div className="container-login">
       <h2>
@@ -21,6 +39,9 @@ const login = () => {
             id="email"
             placeholder="Email"
             required
+            onChange={(e)=>{
+              setEmail(e.target.value);
+            }}
           />
         </div>
         <div className="input">
@@ -30,18 +51,23 @@ const login = () => {
             id="password"
             placeholder="Password"
             required
+            onChange={(e)=>{
+              setPassword(e.target.value);
+            }}
           />
         </div>
       </div>
       <a href="#" className="forgot-password-link">
         Forgot Password?
       </a>
-      <button className="login-btn">Sign in</button>
+      <button className="login-btn" onClick={()=>{
+        submit();
+      }}>Sign in</button>
       <p className="join-link">
         New to linkedin?
-        <a href="/register" className="join-now">
+        <Link to={"/register"} className="join-now">
           Join now
-        </a>
+        </Link>
       </p>
     </div>
   );
