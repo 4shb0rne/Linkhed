@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-
+	"time"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/auth"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
@@ -24,25 +24,26 @@ func (server *Server) Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Print(r)
 	err = json.Unmarshal(body, &user)
 	if err != nil {
-		fmt.Print("error 2")
+		fmt.Print("1")
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-
 	user.Prepare()
 	err = user.Validate("login")
 	if err != nil {
-		fmt.Print("error 3")
+		fmt.Print("2")		
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
 	token, err := server.SignIn(user.Email, user.Password)
 	if err != nil {
-		fmt.Print("error 4")
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
 		return
 	}
+	expiration := time.Now().Add(5 * time.Hour)
+    cookie := &http.Cookie{Name: "token",Value:token,Expires:expiration}
+    http.SetCookie(w, cookie)
 	responses.JSON(w, http.StatusOK, token)
 }
 
@@ -61,4 +62,23 @@ func (server *Server) SignIn(email, password string) (string, error) {
 		return "", err
 	}
 	return auth.CreateToken(user.ID)
+}
+
+
+func (server *Server) GetCurrentUser(w http.ResponseWriter, r *http.Request){
+
+	user_id, err := auth.ExtractTokenID(r)
+	
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	user := models.User{}
+	u,err := user.FindUserByID(server.DB, user_id)
+	
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, u)
 }

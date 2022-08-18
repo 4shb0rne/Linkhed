@@ -1,24 +1,26 @@
 import "../../styles/auth.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios"
+import axios from "axios";
 
 const login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const submit = () =>{
+  const submit = () => {
     const data = {
       email: email,
-      password: password
-    }
-    axios.post('http://localhost:8080/login', data).then((response)=>{
-    const status = response.status
-    if(status == 201){ //success
-      navigate('/');
-    } 
-  })
-  }
+      password: password,
+    };
+    axios.post("http://localhost:8080/login", data).then((response) => {
+      const status = response.status;
+      console.log(status);
+      if (status == 200) {
+        //success
+        navigate("/");
+      }
+    });
+  };
   return (
     <div className="container-login">
       <h2>
@@ -39,7 +41,7 @@ const login = () => {
             id="email"
             placeholder="Email"
             required
-            onChange={(e)=>{
+            onChange={(e) => {
               setEmail(e.target.value);
             }}
           />
@@ -51,7 +53,7 @@ const login = () => {
             id="password"
             placeholder="Password"
             required
-            onChange={(e)=>{
+            onChange={(e) => {
               setPassword(e.target.value);
             }}
           />
@@ -60,9 +62,14 @@ const login = () => {
       <a href="#" className="forgot-password-link">
         Forgot Password?
       </a>
-      <button className="login-btn" onClick={()=>{
-        submit();
-      }}>Sign in</button>
+      <button
+        className="login-btn"
+        onClick={() => {
+          submit();
+        }}
+      >
+        Sign in
+      </button>
       <p className="join-link">
         New to linkedin?
         <Link to={"/register"} className="join-now">
