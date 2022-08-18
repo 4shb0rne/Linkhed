@@ -4,6 +4,7 @@ import Register from "./components/auth/register";
 import Navbar from "./components/layout/navbar";
 import Footer from "./components/layout/footer";
 import ForgetPassword from "./components/auth/forgetpassword";
+import ResetPassword from "./components/auth/resetpassword";
 function App() {
   return (
     <BrowserRouter>
@@ -15,6 +16,10 @@ function App() {
         <Route
           path="/forgetpassword"
           element={<ForgetPassword></ForgetPassword>}
+        ></Route>
+        <Route
+          path="/resetpassword"
+          element={<ResetPassword></ResetPassword>}
         ></Route>
       </Routes>
       <Footer></Footer>
