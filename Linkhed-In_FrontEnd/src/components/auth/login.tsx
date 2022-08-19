@@ -2,7 +2,7 @@ import "../../styles/auth.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-
+import Cookies from 'universal-cookie'
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -14,10 +14,16 @@ const login = () => {
     };
     axios.post("http://localhost:8080/login", data).then((response) => {
       const status = response.status;
+      const data = response.data;
       console.log(status);
       if (status == 200) {
         //success
+        const cookies = new Cookies();
+        const date = new Date();
+        date.setTime(date.getTime() + (6*60*60*1000))
+        cookies.set('token', data, { path: '/', expires: date})
         navigate("/");
+        console.log(cookies.get('token'));
       }
     });
   };

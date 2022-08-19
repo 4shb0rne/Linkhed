@@ -15,6 +15,8 @@
 }
 
 .container-login {
+  display:flex; 
+  flex-direction:column; 
   width: 350px;
   height: 480px;
   background: #fff;
@@ -41,6 +43,8 @@
 }
 
 .container-register {
+  display:flex; 
+  flex-direction:column; 
   width: 420px;
   height: 360px;
   background: #fff;

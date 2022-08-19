@@ -44,6 +44,7 @@ func ExtractToken(r *http.Request) string {
 	keys := r.URL.Query()
 	token := keys.Get("token")
 	if token != "" {
+		fmt.Print(token)
 		return token
 	}
 	bearerToken := r.Header.Get("Authorization")

@@ -13,7 +13,7 @@ const submit = () =>{
     email: email,
     password: password
   }
-  axios.post('http://localhost:8080/users', data).then((response)=>{
+  axios.post('http://localhost:8080/register', data).then((response)=>{
     const status = response.status
     if(status == 201){ //success
       navigate('/login');
