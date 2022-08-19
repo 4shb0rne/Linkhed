@@ -2,7 +2,7 @@ import "../../styles/auth.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import Cookies from 'universal-cookie'
+import Cookies from "universal-cookie";
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,10 +20,9 @@ const login = () => {
         //success
         const cookies = new Cookies();
         const date = new Date();
-        date.setTime(date.getTime() + (6*60*60*1000))
-        cookies.set('token', data, { path: '/', expires: date})
+        date.setTime(date.getTime() + 6 * 60 * 60 * 1000);
+        cookies.set("token", data, { path: "/", expires: date });
         navigate("/");
-        console.log(cookies.get('token'));
       }
     });
   };
