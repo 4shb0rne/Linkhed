@@ -1,29 +1,19 @@
 import "../../styles/auth.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
+
 
 const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
   const submit = () => {
-    const data = {
-      email: email,
-      password: password,
-    };
-    axios.post("http://localhost:8080/register", data).then((response) => {
-      const status = response.status;
-      console.log("invalid 2");
-      if (status == 201) {
-        //success
-        navigate("/login");
-      } else {
-        console.log("invalid");
-        setError("Invalid Data");
+    navigate('/registerdata', {
+      state:{
+        email: email,
+        password: password
       }
-    });
+    })
   };
   return (
     <div>
@@ -53,7 +43,6 @@ const register = () => {
             ></input>
           </div>
         </div>
-        <div>{error ? "Invalid Data" : ""}</div>
         <button
           className="register-btn"
           onClick={() => {

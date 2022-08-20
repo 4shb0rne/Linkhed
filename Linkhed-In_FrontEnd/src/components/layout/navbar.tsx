@@ -34,7 +34,7 @@ const navbar = () => {
         </div>
 
         <div className="nav-links">
-          <Link to="/login">Sign Up</Link>
+          <Link to="/login">Sign In</Link>
           <Link to="/register">Register</Link>
         </div>
       </div>
@@ -64,7 +64,7 @@ const navbar = () => {
           <nav>
             <ul>
               <li>
-                <Link to="/" className="text-white">
+                <Link to="/home" className="text-white">
                   <div className="header_logo">
                     <span className="fas fa-home"></span>
                     <span className="nav-item-text">Home</span>

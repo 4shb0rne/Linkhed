@@ -22,7 +22,8 @@ const login = () => {
         const date = new Date();
         date.setTime(date.getTime() + 6 * 60 * 60 * 1000);
         cookies.set("token", data, { path: "/", expires: date });
-        navigate("/");
+        navigate("/home");
+        window.location.reload()
       }
     });
   };
@@ -30,9 +31,6 @@ const login = () => {
     <div className="container-login">
       <h2>
         LinkedIn
-        <span>
-          <i className="fab fa-linkedin"></i>
-        </span>
       </h2>
       <div className="text">
         <h1>Sign in</h1>

@@ -6,6 +6,7 @@ import Footer from "./components/layout/footer";
 import ForgetPassword from "./components/auth/forgetpassword";
 import ResetPassword from "./components/auth/resetpassword";
 import MainPage from "./pages/home";
+import RegisterData from "./components/auth/registerdata";
 function App() {
   return (
     <BrowserRouter>
@@ -22,6 +23,7 @@ function App() {
           path="/resetpassword"
           element={<ResetPassword></ResetPassword>}
         ></Route>
+        <Route path="/registerdata" element={<RegisterData></RegisterData>}></Route>
         <Route path="/home" element={<MainPage></MainPage>}></Route>
       </Routes>
       <Footer></Footer>

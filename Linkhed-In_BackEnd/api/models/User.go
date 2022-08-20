@@ -14,7 +14,8 @@ import (
 
 type User struct {
 	ID        uint32    `gorm:"primary_key;auto_increment" json:"id"`
-	Fullname  string    `gorm:"size:255;" json:"fullname"`
+	Firstname string    `gorm:"size:255;" json:"firstname"`
+	Lastname  string    `gorm:"size:255;" json:"lastname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Password  string    `gorm:"size:100;not null;" json:"password"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
@@ -40,7 +41,8 @@ func (u *User) BeforeSave() error {
 
 func (u *User) Prepare() {
 	u.ID = 0
-	u.Fullname = html.EscapeString(strings.TrimSpace(u.Fullname))
+	u.Firstname = html.EscapeString(strings.TrimSpace(u.Firstname))
+	u.Lastname = html.EscapeString(strings.TrimSpace(u.Lastname))
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
@@ -48,7 +50,8 @@ func (u *User) Prepare() {
 
 func (u *User) PrepareCreate() {
 	u.ID = 0
-	u.Fullname = ""
+	u.Firstname = html.EscapeString(strings.TrimSpace(u.Firstname))
+	u.Lastname = html.EscapeString(strings.TrimSpace(u.Lastname))
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
@@ -57,8 +60,11 @@ func (u *User) PrepareCreate() {
 func (u *User) Validate(action string) error {
 	switch strings.ToLower(action) {
 	case "update":
-		if u.Fullname == "" {
-			return errors.New("required username")
+		if u.Firstname == "" {
+			return errors.New("required firstname")
+		}
+		if u.Lastname == "" {
+			return errors.New("required lastname")
 		}
 		if u.Password == "" {
 			return errors.New("required password")
@@ -134,7 +140,8 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	}
 	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).UpdateColumns(
 		map[string]interface{}{
-			"fullname":   u.Fullname,
+			"firstname":  u.Firstname,
+			"lastname":   u.Lastname,
 			"email":      u.Email,
 			"password":   u.Password,
 			"updated_at": time.Now(),
