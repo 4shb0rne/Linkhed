@@ -1,0 +1,146 @@
+.box-shadow {
+  box-shadow: 0px 1px 1px 0px;
+}
+
+#profile-upper {
+  position: relative;
+}
+
+#profile-d {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  height: 180px;
+  z-index: 0;
+  display: flex;
+  justify-content: flex-start;
+  left: 0;
+}
+
+#profile-banner-image {
+  height: 360px;
+  overflow: hidden;
+  z-index: 0;
+}
+
+#profile-banner-image img {
+  width: 100%;
+  margin-top: -20%;
+}
+
+#profile-pic {
+  width: 180px;
+  height: 180px;
+  border-radius: 100px;
+  margin-top: 28px;
+  overflow: hidden;
+  border: 1px solid black;
+  box-shadow: 0 0 0 5px #fff;
+}
+
+#profile-pic img {
+  width: 100%;
+}
+
+#u-name {
+  position: absolute;
+  top: 120px;
+  left: 208px;
+  color: #fff;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+#m-btns {
+  position: absolute;
+  right: 56px;
+  bottom: 20px;
+  width: 211px;
+}
+
+#m-btns .td {
+  padding: 0 8px;
+}
+
+.m-btn {
+  cursor: pointer;
+  color: #0e0e0e;
+  font-size: 14px;
+  white-space: pre;
+  padding: 5px 8px 6px 8px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 2px;
+}
+
+.m-btn i {
+  font-size: 16px;
+  margin-right: 1px;
+  vertical-align: middle;
+}
+
+.m-btn span {
+  position: relative;
+  top: 1px;
+}
+
+#edit-profile {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+#edit-profile i {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+#black-grd {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  height: 300px;
+  background: linear-gradient(rgba(0, 0, 0, 0) 71%, rgba(0, 0, 0, 0.53));
+  z-index: -1;
+}
+
+//=====================
+//       Body
+//=====================
+.flex {
+  display: flex;
+}
+
+.flex-space-between {
+  justify-content: space-between;
+}
+
+mt-2 {
+  margin-top: 20px;
+}
+
+ml-2 {
+  margin-left: 20px;
+}
+
+.mt-5 {
+  margin-top: 50px;
+}
+
+.m-10 {
+  margin-left: 10rem;
+  margin-right: 10rem;
+}
+
+.btn-none {
+  width: 50px;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}

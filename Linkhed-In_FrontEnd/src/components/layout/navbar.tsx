@@ -3,20 +3,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 // import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import getUser from "../../utils/getUser";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../utils/auth";
 
 const navbar = () => {
-  const [user, setUser] = useState(null);
+  const auth = useAuth();
   const fetch_user = async () => {
     const User = await getUser();
-    setUser(User);
+    auth.login(User);
   };
   useEffect(() => {
     fetch_user();
   }, []);
-  if (!user) {
+  if (!auth.user) {
     return (
       <div className="nav">
         <input type="checkbox" id="nav-check" />
@@ -103,7 +104,7 @@ const navbar = () => {
                   onClick={() => {
                     const cookies = new Cookies();
                     cookies.remove("token");
-                    setUser(null);
+                    auth.logout();
                   }}
                 >
                   <span className="fa fa-sign-out"></span>

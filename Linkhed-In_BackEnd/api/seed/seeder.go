@@ -13,12 +13,14 @@ var users = []models.User{
 		Lastname:  "Jobs",
 		Email:     "steven@gmail.com",
 		Password:  "password",
+		ProfilePicture : "blank_bjt7w5.png",
 	},
 	models.User{
 		Firstname: "Martin",
 		Lastname:  "Luther",
 		Email:     "luther@gmail.com",
 		Password:  "password",
+		ProfilePicture : "blank_bjt7w5.png",
 	},
 }
 

@@ -7,27 +7,44 @@ import ForgetPassword from "./components/auth/forgetpassword";
 import ResetPassword from "./components/auth/resetpassword";
 import MainPage from "./pages/home";
 import RegisterData from "./components/auth/registerdata";
+import Profile from "./components/auth/profile";
+import { AuthProvider } from "./utils/auth";
+import { RequireAuth } from "./utils/RequireAuth";
+
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar></Navbar>
-      <Routes>
-        <Route path="/"></Route>
-        <Route path="/login" element={<Login></Login>}></Route>
-        <Route path="/register" element={<Register></Register>}></Route>
-        <Route
-          path="/forgetpassword"
-          element={<ForgetPassword></ForgetPassword>}
-        ></Route>
-        <Route
-          path="/resetpassword"
-          element={<ResetPassword></ResetPassword>}
-        ></Route>
-        <Route path="/registerdata" element={<RegisterData></RegisterData>}></Route>
-        <Route path="/home" element={<MainPage></MainPage>}></Route>
-      </Routes>
-      <Footer></Footer>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Navbar></Navbar>
+        <Routes>
+          <Route path="/"></Route>
+          <Route path="/login" element={<Login></Login>}></Route>
+          <Route path="/register" element={<Register></Register>}></Route>
+          <Route
+            path="/forgetpassword"
+            element={<ForgetPassword></ForgetPassword>}
+          ></Route>
+          <Route
+            path="/resetpassword"
+            element={<ResetPassword></ResetPassword>}
+          ></Route>
+          <Route
+            path="/registerdata"
+            element={<RegisterData></RegisterData>}
+          ></Route>
+          <Route path="/home" element={<MainPage></MainPage>}></Route>
+          <Route
+            path="/profile"
+            element={
+              <RequireAuth>
+                <Profile></Profile>
+              </RequireAuth>
+            }
+          ></Route>
+        </Routes>
+        <Footer></Footer>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 

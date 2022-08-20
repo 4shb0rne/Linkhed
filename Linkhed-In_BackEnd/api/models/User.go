@@ -18,6 +18,7 @@ type User struct {
 	Lastname  string    `gorm:"size:255;" json:"lastname"`
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Password  string    `gorm:"size:100;not null;" json:"password"`
+	ProfilePicture string `gorm:"size:255;" json:"profile_picture"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -53,6 +54,7 @@ func (u *User) PrepareCreate() {
 	u.Firstname = html.EscapeString(strings.TrimSpace(u.Firstname))
 	u.Lastname = html.EscapeString(strings.TrimSpace(u.Lastname))
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
+	u.ProfilePicture = "blank_bjt7w5.png";
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
 }
