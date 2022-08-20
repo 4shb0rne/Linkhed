@@ -5,6 +5,7 @@ import Navbar from "./components/layout/navbar";
 import Footer from "./components/layout/footer";
 import ForgetPassword from "./components/auth/forgetpassword";
 import ResetPassword from "./components/auth/resetpassword";
+import MainPage from "./pages/home";
 function App() {
   return (
     <BrowserRouter>
@@ -21,6 +22,7 @@ function App() {
           path="/resetpassword"
           element={<ResetPassword></ResetPassword>}
         ></Route>
+        <Route path="/home" element={<MainPage></MainPage>}></Route>
       </Routes>
       <Footer></Footer>
     </BrowserRouter>
