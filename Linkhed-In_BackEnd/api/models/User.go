@@ -6,7 +6,7 @@ import (
 	"log"
 	"strings"
 	"time"
-
+	"fmt"
 	"github.com/badoux/checkmail"
 	"github.com/jinzhu/gorm"
 	"golang.org/x/crypto/bcrypt"
@@ -159,6 +159,29 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	}
 	return u, nil
 }
+
+
+func (u *User) UpdateProfilePicture(db *gorm.DB, uid uint32) (*User, error) {
+	err := u.BeforeSave()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print(u.ProfilePicture)
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Update(
+		"profile_picture", u.ProfilePicture,
+	)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+	// This is the display the updated user
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
+
+
 
 func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 

@@ -43,6 +43,7 @@ func (server *Server) Run(addr string) {
 		AllowedHeaders:   []string{"Content-Type", "AccessToken", "X-CSRF-Token", "Authorization", "Token"},
 		AllowedOrigins:   []string{"http://localhost:5173", "http://127.0.0.1:5173"},
 		AllowCredentials: true,
+		AllowedMethods: []string{"GET", "POST", "PUT"},
 	})
 	handler := c.Handler(server.Router)
 	log.Fatal(http.ListenAndServe(addr, handler))

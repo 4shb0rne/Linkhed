@@ -1,14 +1,14 @@
 import "../../styles/header.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-// import { faCompass } from "@fortawesome/free-solid-svg-icons";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import getUser from "../../utils/getUser";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/auth";
 
 const navbar = () => {
+  const navigate = useNavigate();
   const auth = useAuth();
   const fetch_user = async () => {
     const User = await getUser();
@@ -105,6 +105,7 @@ const navbar = () => {
                     const cookies = new Cookies();
                     cookies.remove("token");
                     auth.logout();
+                    navigate("/");
                   }}
                 >
                   <span className="fa fa-sign-out"></span>
@@ -112,10 +113,12 @@ const navbar = () => {
                 </div>
               </li>
               <li>
-                <div id="right-border">
-                  <img src="mongo.jpeg" alt="Profile picture" />
-                  <span className="nav-item-text">Profile</span>
-                </div>
+                <Link to="/profile" className="text-white">
+                  <div id="right-border">
+                    <img src="mongo.jpeg" alt="Profile picture" />
+                    <span className="nav-item-text">Profile</span>
+                  </div>
+                </Link>
               </li>
               <li>
                 <div>

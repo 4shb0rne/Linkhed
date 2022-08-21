@@ -22,9 +22,10 @@ func SetMiddlewareJSON(next http.HandlerFunc) http.HandlerFunc {
 
 func SetMiddlewareAuthentication(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		fmt.Print(w)
+		fmt.Print("HALLO")
 		err := auth.TokenValid(r)
 		if err != nil {
+			fmt.Print("GAGAL ANJIR")
 			responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 			return
 		}
