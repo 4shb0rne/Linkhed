@@ -14,6 +14,7 @@ var users = []models.User{
 		Email:     "steven@gmail.com",
 		Password:  "password",
 		ProfilePicture : "blank_bjt7w5.png",
+		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 	},
 	models.User{
 		Firstname: "Martin",
@@ -21,6 +22,7 @@ var users = []models.User{
 		Email:     "luther@gmail.com",
 		Password:  "password",
 		ProfilePicture : "blank_bjt7w5.png",
+		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 	},
 }
 

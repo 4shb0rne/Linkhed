@@ -43,10 +43,37 @@ const profile = () => {
           });
       });
   };
+  const uploadBackgroundImage = (image: any) => {
+    const formData = new FormData();
+    formData.append("file", image[0]);
+    formData.append("upload_preset", "linkhed");
+    axios
+      .post("https://api.cloudinary.com/v1_1/ashbornee/image/upload", formData)
+      .then((response) => {
+        const picture = {
+          background_picture: response.data.public_id,
+        };
+        axios
+          .post(
+            "http://localhost:8080/updatebackgroundpicture/" + auth.user.id,
+            picture,
+            {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res.data);
+            auth.login(res.data);
+          });
+      });
+  };
   const [settingsmodal, setSettingsModal] = useState(false);
   const [addeducationmodal, setAddEducationModal] = useState(false);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
+    const myBackgroundImage = cld.image(auth.user.background_picture);
     myImage.resize(fill().width(250).height(250));
     return (
       <div>
@@ -67,7 +94,17 @@ const profile = () => {
           </Modal>
           <div id="profile-upper">
             <div id="profile-banner-image">
-              <img src="noelle.jfif" alt="Banner image" />
+              <label htmlFor="backgroundupload">
+                <AdvancedImage cldImg={myBackgroundImage} />
+              </label>
+              <input
+                type="file"
+                id="backgroundupload"
+                className="d-none"
+                onChange={(e) => {
+                  uploadBackgroundImage(e.target.files);
+                }}
+              ></input>
             </div>
             <div id="profile-d">
               <div id="profile-pic">

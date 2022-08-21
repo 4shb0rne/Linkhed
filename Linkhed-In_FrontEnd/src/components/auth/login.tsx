@@ -23,7 +23,6 @@ const login = () => {
         date.setTime(date.getTime() + 6 * 60 * 60 * 1000);
         cookies.set("token", data, { path: "/", expires: date });
         navigate("/home");
-        window.location.reload();
       }
     });
   };

@@ -19,6 +19,7 @@ type User struct {
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Password  string    `gorm:"size:100;not null;" json:"password"`
 	ProfilePicture string `gorm:"size:255;" json:"profile_picture"`
+	BackgroundPicture string `gorm:"size:255;" json:"background_picture"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -54,7 +55,8 @@ func (u *User) PrepareCreate() {
 	u.Firstname = html.EscapeString(strings.TrimSpace(u.Firstname))
 	u.Lastname = html.EscapeString(strings.TrimSpace(u.Lastname))
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
-	u.ProfilePicture = "blank_bjt7w5.png";
+	u.ProfilePicture = "blank_bjt7w5";
+	u.BackgroundPicture = "defaultbackground_adjqkt.jpg"
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
 }
@@ -181,7 +183,25 @@ func (u *User) UpdateProfilePicture(db *gorm.DB, uid uint32) (*User, error) {
 	return u, nil
 }
 
-
+func (u *User) UpdateBackgroundPicture(db *gorm.DB, uid uint32) (*User, error) {
+	err := u.BeforeSave()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Print(u.ProfilePicture)
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Update(
+		"background_picture", u.BackgroundPicture,
+	)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+	// This is the display the updated user
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
 
 func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 

@@ -4,6 +4,7 @@ export const RequireAuth = ({ children }: { children: any }) => {
   const cookies = new Cookies();
 
   if (!cookies.get("token")) {
+    console.log("wtf")
     return <Navigate to="/login"></Navigate>;
   }
   return children;

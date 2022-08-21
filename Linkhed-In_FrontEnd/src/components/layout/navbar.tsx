@@ -6,10 +6,16 @@ import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/auth";
-
+import { AdvancedImage } from "@cloudinary/react";
+import { Cloudinary } from "@cloudinary/url-gen";
 const navbar = () => {
   const navigate = useNavigate();
   const auth = useAuth();
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: "ashbornee",
+    },
+  });
   const fetch_user = async () => {
     const User = await getUser();
     auth.login(User);
@@ -41,6 +47,7 @@ const navbar = () => {
       </div>
     );
   } else {
+    const myImage = cld.image(auth.user.profile_picture);
     //home selected
     return (
       <header id="main-header">
@@ -115,7 +122,7 @@ const navbar = () => {
               <li>
                 <Link to="/profile" className="text-white">
                   <div id="right-border">
-                    <img src="mongo.jpeg" alt="Profile picture" />
+                    <AdvancedImage cldImg={myImage} />
                     <span className="nav-item-text">Profile</span>
                   </div>
                 </Link>
