@@ -1,15 +1,20 @@
-import "../../styles/educationform.scss";
+import { useState } from "react";
+import "../../styles/profileform.scss";
 
 const educationform = () => {
+  const [school, setSchool] = useState("");
   return (
     <div>
       <div className="form-input">
-        <label>School</label>
+        <label>School*</label>
         <div>
           <input
             type="text"
             placeholder="Ex : Boston University"
             className="input-text"
+            onChange={(e) => {
+              setSchool(e.target.value);
+            }}
           ></input>
         </div>
       </div>

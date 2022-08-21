@@ -19,6 +19,10 @@ type User struct {
 	Email     string    `gorm:"size:100;not null;unique" json:"email"`
 	Password  string    `gorm:"size:100;not null;" json:"password"`
 	ProfilePicture string `gorm:"size:255;" json:"profile_picture"`
+	Headline string `gorm:"size:255;" json:"headline"`
+	Industry string `gorm:"size:100;" json:"Industry"`
+	Country string `gorm:"size:100;" json:"Country"`
+	City string `gorm:"size:100;" json:"City"`
 	BackgroundPicture string `gorm:"size:255;" json:"background_picture"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`

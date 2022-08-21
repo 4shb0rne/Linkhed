@@ -8,6 +8,7 @@ import { useAuth } from "../../utils/auth";
 import EducationForm from "../cards/educationform";
 import Cookies from "universal-cookie";
 import axios from "axios";
+import ProfileForm from "../cards/profileform";
 const profile = () => {
   const auth = useAuth();
   const cld = new Cloudinary({
@@ -83,7 +84,7 @@ const profile = () => {
             setModal={setSettingsModal}
             ariaText="Profile Settings"
           >
-            <div>TEST</div>
+            <ProfileForm></ProfileForm>
           </Modal>
           <Modal
             modal={addeducationmodal}
