@@ -53,7 +53,7 @@ const navbar = () => {
       <header id="main-header">
         <div>
           <div>
-            <img id="header-logo" src="linkedin.png" alt="LinkedIn" />
+              <img id="header-logo" src="linkedin.png" alt="LinkedIn" />
             <img
               id="header-picture-menu"
               src="mongo.jpeg"

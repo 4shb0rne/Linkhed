@@ -10,10 +10,12 @@ import RegisterData from "./components/auth/registerdata";
 import Profile from "./components/auth/profile";
 import { AuthProvider } from "./utils/auth";
 import { RequireAuth } from "./utils/RequireAuth";
+import { ModalProvider } from "./utils/modalContext";
 
 function App() {
   return (
     <AuthProvider>
+      <ModalProvider>
       <BrowserRouter>
         <Navbar></Navbar>
         <Routes>
@@ -44,6 +46,7 @@ function App() {
         </Routes>
         <Footer></Footer>
       </BrowserRouter>
+      </ModalProvider>
     </AuthProvider>
   );
 }

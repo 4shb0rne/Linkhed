@@ -9,8 +9,10 @@ import EducationForm from "../cards/educationform";
 import Cookies from "universal-cookie";
 import axios from "axios";
 import ProfileForm from "../cards/profileform";
+import { useModal } from "../../utils/modalContext";
 const profile = () => {
   const auth = useAuth();
+  const modal = useModal();
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -70,7 +72,6 @@ const profile = () => {
           });
       });
   };
-  const [settingsmodal, setSettingsModal] = useState(false);
   const [addeducationmodal, setAddEducationModal] = useState(false);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
@@ -80,11 +81,11 @@ const profile = () => {
       <div>
         <div className="box-shadow m-10">
           <Modal
-            modal={settingsmodal}
-            setModal={setSettingsModal}
+            modal={modal.isOpen}
+            setModal={modal.setIsOpen}
             ariaText="Profile Settings"
           >
-            <ProfileForm></ProfileForm>
+            <ProfileForm ></ProfileForm>
           </Modal>
           <Modal
             modal={addeducationmodal}
@@ -137,14 +138,14 @@ const profile = () => {
               <button
                 className="btn-none"
                 onClick={() => {
-                  setSettingsModal(true);
+                  modal.setIsOpen(true);
                 }}
               >
                 <i className="fa fa-pencil"></i>
               </button>
             </div>
           </div>
-          <div className="flex ml-5">Student At Binus University</div>
+          <div className="flex ml-5">{auth.user.Headline}</div>
         </div>
         <div className="box-shadow m-10 mt-1">
           <div className="flex flex-space-between">

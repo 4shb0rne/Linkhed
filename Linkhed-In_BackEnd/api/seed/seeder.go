@@ -9,20 +9,22 @@ import (
 
 var users = []models.User{
 	models.User{
-		Firstname: "Steve",
-		Lastname:  "Jobs",
-		Email:     "steven@gmail.com",
-		Password:  "password",
-		ProfilePicture : "blank_bjt7w5.png",
+		Firstname:         "William",
+		Lastname:          "William",
+		Email:             "william@gmail.com",
+		Password:          "william123",
+		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
+		Headline:          "Student at somewhere",
 	},
 	models.User{
-		Firstname: "Martin",
-		Lastname:  "Luther",
-		Email:     "luther@gmail.com",
-		Password:  "password",
-		ProfilePicture : "blank_bjt7w5.png",
+		Firstname:         "user",
+		Lastname:          "user",
+		Email:             "user@gmail.com",
+		Password:          "user123",
+		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
+		Headline:          "Student at somewhere",
 	},
 }
 
