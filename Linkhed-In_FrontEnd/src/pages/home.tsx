@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../styles/mainpage.scss";
-import { useAuth } from "../utils/auth";
+import { useAuth } from "../utils/authContext";
 import getUser from "../utils/getUser";
+import getPost from "../utils/getPost";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 const home = () => {
+  const [posts, setPosts] = useState<any[]>([]);
   const auth = useAuth();
   const cld = new Cloudinary({
     cloud: {
@@ -15,8 +17,13 @@ const home = () => {
     const User = await getUser();
     auth.login(User);
   };
+  const fetch_posts = async () => {
+    const posts = await getPost();
+    setPosts(posts);
+  };
   useEffect(() => {
     fetch_user();
+    fetch_posts();
   }, []);
   const myImage = cld.image(
     auth.user ? auth.user.profile_picture : "blank_bjt7w5"
@@ -74,6 +81,128 @@ const home = () => {
           <div id="feed-sort">
             <hr />
           </div>
+          {posts &&
+            posts.map((p) => {
+              const profileimage = cld.image(p.author.profile_picture);
+              var hours = Math.floor(
+                Math.abs(
+                  new Date().valueOf() - new Date(p.updated_at).valueOf()
+                ) / 36e5
+              );
+              return (
+                <article>
+                  <div id="post-author">
+                    <a href="#">
+                      <div>
+                        <AdvancedImage cldImg={profileimage} />
+                        <div>
+                          <div>
+                            <strong id="post-author-name">
+                              {p.author.firstname} {p.author.lastname}
+                            </strong>
+                          </div>
+                          <span>{p.author.Headline}</span>
+                          <span>{hours}h</span>
+                        </div>
+                      </div>
+                    </a>
+                    <div>
+                      <span className="fas fa-circle"></span>
+                      <span className="fas fa-circle"></span>
+                      <span className="fas fa-circle"></span>
+                    </div>
+                  </div>
+                  <div id="post-data">
+                    <p>{p.content}</p>
+                    <img src="smolame.gif" alt="" className="image-size" />
+                  </div>
+                  <div id="post-interactions">
+                    <div id="interactions-amount">
+                      <span
+                        id="like-icon"
+                        className="fas fa-thumbs-up fa-flip-horizontal"
+                      ></span>
+                      <span id="heart-icon" className="fas fa-heart"></span>
+                      <span id="amount-info">
+                        6969 <span>&nbsp;·&nbsp;</span> 100 Comments
+                      </span>
+                    </div>
+                    <div id="interactions-btns">
+                      <button>
+                        <span className="far fa-thumbs-up fa-flip-horizontal"></span>
+                        <span>Like</span>
+                      </button>
+                      <button>
+                        <span className="far fa-comment-dots fa-flip-horizontal"></span>
+                        <span>Comment</span>
+                      </button>
+                      <button>
+                        <span className="far fa-share-square"></span>
+                        <span>Share</span>
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+
+          <article>
+            <div id="post-author">
+              <a href="#">
+                <div>
+                  <img src="amepp.jfif" alt="" />
+                  <div>
+                    <div>
+                      <strong id="post-author-name">Amelia wattson</strong>
+                      <span>
+                        <span>&nbsp;·&nbsp;</span>
+                        1st
+                      </span>
+                    </div>
+                    <span>Your mother</span>
+                    <span>12h</span>
+                  </div>
+                </div>
+              </a>
+              <div>
+                <span className="fas fa-circle"></span>
+                <span className="fas fa-circle"></span>
+                <span className="fas fa-circle"></span>
+              </div>
+            </div>
+            <div id="post-data">
+              <p>
+                <span>smol ame </span>power
+              </p>
+              <img src="smolame.gif" alt="" className="image-size" />
+            </div>
+            <div id="post-interactions">
+              <div id="interactions-amount">
+                <span
+                  id="like-icon"
+                  className="fas fa-thumbs-up fa-flip-horizontal"
+                ></span>
+                <span id="heart-icon" className="fas fa-heart"></span>
+                <span id="amount-info">
+                  6969 <span>&nbsp;·&nbsp;</span> 100 Comments
+                </span>
+              </div>
+              <div id="interactions-btns">
+                <button>
+                  <span className="far fa-thumbs-up fa-flip-horizontal"></span>
+                  <span>Like</span>
+                </button>
+                <button>
+                  <span className="far fa-comment-dots fa-flip-horizontal"></span>
+                  <span>Comment</span>
+                </button>
+                <button>
+                  <span className="far fa-share-square"></span>
+                  <span>Share</span>
+                </button>
+              </div>
+            </div>
+          </article>
           <article>
             <div id="post-author">
               <a href="#">

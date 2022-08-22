@@ -4,7 +4,7 @@ import Modal from "../cards/modal";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { fill } from "@cloudinary/url-gen/actions/resize";
-import { useAuth } from "../../utils/auth";
+import { useAuth } from "../../utils/authContext";
 import EducationForm from "../cards/educationform";
 import Cookies from "universal-cookie";
 import axios from "axios";
@@ -85,7 +85,7 @@ const profile = () => {
             setModal={modal.setIsOpen}
             ariaText="Profile Settings"
           >
-            <ProfileForm ></ProfileForm>
+            <ProfileForm></ProfileForm>
           </Modal>
           <Modal
             modal={addeducationmodal}
@@ -146,6 +146,10 @@ const profile = () => {
             </div>
           </div>
           <div className="flex ml-5">{auth.user.Headline}</div>
+          <div className="flex ml-5">
+            {auth.user.City}
+            {auth.user.City && ","} {auth.user.Country}
+          </div>
         </div>
         <div className="box-shadow m-10 mt-1">
           <div className="flex flex-space-between">

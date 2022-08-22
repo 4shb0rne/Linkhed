@@ -2,12 +2,11 @@
 .footer {
   width: 100%;
   background: rgb(243, 242, 239);
-  display: block;
-  margin-top: 100vh;
+  margin-top: 50%;
 }
 
 .inner-footer {
-  width: 95%;
+  width: 100%;
   margin: auto;
   padding: 30px 10px;
   display: flex;
@@ -34,7 +33,7 @@
   color: black;
 }
 
-.border1 {
+.border {
   height: 3px;
   width: 40px;
   background: #ff9800;
@@ -86,14 +85,8 @@ li i {
   }
 }
 
-/* for mobile screen view */
-
 @media screen and (max-width: 660px) {
   .footer-items {
     width: 100%;
   }
 }
-
-/* you can toggle the media screen view accordingly by changing the (max-width: px) to your convenience */
-
-/* Thanks to Computer Conversations */

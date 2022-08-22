@@ -8,7 +8,7 @@ import ResetPassword from "./components/auth/resetpassword";
 import MainPage from "./pages/home";
 import RegisterData from "./components/auth/registerdata";
 import Profile from "./components/auth/profile";
-import { AuthProvider } from "./utils/auth";
+import { AuthProvider } from "./utils/authContext";
 import { RequireAuth } from "./utils/RequireAuth";
 import { ModalProvider } from "./utils/modalContext";
 

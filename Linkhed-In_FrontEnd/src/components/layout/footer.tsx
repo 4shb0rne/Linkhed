@@ -10,7 +10,7 @@ const footer = () => {
 
         <div className="footer-items">
           <h3>Quick Links</h3>
-          <div className="border1"></div>
+          <div className="border"></div>
           <ul>
             <a href="#">
               <li>Home</li>

@@ -5,7 +5,7 @@ import getUser from "../../utils/getUser";
 import { useEffect } from "react";
 import Cookies from "universal-cookie";
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../../utils/auth";
+import { useAuth } from "../../utils/authContext";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 const navbar = () => {

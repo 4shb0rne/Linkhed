@@ -2,9 +2,8 @@
   max-width: 1188px;
   margin: 0 auto;
   padding: 0 30px;
-
   grid-template-areas: "left-aside main-section";
-  grid-template-rows: 100px 1fr;
+  grid-template-rows: auto;
   grid-template-columns: 216px 1fr 312px;
 
   display: grid;
@@ -509,4 +508,8 @@ main#main-section
 .image-size {
   width: 300px;
   height: 500px;
+}
+
+.mt-5 {
+  margin-top: 5rem;
 }
