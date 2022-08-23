@@ -1,29 +1,33 @@
-package models;
+package models
 
 import (
-	"github.com/jinzhu/gorm"
-	"time"
 	"errors"
+	"html"
+	"strings"
+
+	"github.com/jinzhu/gorm"
 )
 
-type Education struct{
+type Education struct {
 	gorm.Model
-	User User
-	UserID uint32
-	School string
-	Degree string
+	UserID       uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
+	School       string
+	Degree       string
 	FieldOfStudy string
-	StartDate time.Time
-	EndDate time.Time
-	Activities string
-	Description string
+	StartYear    uint32
+	EndYear      uint32
+	Activities   string
+	Description  string
 }
-
 
 func (e *Education) Prepare() {
-
+	e.ID = 0
+	e.School = html.EscapeString(strings.TrimSpace(e.School))
+	e.Degree = html.EscapeString(strings.TrimSpace(e.Degree))
+	e.FieldOfStudy = html.EscapeString(strings.TrimSpace(e.FieldOfStudy))
+	e.Activities = html.EscapeString(strings.TrimSpace(e.Activities))
+	e.Description = html.EscapeString(strings.TrimSpace(e.Description))
 }
-
 
 func (e *Education) Validate() error {
 
@@ -32,31 +36,32 @@ func (e *Education) Validate() error {
 	}
 	if e.Degree == "" {
 		return errors.New("required degree")
-	} 
+	}
 	if e.FieldOfStudy == "" {
 		return errors.New("required field of study")
 	}
-	if e.StartDate.IsZero() {
-		return errors.New("required start date")
+	if e.StartYear == 0 {
+		return errors.New("required start year")
 	}
-	if e.EndDate.IsZero() {
-		return errors.New("required end date")
+	if e.EndYear == 0 {
+		return errors.New("required end year")
 	}
 	return nil
 }
 
 func (e *Education) AddEducation(db *gorm.DB) (*Education, error) {
-	var err error
-	err = db.Debug().Model(&Education{}).Create(&e).Error
+	var err error = db.Debug().Model(&Education{}).Create(&e).Error
 	if err != nil {
 		return &Education{}, err
 	}
-	if e.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", e.UserID).Take(&e.User).Error
-		if err != nil {
-			return &Education{}, err
-		}
-	}
 	return e, nil
 }
-
+func (e *Education) GetEducations(db *gorm.DB, pid uint64) (*[]Education, error) {
+	var err error
+	educations := []Education{}
+	err = db.Debug().Model(&Education{}).Where("user_id = ?").Find(&educations).Error
+	if err != nil {
+		return &[]Education{}, err
+	}
+	return &educations, nil
+}

@@ -11,7 +11,6 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
 	s.Router.HandleFunc("/register", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST")
 
-
 	//Users routes
 	s.Router.HandleFunc("/getuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetCurrentUser))).Methods("GET")
 	s.Router.HandleFunc("/users", middlewares.SetMiddlewareJSON(s.GetUsers)).Methods("GET")
@@ -20,7 +19,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/updateprofilepicture/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateProfilePicture))).Methods("POST")
 	s.Router.HandleFunc("/updatebackgroundpicture/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateBackgroundPicture))).Methods("POST")
 	s.Router.HandleFunc("/updateprofile/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
-	s.Router.HandleFunc("/addeducation/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddEducation))).Methods("POST")
+	s.Router.HandleFunc("/educations/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddEducation))).Methods("POST")
 
 	//Posts routes
 	s.Router.HandleFunc("/posts", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")

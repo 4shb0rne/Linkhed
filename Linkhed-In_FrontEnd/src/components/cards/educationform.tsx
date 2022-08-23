@@ -1,6 +1,36 @@
+import axios from "axios";
 import "../../styles/profileform.scss";
+import { useAuth } from "../../utils/authContext";
+import Cookies from "universal-cookie";
+import { useModal } from "../../utils/modalContext";
 
 const educationform = () => {
+  const auth = useAuth();
+  const cookies = new Cookies();
+  const modal = useModal();
+  const token = cookies.get("token");
+  const submit = (school : string, degree : string, fieldofstudy : string, startyear : string, endyear : string, activities : string, description : string) => {
+    const data = {
+     user_id: auth.user.id,
+     school: school,
+     degree: degree,
+     fieldofstudy: fieldofstudy,
+     startyear: parseInt(startyear),
+     endyear: parseInt(endyear),
+     activities: activities,
+     description: description
+    };
+    console.log(data)
+    axios
+    .post("http://localhost:8080/addeducation", data, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    })
+    .then((response) => {
+      
+    });
+  }
   return (
     <div>
       <div className="form-input">
@@ -37,15 +67,15 @@ const educationform = () => {
         </div>
       </div>
       <div className="form-input">
-        <label>Start Date*</label>
+        <label>Start Year*</label>
         <div>
-          <input type="date" className="input-text" id="startdate"></input>
+          <input type="text" className="input-text" id="startyear"></input>
         </div>
       </div>
       <div className="form-input">
-        <label>End Date (or expected)*</label>
+        <label>End Year (or expected)*</label>
         <div>
-          <input type="date" className="input-text" id="enddate"></input>
+          <input type="text " className="input-text" id="endyear"></input>
         </div>
       </div>
       <div className="form-input">
@@ -63,14 +93,19 @@ const educationform = () => {
       <div className="form-input">
         <button
           className="submit-btn"
-          onSubmit={() => {
-            const school = document.getElementById("school");
-            const degree = document.getElementById("degree");
-            const fieldofstudy = document.getElementById("fieldofstudy");
-            const startdate = document.getElementById("startdate");
-            const enddate = document.getElementById("enddate");
-            const activities = document.getElementById("activities");
-            const description = document.getElementById("description");
+          onClick={() => {
+            const school = (document.getElementById("school") as HTMLInputElement).value;
+            const degree = (document.getElementById("degree") as HTMLInputElement).value;
+            const fieldofstudy = (document.getElementById("fieldofstudy") as HTMLInputElement).value;
+            const startyear = (document.getElementById("startyear") as HTMLInputElement).value;
+            const endyear = (document.getElementById("endyear") as HTMLInputElement).value;
+            const activities = (document.getElementById("activities") as HTMLInputElement).value;
+            const description = (document.getElementById("description") as HTMLInputElement).value;
+            if(school && degree && fieldofstudy && startyear && endyear){
+              console.log("TEST")
+              submit(school, degree, fieldofstudy, startyear, endyear, activities, description)
+              modal.setIsOpen2(false)
+            }
           }}
         >
           Submit

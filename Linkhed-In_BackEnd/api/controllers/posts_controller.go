@@ -39,6 +39,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
+	fmt.Print(post.AuthorID)
 	if uid != post.AuthorID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return

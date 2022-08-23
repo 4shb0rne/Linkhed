@@ -72,7 +72,6 @@ const profile = () => {
           });
       });
   };
-  const [addeducationmodal, setAddEducationModal] = useState(false);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
     const myBackgroundImage = cld.image(auth.user.background_picture);
@@ -88,8 +87,8 @@ const profile = () => {
             <ProfileForm></ProfileForm>
           </Modal>
           <Modal
-            modal={addeducationmodal}
-            setModal={setAddEducationModal}
+            modal={modal.isOpen2}
+            setModal={modal.setIsOpen2}
             ariaText="Add Education"
           >
             <EducationForm></EducationForm>
@@ -157,7 +156,7 @@ const profile = () => {
             <button
               className="btn-none"
               onClick={() => {
-                setAddEducationModal(true);
+                modal.setIsOpen2(true)
               }}
             >
               <i className="fa fa-plus"></i>
