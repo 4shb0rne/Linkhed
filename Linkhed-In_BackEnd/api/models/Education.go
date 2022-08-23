@@ -59,7 +59,7 @@ func (e *Education) AddEducation(db *gorm.DB) (*Education, error) {
 func (e *Education) GetEducations(db *gorm.DB, pid uint64) (*[]Education, error) {
 	var err error
 	educations := []Education{}
-	err = db.Debug().Model(&Education{}).Where("user_id = ?").Find(&educations).Error
+	err = db.Debug().Model(&Education{}).Where("user_id = ?", pid).Find(&educations).Error
 	if err != nil {
 		return &[]Education{}, err
 	}

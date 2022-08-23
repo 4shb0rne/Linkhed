@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/profile.scss";
 import Modal from "../cards/modal";
 import { AdvancedImage } from "@cloudinary/react";
@@ -10,9 +10,12 @@ import Cookies from "universal-cookie";
 import axios from "axios";
 import ProfileForm from "../cards/profileform";
 import { useModal } from "../../utils/modalContext";
+import getEducation from "../../utils/getEducation";
+
 const profile = () => {
   const auth = useAuth();
   const modal = useModal();
+  const [educations, setEducations] = useState<any[]>([]);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -72,6 +75,15 @@ const profile = () => {
           });
       });
   };
+  const fetch_educations = async () => {
+    if (auth.user != null) {
+      const educations = await getEducation(auth.user.id);
+      setEducations(educations);
+    }
+  };
+  useEffect(() => {
+    fetch_educations();
+  }, [auth.user]);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
     const myBackgroundImage = cld.image(auth.user.background_picture);
@@ -156,12 +168,26 @@ const profile = () => {
             <button
               className="btn-none"
               onClick={() => {
-                modal.setIsOpen2(true)
+                modal.setIsOpen2(true);
               }}
             >
               <i className="fa fa-plus"></i>
             </button>
           </div>
+          {educations &&
+            educations.map((e) => {
+              return (
+                <div className="m-3 mt-1">
+                  <h2>{e.School}</h2>
+                  <p>
+                    {e.Degree}, {e.FieldOfStudy}
+                  </p>
+                  <p className="text-gray">
+                    {e.StartYear} - {e.EndYear}
+                  </p>
+                </div>
+              );
+            })}
         </div>
       </div>
     );

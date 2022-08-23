@@ -55,12 +55,13 @@ func (server *Server) GetEducation(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	fmt.Print(pid)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
 	education := models.Education{}
-
+	
 	educations, err := education.GetEducations(server.DB, pid)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)

@@ -5,8 +5,12 @@ import getUser from "../utils/getUser";
 import getPost from "../utils/getPost";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
+import { useModal } from "../utils/modalContext";
+import AddPost from "../components/cards/addpost";
+import Modal from "../components/cards/modal";
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
+  const modal = useModal();
   const auth = useAuth();
   const cld = new Cloudinary({
     cloud: {
@@ -28,8 +32,16 @@ const home = () => {
   const myImage = cld.image(
     auth.user ? auth.user.profile_picture : "blank_bjt7w5"
   );
+
   return (
     <div className="container">
+      <Modal
+        modal={modal.isOpen}
+        setModal={modal.setIsOpen}
+        ariaText="Profile Settings"
+      >
+        <AddPost></AddPost>
+      </Modal>
       <div id="left-aside-wrapper">
         <aside id="left-aside">
           <div id="profile-card">
@@ -59,7 +71,12 @@ const home = () => {
         <main id="main-section">
           <div id="share-box">
             <div id="button-box">
-              <button id="btn-post">
+              <button
+                id="btn-post"
+                onClick={() => {
+                  modal.setIsOpen(true);
+                }}
+              >
                 <span className="fas fa-edit"></span>
                 <span id="btn-text">Start a post</span>
               </button>
