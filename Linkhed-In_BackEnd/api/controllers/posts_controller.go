@@ -34,14 +34,8 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
-	fmt.Print(post.AuthorID)
-	if uid != post.AuthorID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New(http.StatusText(http.StatusUnauthorized)))
 		return
 	}
 	postCreated, err := post.SavePost(server.DB)
@@ -111,7 +105,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// If a user attempt to update a post not belonging to him
-	if uid != post.AuthorID {
+	if uid != post.UserID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
@@ -131,7 +125,7 @@ func (server *Server) UpdatePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	//Also check if the request user id is equal to the one gotten from token
-	if uid != postUpdate.AuthorID {
+	if uid != postUpdate.UserID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
@@ -182,7 +176,7 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Is the authenticated user, the owner of this post?
-	if uid != post.AuthorID {
+	if uid != post.UserID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}

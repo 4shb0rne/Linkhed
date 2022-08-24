@@ -12,9 +12,10 @@ import (
 type Post struct {
 	ID         uint64    `gorm:"primary_key;auto_increment" json:"id"`
 	Content    string    `gorm:"size:255;not null;" json:"content"`
-	Author     User      `json:"author"`
-	AuthorID   uint32    `sql:"type:int REFERENCES users(id)" json:"author_id"`
+	User    User      `json:"user"`
+	UserID   uint32    `sql:"type:int REFERENCES users(id)" json:"user_id"`
 	Attachment string    `json:"attachment"`
+	Comments []Comment
 	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -22,7 +23,7 @@ type Post struct {
 func (p *Post) Prepare() {
 	p.ID = 0
 	p.Content = html.EscapeString(strings.TrimSpace(p.Content))
-	p.Author = User{}
+	p.User = User{}
 	p.Attachment = html.EscapeString(strings.TrimSpace(p.Attachment))
 	p.CreatedAt = time.Now()
 	p.UpdatedAt = time.Now()
@@ -32,7 +33,7 @@ func (p *Post) Validate() error {
 	if p.Content == "" {
 		return errors.New("required content")
 	}
-	if p.AuthorID < 1 {
+	if p.UserID < 1 {
 		return errors.New("required author")
 	}
 	return nil
@@ -45,7 +46,7 @@ func (p *Post) SavePost(db *gorm.DB) (*Post, error) {
 		return &Post{}, err
 	}
 	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
+		err = db.Debug().Model(&User{}).Where("id = ?", p.UserID).Take(&p.User).Error
 		if err != nil {
 			return &Post{}, err
 		}
@@ -62,7 +63,7 @@ func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 	}
 	if len(posts) > 0 {
 		for i := range posts {
-			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].AuthorID).Take(&posts[i].Author).Error
+			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].UserID).Take(&posts[i].User).Error
 			if err != nil {
 				return &[]Post{}, err
 			}
@@ -78,7 +79,7 @@ func (p *Post) FindPostByID(db *gorm.DB, pid uint64) (*Post, error) {
 		return &Post{}, err
 	}
 	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
+		err = db.Debug().Model(&User{}).Where("id = ?", p.UserID).Take(&p.User).Error
 		if err != nil {
 			return &Post{}, err
 		}
@@ -111,7 +112,7 @@ func (p *Post) UpdateAPost(db *gorm.DB) (*Post, error) {
 		return &Post{}, err
 	}
 	if p.ID != 0 {
-		err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
+		err = db.Debug().Model(&User{}).Where("id = ?", p.UserID).Take(&p.User).Error
 		if err != nil {
 			return &Post{}, err
 		}

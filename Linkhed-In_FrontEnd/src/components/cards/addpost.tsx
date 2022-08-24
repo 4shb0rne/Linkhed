@@ -7,9 +7,8 @@ import { useState } from "react";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 
-const addpost = ({fetch_posts} : any) => {
-  const [image, setImage] = useState(null)
-  const [imageId, setImageId] = useState('');
+const addpost = ({ fetch_posts }: any) => {
+  const [image, setImage] = useState<FileList | null>(null);
   const auth = useAuth();
   const modal = useModal();
   const cookies = new Cookies();
@@ -19,30 +18,30 @@ const addpost = ({fetch_posts} : any) => {
       cloudName: "ashbornee",
     },
   });
-  const uploadImage = () => {
+  const submit = (content: any) => {
     const formData = new FormData();
-    console.log(image[0])
-    formData.append("file", image[0]);
+    console.log(image![0]);
+    formData.append("file", image![0]);
     formData.append("upload_preset", "linkhed");
     axios
       .post("https://api.cloudinary.com/v1_1/ashbornee/image/upload", formData)
       .then((response) => {
-        console.log(response)
-    })};
-  const submit = (content : any) =>{
-    // uploadImage()
-    // const data = {
-    //   author_id: auth.user.id,
-    //   content: content,
-    //   attachment: imageId
-    // }
-    // axios.post("http://localhost:8080/addpost", data, {
-    //   headers: {
-    //     Authorization: "Bearer " + token,
-    //   },
-    // }).then(()=>{
-    //   fetch_posts()
-    // })
+        console.log(response);
+        const data = {
+          author_id: auth.user.id,
+          content: content,
+          attachment: response.data.public_id,
+        };
+        axios
+          .post("http://localhost:8080/addpost", data, {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          })
+          .then(() => {
+            fetch_posts();
+          });
+      });
   };
   const myImage = cld.image(auth.user.profile_picture);
   return (
@@ -67,17 +66,28 @@ const addpost = ({fetch_posts} : any) => {
         id="imgupload"
         className="d-none"
         onChange={(e) => {
-          setImage(e.target.files)
+          setImage(e.target.files);
+          const image: any = document.getElementById("image-test");
+          image.className = "image-preview";
+          image.src = URL.createObjectURL(e.target.files![0]);
         }}
-         ></input>
+      ></input>
       <div>
-        <button className="input-btn" onClick={()=>{
-          const content = document.getElementById("content-post")?.innerHTML;
-          if(content?.length != 0){
-            submit(content);
-            modal.setIsOpen(false)
-          }
-        }}>Post</button>
+        <img id="image-test"></img>
+      </div>
+      <div>
+        <button
+          className="input-btn"
+          onClick={() => {
+            const content = document.getElementById("content-post")?.innerHTML;
+            if (content?.length != 0) {
+              submit(content);
+              modal.setIsOpen(false);
+            }
+          }}
+        >
+          Post
+        </button>
       </div>
     </div>
   );

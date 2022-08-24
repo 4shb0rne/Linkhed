@@ -8,8 +8,8 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useModal } from "../utils/modalContext";
 import AddPost from "../components/cards/addpost";
 import Modal from "../components/cards/modal";
-import parse from 'html-react-parser';
-import {decode} from 'html-entities';
+import parse from "html-react-parser";
+import { decode } from "html-entities";
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const modal = useModal();
@@ -102,7 +102,8 @@ const home = () => {
           </div>
           {posts &&
             posts.map((p) => {
-              const profileimage = cld.image(p.author.profile_picture);
+              const postImage = cld.image(p.attachment);
+              const profileimage = cld.image(p.user.profile_picture);
               var hours = Math.floor(
                 Math.abs(
                   new Date().valueOf() - new Date(p.updated_at).valueOf()
@@ -117,10 +118,10 @@ const home = () => {
                         <div>
                           <div>
                             <strong id="post-author-name">
-                              {p.author.firstname} {p.author.lastname}
+                              {p.user.firstname} {p.user.lastname}
                             </strong>
                           </div>
-                          <span>{p.author.Headline}</span>
+                          <span>{p.user.Headline}</span>
                           <span>{hours}h</span>
                         </div>
                       </div>
@@ -133,6 +134,7 @@ const home = () => {
                   </div>
                   <div id="post-data">
                     <div>{parse(decode(p.content))}</div>
+                    <AdvancedImage cldImg={postImage} />
                     {/* <img src="smolame.gif" alt="" className="image-size" /> */}
                   </div>
                   <div id="post-interactions">
@@ -160,6 +162,15 @@ const home = () => {
                         <span>Share</span>
                       </button>
                     </div>
+                  </div>
+                  <div className="commentbox">
+                    <div
+                      contentEditable
+                      className="input-comments"
+                      id="content-post"
+                      data-placeholder="What do you want to talk about"
+                    ></div>
+                    <button className="comment-btn">Submit</button>
                   </div>
                 </article>
               );
@@ -222,7 +233,6 @@ const home = () => {
               </div>
             </div>
           </article>
-          
         </main>
       </div>
     </div>
