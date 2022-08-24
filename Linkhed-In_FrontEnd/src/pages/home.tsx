@@ -132,7 +132,7 @@ const home = () => {
                     </div>
                   </div>
                   <div id="post-data">
-                    <p>{parse(decode(p.content))}</p>
+                    <div>{parse(decode(p.content))}</div>
                     {/* <img src="smolame.gif" alt="" className="image-size" /> */}
                   </div>
                   <div id="post-interactions">
