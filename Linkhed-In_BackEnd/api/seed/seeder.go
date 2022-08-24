@@ -30,18 +30,16 @@ var users = []models.User{
 
 var posts = []models.Post{
 	models.Post{
-		Title:   "Title 1",
 		Content: "Hello world 1",
 	},
 	models.Post{
-		Title:   "Title 2",
 		Content: "Hello world 2",
 	},
 }
 
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.Post{}, &models.User{}, &models.Education{}).Error
+	err := db.Debug().DropTableIfExists(&models.Post{}, &models.Education{}, &models.User{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}

@@ -10,19 +10,17 @@ import (
 )
 
 type Post struct {
-	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
-	Title     string    `gorm:"size:255;not null;unique" json:"title"`
-	Content   string    `gorm:"size:255;not null;" json:"content"`
-	Author    User      `json:"author"`
-	AuthorID  uint32    `sql:"type:int REFERENCES users(id)" json:"author_id"`
-	Attachment string   `json:"attachment"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID         uint64    `gorm:"primary_key;auto_increment" json:"id"`
+	Content    string    `gorm:"size:255;not null;" json:"content"`
+	Author     User      `json:"author"`
+	AuthorID   uint32    `sql:"type:int REFERENCES users(id)" json:"author_id"`
+	Attachment string    `json:"attachment"`
+	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func (p *Post) Prepare() {
 	p.ID = 0
-	p.Title = html.EscapeString(strings.TrimSpace(p.Title))
 	p.Content = html.EscapeString(strings.TrimSpace(p.Content))
 	p.Author = User{}
 	p.Attachment = html.EscapeString(strings.TrimSpace(p.Attachment))
@@ -31,10 +29,6 @@ func (p *Post) Prepare() {
 }
 
 func (p *Post) Validate() error {
-
-	if p.Title == "" {
-		return errors.New("required title")
-	}
 	if p.Content == "" {
 		return errors.New("required content")
 	}
@@ -112,7 +106,7 @@ func (p *Post) UpdateAPost(db *gorm.DB) (*Post, error) {
 	// 		return &Post{}, err
 	// 	}
 	// }
-	err = db.Debug().Model(&Post{}).Where("id = ?", p.ID).Updates(Post{Title: p.Title, Content: p.Content, UpdatedAt: time.Now()}).Error
+	err = db.Debug().Model(&Post{}).Where("id = ?", p.ID).Updates(Post{Content: p.Content, UpdatedAt: time.Now()}).Error
 	if err != nil {
 		return &Post{}, err
 	}

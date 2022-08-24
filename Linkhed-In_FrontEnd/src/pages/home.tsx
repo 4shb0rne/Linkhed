@@ -8,6 +8,8 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useModal } from "../utils/modalContext";
 import AddPost from "../components/cards/addpost";
 import Modal from "../components/cards/modal";
+import parse from 'html-react-parser';
+import {decode} from 'html-entities';
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const modal = useModal();
@@ -40,7 +42,7 @@ const home = () => {
         setModal={modal.setIsOpen}
         ariaText="Profile Settings"
       >
-        <AddPost></AddPost>
+        <AddPost fetch_posts={fetch_posts}></AddPost>
       </Modal>
       <div id="left-aside-wrapper">
         <aside id="left-aside">
@@ -52,7 +54,7 @@ const home = () => {
                 {auth.user && auth.user.firstname}{" "}
                 {auth.user && auth.user.lastname}
               </strong>
-              <small>INI BUAT GELAR/TITLE</small>
+              <small>{auth.user && auth.user.Headline}</small>
             </div>
             <div id="profile-links">
               <a>
@@ -130,8 +132,8 @@ const home = () => {
                     </div>
                   </div>
                   <div id="post-data">
-                    <p>{p.content}</p>
-                    <img src="smolame.gif" alt="" className="image-size" />
+                    <p>{parse(decode(p.content))}</p>
+                    {/* <img src="smolame.gif" alt="" className="image-size" /> */}
                   </div>
                   <div id="post-interactions">
                     <div id="interactions-amount">
@@ -220,63 +222,7 @@ const home = () => {
               </div>
             </div>
           </article>
-          <article>
-            <div id="post-author">
-              <a href="#">
-                <div>
-                  <img src="amepp.jfif" alt="" />
-                  <div>
-                    <div>
-                      <strong id="post-author-name">Amelia wattson</strong>
-                      <span>
-                        <span>&nbsp;·&nbsp;</span>
-                        1st
-                      </span>
-                    </div>
-                    <span>Your mother</span>
-                    <span>12h</span>
-                  </div>
-                </div>
-              </a>
-              <div>
-                <span className="fas fa-circle"></span>
-                <span className="fas fa-circle"></span>
-                <span className="fas fa-circle"></span>
-              </div>
-            </div>
-            <div id="post-data">
-              <p>
-                <span>smol ame </span>power
-              </p>
-              <img src="smolame.gif" alt="" className="image-size" />
-            </div>
-            <div id="post-interactions">
-              <div id="interactions-amount">
-                <span
-                  id="like-icon"
-                  className="fas fa-thumbs-up fa-flip-horizontal"
-                ></span>
-                <span id="heart-icon" className="fas fa-heart"></span>
-                <span id="amount-info">
-                  6969 <span>&nbsp;·&nbsp;</span> 100 Comments
-                </span>
-              </div>
-              <div id="interactions-btns">
-                <button>
-                  <span className="far fa-thumbs-up fa-flip-horizontal"></span>
-                  <span>Like</span>
-                </button>
-                <button>
-                  <span className="far fa-comment-dots fa-flip-horizontal"></span>
-                  <span>Comment</span>
-                </button>
-                <button>
-                  <span className="far fa-share-square"></span>
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-          </article>
+          
         </main>
       </div>
     </div>

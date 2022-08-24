@@ -11,10 +11,11 @@ import Profile from "./components/auth/profile";
 import { AuthProvider } from "./utils/authContext";
 import { RequireAuth } from "./utils/RequireAuth";
 import { ModalProvider } from "./utils/modalContext";
-
+import { PostsProvider } from "./utils/postContext";
 function App() {
   return (
     <AuthProvider>
+      <PostsProvider>
       <ModalProvider>
       <BrowserRouter>
         <Navbar></Navbar>
@@ -47,6 +48,7 @@ function App() {
         <Footer></Footer>
       </BrowserRouter>
       </ModalProvider>
+      </PostsProvider>
     </AuthProvider>
   );
 }
