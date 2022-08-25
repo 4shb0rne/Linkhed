@@ -25,7 +25,7 @@ type User struct {
 	Country           string    `gorm:"size:100;" json:"Country"`
 	City              string    `gorm:"size:100;" json:"City"`
 	BackgroundPicture string    `gorm:"size:255;" json:"background_picture"`
-	Posts []Post
+	Posts []*Post `gorm:"many2many:user_posts;"`
 	Comments []Comment
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -130,7 +130,7 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Preload("Posts").Limit(100).Find(&users).Error
+	err = db.Debug().Model(&User{}).Preload("Posts").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}

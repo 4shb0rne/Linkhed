@@ -112,9 +112,16 @@ const home = () => {
                 ) / 36e5
               );
               return (
-                <Posts p={p} hours={hours} fetch_posts={fetch_posts} profileimage={profileimage} postImage={postImage}></Posts>
-                );
-              })}
+                <Posts
+                  key={p.id}
+                  p={p}
+                  hours={hours}
+                  fetch_posts={fetch_posts}
+                  profileimage={profileimage}
+                  postImage={postImage}
+                ></Posts>
+              );
+            })}
         </main>
       </div>
     </div>

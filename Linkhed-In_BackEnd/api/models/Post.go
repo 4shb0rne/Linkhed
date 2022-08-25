@@ -16,6 +16,7 @@ type Post struct {
 	UserID     uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
 	Attachment string `json:"attachment"`
 	Comments   []Comment
+	Users []*User `gorm:"many2many:user_posts;"`
 	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -57,8 +58,9 @@ func (p *Post) SavePost(db *gorm.DB) (*Post, error) {
 func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 	var err error
 	posts := []Post{}
-	err = db.Debug().Model(&Post{}).Limit(100).Find(&posts).Error
-	if err != nil {
+	err = db.Debug().Model(&Post{}).Find(&posts).Error
+	er := db.Debug().Model(&Post{}).Preload("Users").Find(&posts).Error
+	if err != nil || er != nil {
 		return &[]Post{}, err
 	}
 	if len(posts) > 0 {
@@ -67,12 +69,14 @@ func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 			err2 := db.Debug().Model(&posts[i]).Preload("Comments").Find(&posts[i]).Error
 			if len(posts[i].Comments) > 0 {
 				for j := range posts[i].Comments {
-					err3 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
+					err3 := db.Debug().Model(&posts[i].Comments[j]).Preload("Replies").Find(&posts[i].Comments[j]).Error
+					err4 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
 					_ = err3
+					_ = err4
 					if len(posts[i].Comments[j].Replies) > 0 {
 						for z := range posts[i].Comments[j].Replies {
-							err4 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
-							_ = err4
+							err5 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
+							_ = err5
 						}
 					}
 				}

@@ -39,11 +39,11 @@ var posts = []models.Post{
 
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.Post{}, &models.Education{},&models.Comment{}, &models.User{}).Error
+	err := db.Debug().DropTableIfExists(&models.UserPosts{}, &models.Reply{}, &models.Comment{}, &models.Post{}, &models.Education{}, &models.User{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
-	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Comment{}).Error
+	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Comment{}, &models.Reply{}, &models.UserPosts{}).Error
 	if err != nil {
 		log.Fatalf("cannot migrate table: %v", err)
 	}
