@@ -10,6 +10,7 @@ import AddPost from "../components/cards/addpost";
 import Modal from "../components/cards/modal";
 import parse from "html-react-parser";
 import { decode } from "html-entities";
+import getComment from "../utils/getComment";
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const modal = useModal();
@@ -104,6 +105,7 @@ const home = () => {
             posts.map((p) => {
               const postImage = cld.image(p.attachment);
               const profileimage = cld.image(p.user.profile_picture);
+
               var hours = Math.floor(
                 Math.abs(
                   new Date().valueOf() - new Date(p.updated_at).valueOf()
@@ -172,11 +174,13 @@ const home = () => {
                     ></div>
                     <button className="comment-btn">Submit</button>
                   </div>
+                  {p.Comments.map((c: any) => {
+                    return <div>{c.id}</div>;
+                  })}
                 </article>
               );
             })}
-
-          <article>
+          {/* <article>
             <div id="post-author">
               <a href="#">
                 <div>
@@ -232,7 +236,7 @@ const home = () => {
                 </button>
               </div>
             </div>
-          </article>
+          </article> */}
         </main>
       </div>
     </div>
