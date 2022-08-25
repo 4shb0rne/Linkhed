@@ -20,28 +20,45 @@ const addpost = ({ fetch_posts }: any) => {
   });
   const submit = (content: any) => {
     const formData = new FormData();
-    console.log(image![0]);
-    formData.append("file", image![0]);
-    formData.append("upload_preset", "linkhed");
-    axios
-      .post("https://api.cloudinary.com/v1_1/ashbornee/image/upload", formData)
-      .then((response) => {
-        console.log(response);
-        const data = {
-          author_id: auth.user.id,
-          content: content,
-          attachment: response.data.public_id,
-        };
-        axios
-          .post("http://localhost:8080/addpost", data, {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          })
-          .then(() => {
-            fetch_posts();
-          });
-      });
+    if(image){
+      formData.append("file", image![0]);
+      formData.append("upload_preset", "linkhed");
+      axios
+        .post("https://api.cloudinary.com/v1_1/ashbornee/image/upload", formData)
+        .then((response) => {
+          console.log(response);
+          const data = {
+            user_id: auth.user.id,
+            content: content,
+            attachment: response.data.public_id,
+          };
+          axios
+            .post("http://localhost:8080/addpost", data, {
+              headers: {
+                Authorization: "Bearer " + token,
+              },
+            })
+            .then(() => {
+              fetch_posts();
+            });
+        });
+    } else
+    {
+      const data = {
+        user_id: auth.user.id,
+        content: content
+      };
+      axios
+        .post("http://localhost:8080/addpost", data, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then(() => {
+          fetch_posts();
+        });
+    }
+    
   };
   const myImage = cld.image(auth.user.profile_picture);
   return (
@@ -55,7 +72,7 @@ const addpost = ({ fetch_posts }: any) => {
       <div
         contentEditable
         className="input-post"
-        id="content-post"
+        id="post-content"
         data-placeholder="What do you want to talk about"
       ></div>
       <label htmlFor="imgupload">
@@ -79,7 +96,7 @@ const addpost = ({ fetch_posts }: any) => {
         <button
           className="input-btn"
           onClick={() => {
-            const content = document.getElementById("content-post")?.innerHTML;
+            const content = document.getElementById("post-content")?.innerHTML;
             if (content?.length != 0) {
               submit(content);
               modal.setIsOpen(false);

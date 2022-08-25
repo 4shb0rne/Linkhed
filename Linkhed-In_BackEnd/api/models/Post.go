@@ -10,12 +10,12 @@ import (
 )
 
 type Post struct {
-	ID         uint64    `gorm:"primary_key;auto_increment" json:"id"`
-	Content    string    `gorm:"size:255;not null;" json:"content"`
-	User    User      `json:"user"`
-	UserID   uint32    `sql:"type:int REFERENCES users(id)" json:"user_id"`
-	Attachment string    `json:"attachment"`
-	Comments []Comment
+	ID         uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	Content    string `gorm:"size:255;not null;" json:"content"`
+	User       User   `json:"user"`
+	UserID     uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
+	Attachment string `json:"attachment"`
+	Comments   []Comment
 	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -34,7 +34,7 @@ func (p *Post) Validate() error {
 		return errors.New("required content")
 	}
 	if p.UserID < 1 {
-		return errors.New("required author")
+		return errors.New("required user")
 	}
 	return nil
 }
@@ -64,11 +64,17 @@ func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 	if len(posts) > 0 {
 		for i := range posts {
 			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].UserID).Take(&posts[i].User).Error
-			err2:= db.Debug().Model(&posts[i]).Preload("Comments").Find(&posts[i]).Error
+			err2 := db.Debug().Model(&posts[i]).Preload("Comments").Find(&posts[i]).Error
 			if len(posts[i].Comments) > 0 {
-				for j := range posts[i].Comments{
-					err3:= db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
+				for j := range posts[i].Comments {
+					err3 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
 					_ = err3
+					if len(posts[i].Comments[j].Replies) > 0 {
+						for z := range posts[i].Comments[j].Replies {
+							err4 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
+							_ = err4
+						}
+					}
 				}
 			}
 			if err != nil || err2 != nil {

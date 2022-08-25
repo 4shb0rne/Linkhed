@@ -463,7 +463,6 @@ main#main-section article div#post-interactions div#interactions-btns button {
   height: 30px;
   margin-right: 5px;
   cursor: pointer;
-
   display: flex;
   align-items: center;
 }
@@ -563,4 +562,39 @@ main#main-section
   cursor: not-allowed;
   background: rgba(0, 0, 0, 0.08);
   color: rgba(0, 0, 0, 0.3);
+}
+
+.d-none{
+  display: none;
+}
+
+.d-flex{
+  display: flex;
+}
+
+.comment-card{
+  background-color: rgb(242,242,242);
+  margin: 1rem;
+}
+
+.replybox{
+  display: flex;
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+}
+
+.reply-card{
+  background-color: rgb(242,242,242);
+  margin-left: 2rem;
+  margin-right: 2rem;
+  margin-bottom: 1rem;
+}
+
+.bg-gray{
+  background-color: rgb(242,242,242);
+}
+
+.float-right{
+  float: right;
 }

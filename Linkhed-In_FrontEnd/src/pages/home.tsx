@@ -8,13 +8,14 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useModal } from "../utils/modalContext";
 import AddPost from "../components/cards/addpost";
 import Modal from "../components/cards/modal";
-import parse from "html-react-parser";
-import { decode } from "html-entities";
-import getComment from "../utils/getComment";
+import Cookies from "universal-cookie";
+import Posts from "../components/cards/Posts";
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const modal = useModal();
   const auth = useAuth();
+  const cookies = new Cookies();
+  const token = cookies.get("token");
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -105,138 +106,15 @@ const home = () => {
             posts.map((p) => {
               const postImage = cld.image(p.attachment);
               const profileimage = cld.image(p.user.profile_picture);
-
               var hours = Math.floor(
                 Math.abs(
                   new Date().valueOf() - new Date(p.updated_at).valueOf()
                 ) / 36e5
               );
               return (
-                <article>
-                  <div id="post-author">
-                    <a href="#">
-                      <div>
-                        <AdvancedImage cldImg={profileimage} />
-                        <div>
-                          <div>
-                            <strong id="post-author-name">
-                              {p.user.firstname} {p.user.lastname}
-                            </strong>
-                          </div>
-                          <span>{p.user.Headline}</span>
-                          <span>{hours}h</span>
-                        </div>
-                      </div>
-                    </a>
-                    <div>
-                      <span className="fas fa-circle"></span>
-                      <span className="fas fa-circle"></span>
-                      <span className="fas fa-circle"></span>
-                    </div>
-                  </div>
-                  <div id="post-data">
-                    <div>{parse(decode(p.content))}</div>
-                    <AdvancedImage cldImg={postImage} />
-                    {/* <img src="smolame.gif" alt="" className="image-size" /> */}
-                  </div>
-                  <div id="post-interactions">
-                    <div id="interactions-amount">
-                      <span
-                        id="like-icon"
-                        className="fas fa-thumbs-up fa-flip-horizontal"
-                      ></span>
-                      <span id="heart-icon" className="fas fa-heart"></span>
-                      <span id="amount-info">
-                        6969 <span>&nbsp;·&nbsp;</span> 100 Comments
-                      </span>
-                    </div>
-                    <div id="interactions-btns">
-                      <button>
-                        <span className="far fa-thumbs-up fa-flip-horizontal"></span>
-                        <span>Like</span>
-                      </button>
-                      <button>
-                        <span className="far fa-comment-dots fa-flip-horizontal"></span>
-                        <span>Comment</span>
-                      </button>
-                      <button>
-                        <span className="far fa-share-square"></span>
-                        <span>Share</span>
-                      </button>
-                    </div>
-                  </div>
-                  <div className="commentbox">
-                    <div
-                      contentEditable
-                      className="input-comments"
-                      id="content-post"
-                      data-placeholder="What do you want to talk about"
-                    ></div>
-                    <button className="comment-btn">Submit</button>
-                  </div>
-                  {p.Comments.map((c: any) => {
-                    return <div>{c.id}</div>;
-                  })}
-                </article>
-              );
-            })}
-          {/* <article>
-            <div id="post-author">
-              <a href="#">
-                <div>
-                  <img src="amepp.jfif" alt="" />
-                  <div>
-                    <div>
-                      <strong id="post-author-name">Amelia wattson</strong>
-                      <span>
-                        <span>&nbsp;·&nbsp;</span>
-                        1st
-                      </span>
-                    </div>
-                    <span>Your mother</span>
-                    <span>12h</span>
-                  </div>
-                </div>
-              </a>
-              <div>
-                <span className="fas fa-circle"></span>
-                <span className="fas fa-circle"></span>
-                <span className="fas fa-circle"></span>
-              </div>
-            </div>
-            <div id="post-data">
-              <p>
-                <span>smol ame </span>power
-              </p>
-              <img src="smolame.gif" alt="" className="image-size" />
-            </div>
-            <div id="post-interactions">
-              <div id="interactions-amount">
-                <span
-                  id="like-icon"
-                  className="fas fa-thumbs-up fa-flip-horizontal"
-                ></span>
-                <span id="heart-icon" className="fas fa-heart"></span>
-                <span id="amount-info">
-                  6969 <span>&nbsp;·&nbsp;</span> 100 Comments
-                </span>
-              </div>
-              <div id="interactions-btns">
-                <button>
-                  <span className="far fa-thumbs-up fa-flip-horizontal"></span>
-                  <span>Like</span>
-                </button>
-                <button>
-                  <span className="far fa-comment-dots fa-flip-horizontal"></span>
-                  <span>Comment</span>
-                </button>
-                <button>
-                  <span className="far fa-share-square"></span>
-                  <span>Share</span>
-                </button>
-              </div>
-            </div>
-          </article> */}
+                <Posts p={p} hours={hours} fetch_posts={fetch_posts} profileimage={profileimage} postImage={postImage}></Posts>
+                );
+              })}
         </main>
       </div>
     </div>

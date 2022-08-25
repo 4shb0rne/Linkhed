@@ -25,6 +25,8 @@ func (s *Server) initializeRoutes() {
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
 	s.Router.HandleFunc("/addcomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddComment))).Methods("POST")
+	s.Router.HandleFunc("/addreply", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddReply))).Methods("POST")
+	s.Router.HandleFunc("/replies/{id}", middlewares.SetMiddlewareJSON(s.GetReplies)).Methods("GET")
 	s.Router.HandleFunc("/comments/{id}", middlewares.SetMiddlewareJSON(s.GetComments)).Methods("GET")
 	s.Router.HandleFunc("/posts", middlewares.SetMiddlewareJSON(s.GetPosts)).Methods("GET")
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")

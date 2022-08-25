@@ -9,12 +9,14 @@ import (
 
 	"github.com/jinzhu/gorm"
 )
-type Comment struct{
-	ID        uint64    `gorm:"primary_key;auto_increment" json:"id"`
-	PostID  uint32
-	Content   string    `gorm:"size:255;not null;" json:"content"`
-	User    User
-	UserID  uint32
+
+type Comment struct {
+	ID        uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	PostID    uint32
+	Content   string `gorm:"size:255;not null;" json:"content"`
+	User      User
+	UserID    uint32
+	Replies   []Reply
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
