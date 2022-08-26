@@ -11,7 +11,8 @@ import axios from "axios";
 import ProfileForm from "../cards/profileform";
 import { useModal } from "../../utils/modalContext";
 import getEducation from "../../utils/getEducation";
-
+import getUser from "../../utils/getUser";
+import ExperienceForm from "../cards/experienceform";
 const profile = () => {
   const auth = useAuth();
   const modal = useModal();
@@ -70,7 +71,6 @@ const profile = () => {
             }
           )
           .then((res) => {
-            console.log(res.data);
             auth.login(res.data);
           });
       });
@@ -79,11 +79,13 @@ const profile = () => {
     if (auth.user != null) {
       const educations = await getEducation(auth.user.id);
       setEducations(educations);
+      const user = await getUser();
+      auth.login(user);
     }
   };
   useEffect(() => {
     fetch_educations();
-  }, [auth.user]);
+  }, []);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
     const myBackgroundImage = cld.image(auth.user.background_picture);
@@ -103,7 +105,14 @@ const profile = () => {
             setModal={modal.setIsOpen2}
             ariaText="Add Education"
           >
-            <EducationForm></EducationForm>
+            <EducationForm fetch_educations={fetch_educations}></EducationForm>
+          </Modal>
+          <Modal
+            modal={modal.isOpen3}
+            setModal={modal.setIsOpen3}
+            ariaText="Add Experience"
+          >
+            <ExperienceForm></ExperienceForm>
           </Modal>
           <div id="profile-upper">
             <div id="profile-banner-image">
@@ -188,6 +197,33 @@ const profile = () => {
                 </div>
               );
             })}
+        </div>
+        <div className="box-shadow m-10 mt-1">
+          <div className="flex flex-space-between">
+            <h1 className="p-3">Experience</h1>
+            <button
+              className="btn-none"
+              onClick={() => {
+                modal.setIsOpen3(true);
+              }}
+            >
+              <i className="fa fa-plus"></i>
+            </button>
+          </div>
+          {/* {educations &&
+            educations.map((e) => {
+              return (
+                <div className="m-3 mt-1">
+                  <h2>{e.School}</h2>
+                  <p>
+                    {e.Degree}, {e.FieldOfStudy}
+                  </p>
+                  <p className="text-gray">
+                    {e.StartYear} - {e.EndYear}
+                  </p>
+                </div>
+              );
+            })} */}
         </div>
       </div>
     );
