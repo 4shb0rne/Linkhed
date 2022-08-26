@@ -8,6 +8,7 @@ import Cookies from "universal-cookie";
 import { useState } from "react";
 
 import Comments from "./Comments";
+import getUser from "../../utils/getUser";
 
 const posts = (props: any) => {
   const [open, setOpen] = useState(false);
@@ -17,6 +18,14 @@ const posts = (props: any) => {
     },
   });
   const auth = useAuth();
+  const checkLike = ()=>{
+    if(auth.user.Posts.find((o : any) => o.id === props.p.id)){
+      return true;
+    } else{
+      return false;
+    }
+  }
+  const [liked, setLiked] = useState(checkLike());
   const cookies = new Cookies();
   const token = cookies.get("token");
   return (
@@ -53,13 +62,35 @@ const posts = (props: any) => {
             className="fas fa-thumbs-up fa-flip-horizontal"
           ></span>
           <span id="amount-info">
-            6969 <span>&nbsp;·&nbsp;</span> {props.p.Comments.length} Comments
+            {props.p.Users.length} <span>&nbsp;·&nbsp;</span> {props.p.Comments.length} Comments
           </span>
         </div>
         <div id="interactions-btns">
-          <button>
-            <span className="far fa-thumbs-up fa-flip-horizontal"></span>
-            <span>Like</span>
+          <button onClick={async()=>{
+            if(liked == false){
+              const data = {
+                userid: auth.user.id,
+                postid: props.p.id
+              }
+              await axios.post("http://localhost:8080/likepost", data, {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              })
+              setLiked(true)
+            } else{
+              await axios.delete("http://localhost:8080/dislikepost/"+props.p.id, {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              })
+              setLiked(false)
+            }
+            const User = await getUser();
+            auth.login(User);
+          }}>
+            <span className={`far fa-thumbs-up fa-flip-horizontal ${liked ? "post-like-on" : ""}`}></span>
+            <span className={`${liked ? "post-like-on" : ""}`}>Like</span>
           </button>
           <button
             onClick={() => {

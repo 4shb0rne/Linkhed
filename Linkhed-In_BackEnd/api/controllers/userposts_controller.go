@@ -33,10 +33,6 @@ func (server *Server) LikePost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	if err != nil {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-		return
-	}
 	Liked, err := userpost.LikePost(server.DB)
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -64,10 +60,6 @@ func (server *Server) DislikePost(w http.ResponseWriter, r *http.Request) {
 	err = server.DB.Debug().Model(models.UserPosts{}).Where("post_id = ? and user_id = ?", pid, uid).Take(&userpost).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
-		return
-	}
-	if uid != userpost.UserID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 	_, err = userpost.DislikePost(server.DB, pid, uid)
