@@ -10,26 +10,30 @@ const experienceform = () => {
   const modal = useModal();
   const token = cookies.get("token");
   const submit = (
-    school: string,
-    degree: string,
-    fieldofstudy: string,
+    title: string,
+    employment: string,
+    company: string,
+    location: string,
+    industry: string,
+    startmonth: string,
     startyear: string,
-    endyear: string,
-    activities: string,
-    description: string
+    endmonth: string,
+    endyear: string
   ) => {
     const data = {
       user_id: auth.user.id,
-      school: school,
-      degree: degree,
-      fieldofstudy: fieldofstudy,
+      title: title,
+      employment: employment,
+      location: location,
+      industry: industry,
+      company: company,
+      startmonth: parseInt(startmonth),
       startyear: parseInt(startyear),
+      endmonth: parseInt(endmonth),
       endyear: parseInt(endyear),
-      activities: activities,
-      description: description,
     };
     axios
-      .post("http://localhost:8080/addeducation", data, {
+      .post("http://localhost:8080/addexperience", data, {
         headers: {
           Authorization: "Bearer " + token,
         },
@@ -135,18 +139,18 @@ const experienceform = () => {
             const endyear = (
               document.getElementById("endyear") as HTMLInputElement
             ).value;
-            // if (school && degree && fieldofstudy && startyear && endyear) {
-            //   submit(
-            //     school,
-            //     degree,
-            //     fieldofstudy,
-            //     startyear,
-            //     endyear,
-            //     activities,
-            //     description
-            //   );
-            //   modal.setIsOpen2(false);
-            // }
+            if (
+              title &&
+              employment &&
+              company &&
+              location &&
+              industry &&
+              startmonth &&
+              startyear &&
+              endmonth &&
+              endyear
+            ) {
+            }
           }}
         >
           Submit
