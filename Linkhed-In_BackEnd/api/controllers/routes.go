@@ -21,7 +21,8 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/updateprofile/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
 	s.Router.HandleFunc("/addeducation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddEducation))).Methods("POST")
 	s.Router.HandleFunc("/educations/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetEducation))).Methods("GET")
-
+	s.Router.HandleFunc("/addexperience", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddExperience))).Methods("POST")
+	s.Router.HandleFunc("/experiences/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetExperience))).Methods("GET")
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
 	s.Router.HandleFunc("/addcomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddComment))).Methods("POST")
@@ -29,7 +30,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/likepost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.LikePost))).Methods("POST")
 	s.Router.HandleFunc("/dislikepost/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DislikePost))).Methods("DELETE")
 	s.Router.HandleFunc("/replies/{id}", middlewares.SetMiddlewareJSON(s.GetReplies)).Methods("GET")
-	s.Router.HandleFunc("/comments/{id}", middlewares.SetMiddlewareJSON(s.GetComments)).Methods("GET") 	
+	s.Router.HandleFunc("/comments/{id}", middlewares.SetMiddlewareJSON(s.GetComments)).Methods("GET")
 	s.Router.HandleFunc("/posts", middlewares.SetMiddlewareJSON(s.GetPosts)).Methods("GET")
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")

@@ -83,6 +83,14 @@ const profile = () => {
       auth.login(user);
     }
   };
+  const fetch_experiences = async()=>{
+    if (auth.user != null) {
+      const educations = await getEducation(auth.user.id);
+      setEducations(educations);
+      const user = await getUser();
+      auth.login(user);
+    }
+  }
   useEffect(() => {
     fetch_educations();
   }, []);

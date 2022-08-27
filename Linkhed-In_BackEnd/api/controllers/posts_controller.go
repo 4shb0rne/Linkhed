@@ -49,9 +49,7 @@ func (server *Server) CreatePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) GetPosts(w http.ResponseWriter, r *http.Request) {
-
 	post := models.Post{}
-
 	posts, err := post.FindAllPosts(server.DB)
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)

@@ -150,6 +150,7 @@ const experienceform = () => {
               endmonth &&
               endyear
             ) {
+              submit(title, employment, company, location, industry, startmonth, startyear, endmonth, endyear)
             }
           }}
         >

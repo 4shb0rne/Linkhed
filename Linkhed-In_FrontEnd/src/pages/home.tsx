@@ -8,19 +8,19 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useModal } from "../utils/modalContext";
 import AddPost from "../components/cards/addpost";
 import Modal from "../components/cards/modal";
-import Cookies from "universal-cookie";
 import Posts from "../components/cards/Posts";
+import InfiniteScroll from 'react-infinite-scroll-component'; 
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
+  const [length, setLength] = useState(5);
   const modal = useModal();
   const auth = useAuth();
-  const cookies = new Cookies();
-  const token = cookies.get("token");
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
     },
   });
+
   const fetch_user = async () => {
     const User = await getUser();
     auth.login(User);
@@ -29,6 +29,13 @@ const home = () => {
     const posts = await getPost();
     setPosts(posts);
   };
+
+  const add_length = () =>{
+    setTimeout(() => {
+      setLength(length+5);
+    }, 5000);
+  }
+
   useEffect(() => {
     fetch_user();
     fetch_posts();
@@ -102,26 +109,32 @@ const home = () => {
           <div id="feed-sort">
             <hr />
           </div>
+          <InfiniteScroll
+           dataLength={length}
+           next={add_length}
+           hasMore={posts.length >= length}
+           loader={<h4>Loading...</h4>}>
           {posts &&
-            posts.map((p) => {
-              const postImage = cld.image(p.attachment);
-              const profileimage = cld.image(p.user.profile_picture);
-              var hours = Math.floor(
-                Math.abs(
-                  new Date().valueOf() - new Date(p.updated_at).valueOf()
-                ) / 36e5
-              );
-              return (
-                <Posts
-                  key={p.id}
-                  p={p}
-                  hours={hours}
-                  fetch_posts={fetch_posts}
-                  profileimage={profileimage}
-                  postImage={postImage}
-                ></Posts>
-              );
-            })}
+              posts.map((p) => {
+                const postImage = cld.image(p.attachment);
+                const profileimage = cld.image(p.user.profile_picture);
+                var hours = Math.floor(
+                  Math.abs(
+                    new Date().valueOf() - new Date(p.updated_at).valueOf()
+                  ) / 36e5
+                );
+                return (
+                  <Posts
+                    key={p.id}
+                    p={p}
+                    hours={hours}
+                    fetch_posts={fetch_posts}
+                    profileimage={profileimage}
+                    postImage={postImage}
+                  ></Posts>
+                );
+              })}
+          </InfiniteScroll>
         </main>
       </div>
     </div>

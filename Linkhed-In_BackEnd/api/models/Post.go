@@ -16,7 +16,7 @@ type Post struct {
 	UserID     uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
 	Attachment string `json:"attachment"`
 	Comments   []Comment
-	Users []*User `gorm:"many2many:user_posts;"`
+	Users      []*User   `gorm:"many2many:user_posts;"`
 	CreatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt  time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
