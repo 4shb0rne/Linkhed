@@ -12,42 +12,45 @@ import { AuthProvider } from "./utils/authContext";
 import { RequireAuth } from "./utils/RequireAuth";
 import { ModalProvider } from "./utils/modalContext";
 import { PostsProvider } from "./utils/postContext";
+import "../index.css";
 function App() {
   return (
     <AuthProvider>
       <PostsProvider>
-      <ModalProvider>
-      <BrowserRouter>
-        <Navbar></Navbar>
-        <Routes>
-          <Route path="/"></Route>
-          <Route path="/login" element={<Login></Login>}></Route>
-          <Route path="/register" element={<Register></Register>}></Route>
-          <Route
-            path="/forgetpassword"
-            element={<ForgetPassword></ForgetPassword>}
-          ></Route>
-          <Route
-            path="/resetpassword"
-            element={<ResetPassword></ResetPassword>}
-          ></Route>
-          <Route
-            path="/registerdata"
-            element={<RegisterData></RegisterData>}
-          ></Route>
-          <Route path="/home" element={<MainPage></MainPage>}></Route>
-          <Route
-            path="/profile"
-            element={
-              <RequireAuth>
-                <Profile></Profile>
-              </RequireAuth>
-            }
-          ></Route>
-        </Routes>
-        <Footer></Footer>
-      </BrowserRouter>
-      </ModalProvider>
+        <ModalProvider>
+          <BrowserRouter>
+            <Navbar></Navbar>
+            <div className="body">
+              <Routes>
+                <Route path="/"></Route>
+                <Route path="/login" element={<Login></Login>}></Route>
+                <Route path="/register" element={<Register></Register>}></Route>
+                <Route
+                  path="/forgetpassword"
+                  element={<ForgetPassword></ForgetPassword>}
+                ></Route>
+                <Route
+                  path="/resetpassword"
+                  element={<ResetPassword></ResetPassword>}
+                ></Route>
+                <Route
+                  path="/registerdata"
+                  element={<RegisterData></RegisterData>}
+                ></Route>
+                <Route path="/home" element={<MainPage></MainPage>}></Route>
+                <Route
+                  path="/profile"
+                  element={
+                    <RequireAuth>
+                      <Profile></Profile>
+                    </RequireAuth>
+                  }
+                ></Route>
+              </Routes>
+            </div>
+            <Footer></Footer>
+          </BrowserRouter>
+        </ModalProvider>
       </PostsProvider>
     </AuthProvider>
   );

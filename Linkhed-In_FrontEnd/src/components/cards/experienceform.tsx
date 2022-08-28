@@ -4,7 +4,7 @@ import { useAuth } from "../../utils/authContext";
 import Cookies from "universal-cookie";
 import { useModal } from "../../utils/modalContext";
 
-const experienceform = () => {
+const experienceform = (props: any) => {
   const auth = useAuth();
   const cookies = new Cookies();
   const modal = useModal();
@@ -23,10 +23,10 @@ const experienceform = () => {
     const data = {
       user_id: auth.user.id,
       title: title,
-      employment: employment,
+      employmenttype: employment,
       location: location,
       industry: industry,
-      company: company,
+      companyname: company,
       startmonth: parseInt(startmonth),
       startyear: parseInt(startyear),
       endmonth: parseInt(endmonth),
@@ -38,7 +38,9 @@ const experienceform = () => {
           Authorization: "Bearer " + token,
         },
       })
-      .then(() => {});
+      .then(() => {
+        props.fetch_experiences();
+      });
   };
   return (
     <div>
@@ -97,13 +99,13 @@ const experienceform = () => {
       </div>
       <div className="form-input col-2">
         <div>
-          <label>End Month*</label>
+          <label>End Month(optional)</label>
           <div>
             <input type="number" className="input-text" id="endmonth"></input>
           </div>
         </div>
         <div>
-          <label>End Year*</label>
+          <label>End Year(optional)</label>
           <div>
             <input type="number" className="input-text" id="endyear"></input>
           </div>
@@ -146,11 +148,20 @@ const experienceform = () => {
               location &&
               industry &&
               startmonth &&
-              startyear &&
-              endmonth &&
-              endyear
+              startyear
             ) {
-              submit(title, employment, company, location, industry, startmonth, startyear, endmonth, endyear)
+              submit(
+                title,
+                employment,
+                company,
+                location,
+                industry,
+                startmonth,
+                startyear,
+                endmonth,
+                endyear
+              );
+              modal.setIsOpen3(false);
             }
           }}
         >

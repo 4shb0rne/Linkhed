@@ -13,10 +13,12 @@ import { useModal } from "../../utils/modalContext";
 import getEducation from "../../utils/getEducation";
 import getUser from "../../utils/getUser";
 import ExperienceForm from "../cards/experienceform";
+import getExperience from "../../utils/getExperience";
 const profile = () => {
   const auth = useAuth();
   const modal = useModal();
   const [educations, setEducations] = useState<any[]>([]);
+  const [experiences, setExperiences] = useState<any[]>([]);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -75,6 +77,11 @@ const profile = () => {
           });
       });
   };
+  const fetch_user = async () => {
+    const User = await getUser();
+    auth.login(User);
+  };
+
   const fetch_educations = async () => {
     if (auth.user != null) {
       const educations = await getEducation(auth.user.id);
@@ -83,16 +90,18 @@ const profile = () => {
       auth.login(user);
     }
   };
-  const fetch_experiences = async()=>{
+  const fetch_experiences = async () => {
     if (auth.user != null) {
-      const educations = await getEducation(auth.user.id);
-      setEducations(educations);
+      const experience = await getExperience(auth.user.id);
+      setExperiences(experience);
       const user = await getUser();
       auth.login(user);
     }
-  }
+  };
   useEffect(() => {
+    fetch_user();
     fetch_educations();
+    fetch_experiences();
   }, []);
   if (auth.user) {
     const myImage = cld.image(auth.user.profile_picture);
@@ -120,7 +129,9 @@ const profile = () => {
             setModal={modal.setIsOpen3}
             ariaText="Add Experience"
           >
-            <ExperienceForm></ExperienceForm>
+            <ExperienceForm
+              fetch_experiences={fetch_experiences}
+            ></ExperienceForm>
           </Modal>
           <div id="profile-upper">
             <div id="profile-banner-image">
@@ -218,20 +229,20 @@ const profile = () => {
               <i className="fa fa-plus"></i>
             </button>
           </div>
-          {/* {educations &&
-            educations.map((e) => {
+          {experiences &&
+            experiences.map((e) => {
               return (
                 <div className="m-3 mt-1">
-                  <h2>{e.School}</h2>
-                  <p>
-                    {e.Degree}, {e.FieldOfStudy}
-                  </p>
+                  <h1>{e.CompanyName}</h1>
+                  <h2>{e.Title}</h2>
+                  <p>{e.EmploymentType}</p>
                   <p className="text-gray">
-                    {e.StartYear} - {e.EndYear}
+                    {e.StartMonth}-{e.StartYear} -{" "}
+                    {e.EndYear == 0 ? "Present" : e.EndMonth + "-" + e.EndYear}
                   </p>
                 </div>
               );
-            })} */}
+            })}
         </div>
       </div>
     );

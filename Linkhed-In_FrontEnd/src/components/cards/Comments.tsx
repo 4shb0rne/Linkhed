@@ -6,12 +6,24 @@ import { AdvancedImage } from "@cloudinary/react";
 import { useAuth } from "../../utils/authContext";
 import Cookies from "universal-cookie";
 import { useState } from "react";
+import getUser from "../../utils/getUser";
 
 const comments = (props: any) => {
   const [open, setOpen] = useState(false);
   const auth = useAuth();
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const checkLike = () => {
+    if (auth.user) {
+      if (auth.user.CommentLikes.find((o: any) => o.id === props.c.id)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    return false;
+  };
+  const [liked, setLiked] = useState(checkLike());
   const data = props;
   return (
     <div key={data.c.id}>
@@ -32,12 +44,59 @@ const comments = (props: any) => {
               </div>
             </a>
           </div>
+
           <div id="post-data">
             <div>{parse(decode(data.c.content))}</div>
-            {/* <AdvancedImage cldImg={props.postImage} /> */}
           </div>
           <div id="post-interactions">
+            <div id="interactions-amount">
+              <span
+                id="like-icon"
+                className="fas fa-thumbs-up fa-flip-horizontal"
+              ></span>
+              <span id="amount-info">{props.c.Users.length}</span>
+            </div>
             <div id="interactions-btns">
+              <button
+                onClick={async () => {
+                  if (liked == false) {
+                    const data = {
+                      userid: auth.user.id,
+                      commentid: props.c.id,
+                    };
+                    await axios.post(
+                      "http://localhost:8080/likecomment",
+                      data,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    setLiked(true);
+                  } else {
+                    await axios.delete(
+                      "http://localhost:8080/dislikecomment/" + props.c.id,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    setLiked(false);
+                  }
+                  const User = await getUser();
+                  auth.login(User);
+                  props.fetch_posts();
+                }}
+              >
+                <span
+                  className={`far fa-thumbs-up fa-flip-horizontal ${
+                    liked ? "post-like-on" : ""
+                  }`}
+                ></span>
+                <span className={`${liked ? "post-like-on" : ""}`}>Like</span>
+              </button>
               <button
                 onClick={() => {
                   if (!open) {

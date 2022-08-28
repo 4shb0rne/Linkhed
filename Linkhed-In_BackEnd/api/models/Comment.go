@@ -16,6 +16,7 @@ type Comment struct {
 	Content   string `gorm:"size:255;not null;" json:"content"`
 	User      User
 	UserID    uint32
+	Users     []*User   `gorm:"many2many:user_comments;"`
 	Replies   []Reply
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -62,7 +63,7 @@ func (c *Comment) AddComment(db *gorm.DB) (*Comment, error) {
 func (c *Comment) FindComments(db *gorm.DB, pid uint64) (*[]Comment, error) {
 	var err error
 	comments := []Comment{}
-	err = db.Debug().Model(&Comment{}).Where("post_id = ?", pid).Find(&comments).Error
+	err = db.Debug().Model(&Comment{}).Where("post_id = ?", pid).Preload("Users").Find(&comments).Error
 	if err != nil {
 		return &[]Comment{}, err
 	}

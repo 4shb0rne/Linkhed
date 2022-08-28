@@ -6,7 +6,6 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useAuth } from "../../utils/authContext";
 import Cookies from "universal-cookie";
 import { useState } from "react";
-
 import Comments from "./Comments";
 import getUser from "../../utils/getUser";
 
@@ -19,11 +18,14 @@ const posts = (props: any) => {
   });
   const auth = useAuth();
   const checkLike = () => {
-    if (auth.user.Posts.find((o: any) => o.id === props.p.id)) {
-      return true;
-    } else {
-      return false;
+    if (auth.user) {
+      if (auth.user.PostsLikes.find((o: any) => o.id === props.p.id)) {
+        return true;
+      } else {
+        return false;
+      }
     }
+    return false;
   };
   const [liked, setLiked] = useState(checkLike());
   const cookies = new Cookies();

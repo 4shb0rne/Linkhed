@@ -16,7 +16,7 @@ type Experience struct {
 	CompanyName    string
 	Location       string
 	Industry       string
-	StartMonth     uint32
+	StartMonth     uint32	
 	StartYear      uint32
 	EndMonth       uint32
 	EndYear        uint32
@@ -51,14 +51,8 @@ func (e *Experience) Validate() error {
 	if e.StartYear == 0 {
 		return errors.New("required start year")
 	}
-	if e.EndYear == 0 {
-		return errors.New("required end year")
-	}
 	if e.StartMonth == 0 {
 		return errors.New("required start month")
-	}
-	if e.EndMonth == 0 {
-		return errors.New("required end month")
 	}
 	return nil
 }

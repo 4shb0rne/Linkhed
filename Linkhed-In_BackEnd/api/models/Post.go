@@ -55,11 +55,11 @@ func (p *Post) SavePost(db *gorm.DB) (*Post, error) {
 	return p, nil
 }
 
-func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
+func (p *Post) FindAllPosts(db *gorm.DB, count uint64) (*[]Post, error) {
 	var err error
 	posts := []Post{}
-	err = db.Debug().Model(&Post{}).Find(&posts).Error
-	er := db.Debug().Model(&Post{}).Preload("Users").Find(&posts).Error
+	err = db.Debug().Model(&Post{}).Limit(count).Find(&posts).Error
+	er := db.Debug().Model(&Post{}).Limit(count).Preload("Users").Find(&posts).Error
 	if err != nil || er != nil {
 		return &[]Post{}, err
 	}
@@ -69,7 +69,7 @@ func (p *Post) FindAllPosts(db *gorm.DB) (*[]Post, error) {
 			err2 := db.Debug().Model(&posts[i]).Preload("Comments").Find(&posts[i]).Error
 			if len(posts[i].Comments) > 0 {
 				for j := range posts[i].Comments {
-					err3 := db.Debug().Model(&posts[i].Comments[j]).Preload("Replies").Find(&posts[i].Comments[j]).Error
+					err3 := db.Debug().Model(&posts[i].Comments[j]).Preload("Users").Preload("Replies").Find(&posts[i].Comments[j]).Error
 					err4 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
 					_ = err3
 					_ = err4
@@ -149,3 +149,4 @@ func (p *Post) DeleteAPost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 	}
 	return db.RowsAffected, nil
 }
+
