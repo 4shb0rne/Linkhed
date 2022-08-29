@@ -75,6 +75,25 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
+
+func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
+	
+	body, err := ioutil.ReadAll(r.Body)
+	query := models.SearchQuery{}
+	err = json.Unmarshal(body, &query)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+	}
+	user := models.User{}
+	userList, err := user.SearchUser(server.DB, query)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, userList)
+}
+
+
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)

@@ -53,17 +53,26 @@ const navbar = () => {
       <header id="main-header">
         <div>
           <div>
-              <img id="header-logo" src="linkedin.png" alt="LinkedIn" />
+            <img id="header-logo" src="/linkedin.png" alt="LinkedIn" />
             <img
               id="header-picture-menu"
-              src="mongo.jpeg"
+              src="/linkedin.png"
               alt="Profile picture"
             />
             <span id="header-picture-menu-bars">
               <span className="fas fa-bars"></span>
             </span>
             <div>
-              <input id="search" type="text" placeholder="         Search" />
+              <form
+                onSubmit={() => {
+                  const data = (
+                    document.getElementById("search") as HTMLInputElement
+                  ).value;
+                  navigate(`/search/${data}`);
+                }}
+              >
+                <input id="search" type="text" placeholder="Search" />
+              </form>
               <span id="search-icon" className="fas fa-search"></span>
               <span id="search-button" className="fas fa-search"></span>
             </div>

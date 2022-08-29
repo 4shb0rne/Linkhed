@@ -16,6 +16,8 @@ var users = []models.User{
 		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 		Headline:          "Student at somewhere",
+		City:			   "Tangerang",
+		Country:		   "Indonesia",
 	},
 	models.User{
 		Firstname:         "user",
@@ -25,6 +27,8 @@ var users = []models.User{
 		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 		Headline:          "Student at somewhere",
+		City:			   "Tangerang",
+		Country:		   "Indonesia",
 	},
 }
 

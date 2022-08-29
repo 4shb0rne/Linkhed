@@ -32,6 +32,11 @@ type User struct {
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
+type SearchQuery struct{
+	Content string
+}
+
+
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
@@ -224,4 +229,15 @@ func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 		return 0, db.Error
 	}
 	return db.RowsAffected, nil
+}
+
+
+func (u *User) SearchUser(db *gorm.DB, query SearchQuery) (*[]User, error) {
+	var err error
+	users := []User{}
+	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("PostsLikes").Preload("CommentLikes").Find(&users).Error
+	if err != nil {
+		return &[]User{}, err
+	}
+	return &users, err
 }

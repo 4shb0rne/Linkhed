@@ -12,6 +12,7 @@ import { AuthProvider } from "./utils/authContext";
 import { RequireAuth } from "./utils/RequireAuth";
 import { ModalProvider } from "./utils/modalContext";
 import { PostsProvider } from "./utils/postContext";
+import SearchPage from "./pages/searchpage";
 import "../index.css";
 function App() {
   return (
@@ -45,6 +46,10 @@ function App() {
                       <Profile></Profile>
                     </RequireAuth>
                   }
+                ></Route>
+                <Route
+                  path="/search/:query"
+                  element={<SearchPage></SearchPage>}
                 ></Route>
               </Routes>
             </div>

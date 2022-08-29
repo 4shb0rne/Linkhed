@@ -58,9 +58,8 @@ func (p *Post) SavePost(db *gorm.DB) (*Post, error) {
 func (p *Post) FindAllPosts(db *gorm.DB, count uint64) (*[]Post, error) {
 	var err error
 	posts := []Post{}
-	err = db.Debug().Model(&Post{}).Limit(count).Find(&posts).Error
 	er := db.Debug().Model(&Post{}).Limit(count).Preload("Users").Find(&posts).Error
-	if err != nil || er != nil {
+	if er != nil {
 		return &[]Post{}, err
 	}
 	if len(posts) > 0 {
@@ -148,5 +147,38 @@ func (p *Post) DeleteAPost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 		return 0, db.Error
 	}
 	return db.RowsAffected, nil
+}
+
+func (p *Post) SearchPost(db *gorm.DB, query SearchQuery) (*[]Post, error) {
+	var err error
+	posts := []Post{}
+	err = db.Debug().Model(&Post{}).Where("content ILIKE ?", "%"+query.Content+"%").Preload("Users").Find(&posts).Error
+	if len(posts) > 0 {
+		for i := range posts {
+			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].UserID).Take(&posts[i].User).Error
+			err2 := db.Debug().Model(&posts[i]).Preload("Comments").Find(&posts[i]).Error
+			if len(posts[i].Comments) > 0 {
+				for j := range posts[i].Comments {
+					err3 := db.Debug().Model(&posts[i].Comments[j]).Preload("Users").Preload("Replies").Find(&posts[i].Comments[j]).Error
+					err4 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].UserID).Take(&posts[i].Comments[j].User).Error
+					_ = err3
+					_ = err4
+					if len(posts[i].Comments[j].Replies) > 0 {
+						for z := range posts[i].Comments[j].Replies {
+							err5 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
+							_ = err5
+						}
+					}
+				}
+			}
+			if err != nil || err2 != nil {
+				return &[]Post{}, err
+			}
+		}
+	}
+	if err != nil {
+		return &[]Post{}, err
+	}
+	return &posts, err
 }
 

@@ -188,3 +188,20 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+
+func (server *Server) SearchPost(w http.ResponseWriter, r *http.Request) {
+	
+	body, err := ioutil.ReadAll(r.Body)
+	query := models.SearchQuery{}
+	err = json.Unmarshal(body, &query)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+	}
+	post := models.Post{}
+	postList, err := post.SearchPost(server.DB, query)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, postList)
+}

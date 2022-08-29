@@ -34,10 +34,15 @@ const home = () => {
   };
 
   const load_posts = () => {
-    setLength(length + 3);
+    setLength(length + 1);
+    if (length + 1 == Posts.length) {
+      setHasMore(false);
+    } else {
+      setHasMore(true);
+    }
     setTimeout(() => {
       axios
-        .get("http://localhost:8080/posts/" + (length + 3))
+        .get("http://localhost:8080/posts/" + (length + 1))
         .then((response) => {
           console.log(response.data);
           setPosts(response.data);
