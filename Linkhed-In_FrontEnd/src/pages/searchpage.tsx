@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import Cookies from "universal-cookie";
 import { useEffect, useState } from "react";
@@ -7,6 +6,8 @@ import axios from "axios";
 import "../styles/searchpage.scss";
 import Posts from "../components/cards/Posts";
 import "../styles/mainpage.scss";
+import { useAuth } from "../utils/authContext";
+import Userlist from "../components/cards/userlist";
 const searchpage = () => {
   const params = useParams();
   const cookies = new Cookies();
@@ -61,28 +62,7 @@ const searchpage = () => {
         </div>
         {users &&
           users.map((u) => {
-            const Image = cld.image(u.profile_picture);
-            return (
-              <div id="post-author">
-                <a>
-                  <div>
-                    <AdvancedImage cldImg={Image} />
-                    <div>
-                      <div>
-                        <strong id="post-author-name">
-                          {u.firstname} {u.lastname}
-                        </strong>
-                      </div>
-                      <span>{u.Headline}</span>
-                      <span>
-                        {u.City}, {u.Country}
-                      </span>
-                    </div>
-                  </div>
-                </a>
-                <button className="connect-btn">Connect</button>
-              </div>
-            );
+            return <Userlist u={u}></Userlist>;
           })}
       </div>
       <div className="box-shadow m-10 mt-1">

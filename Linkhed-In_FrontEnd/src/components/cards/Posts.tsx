@@ -8,9 +8,11 @@ import Cookies from "universal-cookie";
 import { useState } from "react";
 import Comments from "./Comments";
 import getUser from "../../utils/getUser";
+import { useNavigate } from "react-router-dom";
 
 const posts = (props: any) => {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -34,7 +36,11 @@ const posts = (props: any) => {
     <article key={props.p.id}>
       <div id="post-author">
         <a href="#">
-          <div>
+          <div
+            onClick={() => {
+              navigate("/openprofile/" + props.p.user.id);
+            }}
+          >
             <AdvancedImage cldImg={props.profileimage} />
             <div>
               <div>
