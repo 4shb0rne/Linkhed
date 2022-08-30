@@ -24,8 +24,7 @@ func (up *UserPosts) Validate() error {
 }
 
 func (up *UserPosts) LikePost(db *gorm.DB) (*UserPosts, error) {
-	var err error
-	err = db.Debug().Model(&UserPosts{}).Create(&up).Error
+	var err error = db.Debug().Model(&UserPosts{}).Create(&up).Error
 	if err != nil {
 		return &UserPosts{}, err
 	}

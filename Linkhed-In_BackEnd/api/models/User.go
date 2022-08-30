@@ -14,28 +14,28 @@ import (
 )
 
 type User struct {
-	ID                uint32  `gorm:"primary_key;auto_increment" json:"id"`
-	Firstname         string  `gorm:"size:255;" json:"firstname"`
-	Lastname          string  `gorm:"size:255;" json:"lastname"`
-	Email             string  `gorm:"size:100;not null;unique" json:"email"`
-	Password          string  `gorm:"size:100;not null;" json:"password"`
-	ProfilePicture    string  `gorm:"size:255;" json:"profile_picture"`
-	Headline          string  `gorm:"size:255;" json:"Headline"`
-	Industry          string  `gorm:"size:100;" json:"Industry"`
-	Country           string  `gorm:"size:100;" json:"Country"`
-	City              string  `gorm:"size:100;" json:"City"`
-	BackgroundPicture string  `gorm:"size:255;" json:"background_picture"`
-	PostsLikes             []*Post `gorm:"many2many:user_posts;"`
+	ID                uint32     `gorm:"primary_key;auto_increment" json:"id"`
+	Firstname         string     `gorm:"size:255;" json:"firstname"`
+	Lastname          string     `gorm:"size:255;" json:"lastname"`
+	Email             string     `gorm:"size:100;not null;unique" json:"email"`
+	Password          string     `gorm:"size:100;not null;" json:"password"`
+	ProfilePicture    string     `gorm:"size:255;" json:"profile_picture"`
+	Headline          string     `gorm:"size:255;" json:"Headline"`
+	Industry          string     `gorm:"size:100;" json:"Industry"`
+	Country           string     `gorm:"size:100;" json:"Country"`
+	City              string     `gorm:"size:100;" json:"City"`
+	BackgroundPicture string     `gorm:"size:255;" json:"background_picture"`
+	PostsLikes        []*Post    `gorm:"many2many:user_posts;"`
 	CommentLikes      []*Comment `gorm:"many2many:user_comments;"`
-	ProfileVisited	uint32 
+	Connections       []*User    `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
+	ProfileVisited    uint32
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
-type SearchQuery struct{
+type SearchQuery struct {
 	Content string
 }
-
 
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
@@ -136,7 +136,7 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Find(&users).Error
+	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Preload("Connections").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}
@@ -144,7 +144,7 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 }
 
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
-	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("CommentLikes").Take(&u).Error
+	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("CommentLikes").Preload("Connections").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -231,11 +231,10 @@ func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 	return db.RowsAffected, nil
 }
 
-
 func (u *User) SearchUser(db *gorm.DB, query SearchQuery) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("PostsLikes").Preload("CommentLikes").Find(&users).Error
+	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("Connections").Preload("PostsLikes").Preload("CommentLikes").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}

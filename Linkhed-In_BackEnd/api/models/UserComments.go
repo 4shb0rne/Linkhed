@@ -9,7 +9,7 @@ import (
 
 type UserComments struct {
 	UserID    uint32 `gorm:"primaryKey"`
-	CommentID    uint32 `gorm:"primaryKey"`
+	CommentID uint32 `gorm:"primaryKey"`
 	CreatedAt time.Time
 }
 
@@ -24,8 +24,7 @@ func (uc *UserComments) Validate() error {
 }
 
 func (uc *UserComments) LikeComment(db *gorm.DB) (*UserComments, error) {
-	var err error
-	err = db.Debug().Model(&UserComments{}).Create(&uc).Error
+	var err error = db.Debug().Model(&UserComments{}).Create(&uc).Error
 	if err != nil {
 		return &UserComments{}, err
 	}

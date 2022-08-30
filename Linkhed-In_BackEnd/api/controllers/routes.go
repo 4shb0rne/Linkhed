@@ -38,10 +38,10 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 
-
 	//Search
 	s.Router.HandleFunc("/searchuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchUser))).Methods("POST")
 	s.Router.HandleFunc("/searchpost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchPost))).Methods("POST")
 
-	
+	s.Router.HandleFunc("/connectuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.ConnectUser))).Methods("POST")
+	s.Router.HandleFunc("/disconnectuser/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DisconnectUser))).Methods("POST")
 }
