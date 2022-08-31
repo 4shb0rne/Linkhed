@@ -42,3 +42,17 @@ func (i *Invitation) AddInvitation(db *gorm.DB) (*Invitation, error) {
 	}
 	return i, nil
 }
+
+func (i *Invitation) DeleteInvitation(db *gorm.DB, pid uint64) (int64, error) {
+
+	db = db.Debug().Model(&Invitation{}).Where("id = ?", pid).Take(&Invitation{}).Delete(&Invitation{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Invitation not found")
+		}
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}
+

@@ -14,6 +14,7 @@ import { ModalProvider } from "./utils/modalContext";
 import { PostsProvider } from "./utils/postContext";
 import UserProfile from "./pages/userprofile";
 import SearchPage from "./pages/searchpage";
+import NetworkPage from "./pages/networkpage";
 import "../index.css";
 function App() {
   return (
@@ -61,6 +62,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <UserProfile></UserProfile>
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="/networkpage"
+                  element={
+                    <RequireAuth>
+                      <NetworkPage></NetworkPage>
                     </RequireAuth>
                   }
                 ></Route>

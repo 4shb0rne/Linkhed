@@ -89,7 +89,7 @@ const navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-white">
+                <Link to="/networkpage" className="text-white">
                   <div className="header_logo">
                     <span className="fas fa-user-friends"></span>
                     <span className="nav-item-text">My Network</span>

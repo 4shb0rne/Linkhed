@@ -45,4 +45,7 @@ func (s *Server) initializeRoutes() {
 
 	s.Router.HandleFunc("/connectuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.ConnectUser))).Methods("POST")
 	s.Router.HandleFunc("/disconnectuser/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DisconnectUser))).Methods("DELETE")
+
+	s.Router.HandleFunc("/sendinvitation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddInvitation))).Methods("POST")	
+	s.Router.HandleFunc("/deleteinvitation/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteInvitation))).Methods("DELETE")
 }
