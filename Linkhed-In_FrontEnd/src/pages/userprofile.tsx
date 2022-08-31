@@ -40,7 +40,7 @@ const userprofile = () => {
       cloudName: "ashbornee",
     },
   });
-  if (user && auth) {
+  if (user && auth.user) {
     const myImage = cld.image(user["profile_picture"]);
     const myBackgroundImage = cld.image(user["background_picture"]);
     myImage.resize(fill().width(250).height(250));

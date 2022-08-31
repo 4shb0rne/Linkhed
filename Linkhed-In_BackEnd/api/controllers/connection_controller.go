@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/4shb0rne/Linkhed-In_BackEnd/api/auth"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/utils/formaterror"
@@ -46,12 +45,12 @@ func (server *Server) ConnectUser(w http.ResponseWriter, r *http.Request) {
 func (server *Server) DisconnectUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
-	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	pid, err := strconv.ParseUint(vars["pid"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
+	uid, err := strconv.ParseUint(vars["uid"], 10, 64)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return

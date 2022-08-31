@@ -181,6 +181,23 @@ func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	return u, nil
 }
 
+func (u *User) UpdateVisited(db *gorm.DB, uid uint32, counts uint32) (*User, error) {
+	err := u.BeforeSave()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Update("profile_visited", counts)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+	// This is the display the updated user
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("CommentLikes").Preload("Connections").Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
+
 func (u *User) UpdateProfilePicture(db *gorm.DB, uid uint32) (*User, error) {
 	err := u.BeforeSave()
 	if err != nil {

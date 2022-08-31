@@ -22,8 +22,6 @@ const userlist = (props: any) => {
 
   const checkConnect = () => {
     if (auth.user) {
-      console.log(auth.user.Connections);
-      console.log(props.u.id);
       if (auth.user.Connections.find((o: any) => o.id === props.u.id)) {
         console.log("True");
         return true;
@@ -69,14 +67,23 @@ const userlist = (props: any) => {
                 userid: auth.user.id,
                 connectionid: props.u.id,
               };
+              const data2 =  {
+                userid: props.u.id,
+                connectionid: auth.user.id,
+              }
               axios.post("http://localhost:8080/connectuser", data1, {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              });
+              axios.post("http://localhost:8080/connectuser", data2, {
                 headers: {
                   Authorization: "Bearer " + token,
                 },
               });
               setConnect(true);
             }}
-          >
+          > 
             Connect
           </button>
         ) : (
@@ -84,7 +91,15 @@ const userlist = (props: any) => {
             className="connect-btn"
             onClick={() => {
               axios.delete(
-                "http://localhost:8080/disconnectuser/" + props.u.id,
+                "http://localhost:8080/disconnectuser/"+props.u.id+"/"+auth.user.id,
+                {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                }
+              );
+              axios.delete(
+                "http://localhost:8080/disconnectuser/"+auth.user.id+"/"+props.u.id,
                 {
                   headers: {
                     Authorization: "Bearer " + token,
@@ -94,7 +109,7 @@ const userlist = (props: any) => {
               setConnect(false);
             }}
           >
-            Disconnect
+            Delete Connection 
           </button>
         )}
       </div>

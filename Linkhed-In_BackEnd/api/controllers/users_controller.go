@@ -75,9 +75,8 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
-
 func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
-	
+
 	body, err := ioutil.ReadAll(r.Body)
 	query := models.SearchQuery{}
 	err = json.Unmarshal(body, &query)
@@ -92,7 +91,32 @@ func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, userList)
 }
+func (server *Server) UpdateProfileViews(w http.ResponseWriter, r *http.Request) {
 
+	vars := mux.Vars(r)
+	uid, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	counts, err := strconv.ParseUint(vars["count"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	user := models.User{}
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	updatedUser, err := user.UpdateVisited(server.DB, uint32(uid), uint32(counts))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, updatedUser)
+}
 
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
@@ -138,7 +162,7 @@ func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) UpdateProfilePicture(w http.ResponseWriter, r *http.Request) {
-	
+
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
@@ -180,7 +204,7 @@ func (server *Server) UpdateProfilePicture(w http.ResponseWriter, r *http.Reques
 }
 
 func (server *Server) UpdateBackgroundPicture(w http.ResponseWriter, r *http.Request) {
-	
+
 	vars := mux.Vars(r)
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
@@ -221,13 +245,12 @@ func (server *Server) UpdateBackgroundPicture(w http.ResponseWriter, r *http.Req
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
 
-
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	vars := mux.Vars(r)
 
 	user := models.User{}
-	
+
 	uid, err := strconv.ParseUint(vars["id"], 10, 32)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
@@ -250,5 +273,3 @@ func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", uid))
 	responses.JSON(w, http.StatusNoContent, "")
 }
-
-

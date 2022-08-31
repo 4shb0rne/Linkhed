@@ -57,7 +57,7 @@ const home = () => {
   const myImage = cld.image(
     auth.user ? auth.user.profile_picture : "blank_bjt7w5"
   );
-
+    
   return (
     <div className="container">
       <Modal
@@ -82,11 +82,11 @@ const home = () => {
             <div id="profile-links">
               <a>
                 <span> Who's viewed your profile </span>
-                <span className="profile-number"> 102 </span>
+                <span className="profile-number"> {auth.user && auth.user.ProfileVisited} </span>
               </a>
               <a>
                 <span> Connections </span>
-                <span className="profile-number"> 452 </span>
+                <span className="profile-number"> {auth.user && auth.user.Connections.length} </span>
               </a>
             </div>
           </div>

@@ -38,7 +38,19 @@ const posts = (props: any) => {
         <a href="#">
           <div
             onClick={() => {
-              navigate("/openprofile/" + props.p.user.id);
+              if(auth.user.id == props.p.user.id){
+                navigate("/profile")
+              } else{
+                axios
+                .get("http://localhost:8080/updateprofileview/"+props.p.user.id+"/"+(props.p.user.ProfileVisited+1), {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                }).then((response)=>{
+                  auth.login(response.data)
+                })
+                navigate("/openprofile/" + props.p.user.id);
+              }
             }}
           >
             <AdvancedImage cldImg={props.profileimage} />

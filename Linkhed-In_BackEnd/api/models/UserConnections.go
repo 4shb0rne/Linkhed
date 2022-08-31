@@ -8,8 +8,8 @@ import (
 )
 
 type UserConnections struct {
-	UserID       uint32 `gorm:"primaryKey"`
-	ConnectionID uint32 `gorm:"primaryKey"`
+	UserID       uint64 `gorm:"primaryKey"`
+	ConnectionID uint64 `gorm:"primaryKey"`
 	CreatedAt    time.Time
 }
 
@@ -31,7 +31,7 @@ func (uc *UserConnections) ConnectUser(db *gorm.DB) (*UserConnections, error) {
 	return uc, nil
 }
 
-func (uc *UserConnections) DisconnectUser(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
+func (uc *UserConnections) DisconnectUser(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
 	db = db.Debug().Model(&UserPosts{}).Where("connection_id = ? and user_id = ?", pid, uid).Take(&UserConnections{}).Delete(&UserConnections{})
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
