@@ -46,8 +46,6 @@ const posts = (props: any) => {
                   headers: {
                     Authorization: "Bearer " + token,
                   },
-                }).then((response)=>{
-                  auth.login(response.data)
                 })
                 navigate("/openprofile/" + props.p.user.id);
               }

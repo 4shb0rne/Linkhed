@@ -64,7 +64,7 @@ func (server *Server) DeleteInvitation(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
 		return
 	}
-	if uid != invitation.UserID {
+	if uid != invitation.ConnectionID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}

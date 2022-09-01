@@ -10,7 +10,7 @@ type Invitation struct {
 	gorm.Model
 	UserID       uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
 	ConnectionID uint32 `sql:"type:int REFERENCES users(id)" json:"connection_id"`
-	User         User   `json:"user"`
+	User         User   `gorm:"references:connection_id"`
 }
 
 func (i *Invitation) Validate() error {
@@ -55,4 +55,3 @@ func (i *Invitation) DeleteInvitation(db *gorm.DB, pid uint64) (int64, error) {
 	}
 	return db.RowsAffected, nil
 }
-

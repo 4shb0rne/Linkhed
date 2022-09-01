@@ -7,12 +7,14 @@ import getEducation from "../utils/getEducation";
 import getExperience from "../utils/getExperience";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-
+import Cookies from "universal-cookie";
 const userprofile = () => {
   const params = useParams();
   const auth = useAuth();
   const id = parseInt(params.id!);
   const [user, setUser]: any = useState(null);
+  const cookies = new Cookies();
+  const token = cookies.get("token");
   const fetch_user = async () => {
     axios.get("http://localhost:8080/users/" + params.id).then((response) => {
       setUser(response.data);
@@ -72,7 +74,17 @@ const userprofile = () => {
               <h1>
                 {user["firstname"]} {user["lastname"]}
               </h1>
-              {auth.user.id != id && <button>Connect</button>}
+              {auth.user.id != id && <button onClick={()=>{
+                const data = {
+                  user_id: auth.user.id,
+                  connection_id: id
+                }
+                axios.post("http://localhost:8080/sendinvitation", data, {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                })
+              }}>Connect</button>}
             </div>
           </div>
           <div className="flex ml-5">{user["Headline"]}</div>

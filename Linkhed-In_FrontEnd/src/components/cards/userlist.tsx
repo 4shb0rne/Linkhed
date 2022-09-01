@@ -63,24 +63,7 @@ const userlist = (props: any) => {
           <button
             className="connect-btn"
             onClick={() => {
-              const data1 = {
-                userid: auth.user.id,
-                connectionid: props.u.id,
-              };
-              const data2 =  {
-                userid: props.u.id,
-                connectionid: auth.user.id,
-              }
-              axios.post("http://localhost:8080/connectuser", data1, {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              });
-              axios.post("http://localhost:8080/connectuser", data2, {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              });
+              
               setConnect(true);
             }}
           > 

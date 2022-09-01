@@ -14,21 +14,21 @@ import (
 )
 
 type User struct {
-	ID                uint32     `gorm:"primary_key;auto_increment" json:"id"`
-	Firstname         string     `gorm:"size:255;" json:"firstname"`
-	Lastname          string     `gorm:"size:255;" json:"lastname"`
-	Email             string     `gorm:"size:100;not null;unique" json:"email"`
-	Password          string     `gorm:"size:100;not null;" json:"password"`
-	ProfilePicture    string     `gorm:"size:255;" json:"profile_picture"`
-	Headline          string     `gorm:"size:255;" json:"Headline"`
-	Industry          string     `gorm:"size:100;" json:"Industry"`
-	Country           string     `gorm:"size:100;" json:"Country"`
-	City              string     `gorm:"size:100;" json:"City"`
-	BackgroundPicture string     `gorm:"size:255;" json:"background_picture"`
-	PostsLikes        []*Post    `gorm:"many2many:user_posts;"`
-	CommentLikes      []*Comment `gorm:"many2many:user_comments;"`
-	Connections       []*User    `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
-	Invitations 	  []*Invitation `gorm:"foreignKey:UserID"`
+	ID                uint32        `gorm:"primary_key;auto_increment" json:"id"`
+	Firstname         string        `gorm:"size:255;" json:"firstname"`
+	Lastname          string        `gorm:"size:255;" json:"lastname"`
+	Email             string        `gorm:"size:100;not null;unique" json:"email"`
+	Password          string        `gorm:"size:100;not null;" json:"password"`
+	ProfilePicture    string        `gorm:"size:255;" json:"profile_picture"`
+	Headline          string        `gorm:"size:255;" json:"Headline"`
+	Industry          string        `gorm:"size:100;" json:"Industry"`
+	Country           string        `gorm:"size:100;" json:"Country"`
+	City              string        `gorm:"size:100;" json:"City"`
+	BackgroundPicture string        `gorm:"size:255;" json:"background_picture"`
+	PostsLikes        []*Post       `gorm:"many2many:user_posts;"`
+	CommentLikes      []*Comment    `gorm:"many2many:user_comments;"`
+	Connections       []*User       `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
+	Invitations       []*Invitation `gorm:"foreignKey:ConnectionID"`
 	ProfileVisited    uint32
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
