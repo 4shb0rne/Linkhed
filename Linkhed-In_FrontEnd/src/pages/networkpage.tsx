@@ -6,26 +6,45 @@ import { useAuth } from "../utils/authContext";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import getUser from "../utils/getUser";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 const networkpage = () => {
   const auth = useAuth();
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const [user, setUser] = useState(null);
   const fetch_user = async () => {
     const User = await getUser();
+    setUser(User);
     auth.login(User);
   };
-
+  useEffect(() => {
+    fetch_user();
+  }, []);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
     },
   });
   if (auth.user) {
-    console.log(auth.user)
     return (
       <div className="container">
         <div id="left-aside-wrapper">
-          
+          <aside id="left-aside">
+            <div className="box-shadow p-1">
+              <div>Manage your networks</div>
+              <div>
+                <div className="network-menu p-1">
+                  <Link to="/connection" className="text-black">
+                    Connections
+                  </Link>
+                </div>
+                <div className="network-menu p-1">Contacts</div>
+                <div className="network-menu p-1">People | Follow</div>
+                <div className="network-menu p-1">Group</div>
+              </div>
+            </div>
+          </aside>
         </div>
         <div id="main-wrapper">
           <main id="main-section">
@@ -50,42 +69,66 @@ const networkpage = () => {
                               </div>
                               <span>{i.User.Headline}</span>
                             </div>
-                            <p className="float-right">
-                            <button onClick={()=>{
-                              const data1 = {
-                                userid: auth.user.id,
-                                connectionid: i.connection_id,
-                              };
-                              const data2 =  {
-                                userid: i.connection.id,
-                                connectionid: auth.user.id,
-                              }
-                              axios.post("http://localhost:8080/connectuser", data1, {
-                                headers: {
-                                  Authorization: "Bearer " + token,
-                                },
-                              });
-                              axios.post("http://localhost:8080/connectuser", data2, {
-                                headers: {
-                                  Authorization: "Bearer " + token,
-                                },
-                              });
-                              axios.delete("http://localhost:8080/deleteinvitation/"+i.ID, {
-                                headers: {
-                                  Authorization: "Bearer " + token,
-                                },
-                              })
-                              fetch_user()
-                            }}>Accept</button>
-                            <button onClick={()=>{
-                              axios.delete("http://localhost:8080/deleteinvitation/"+i.ID, {
-                                headers: {
-                                  Authorization: "Bearer " + token,
-                                },
-                              })
-                              fetch_user()
-                            }}>Decline</button>
-                            </p>
+                            <button
+                              className="accept-btn"
+                              onClick={() => {
+                                const data1 = {
+                                  userid: auth.user.id,
+                                  connectionid: i.user_id,
+                                };
+                                const data2 = {
+                                  userid: i.user_id,
+                                  connectionid: auth.user.id,
+                                };
+                                axios.post(
+                                  "http://localhost:8080/connectuser",
+                                  data1,
+                                  {
+                                    headers: {
+                                      Authorization: "Bearer " + token,
+                                    },
+                                  }
+                                );
+                                axios.post(
+                                  "http://localhost:8080/connectuser",
+                                  data2,
+                                  {
+                                    headers: {
+                                      Authorization: "Bearer " + token,
+                                    },
+                                  }
+                                );
+                                axios.delete(
+                                  "http://localhost:8080/deleteinvitation/" +
+                                    i.ID,
+                                  {
+                                    headers: {
+                                      Authorization: "Bearer " + token,
+                                    },
+                                  }
+                                );
+                                fetch_user();
+                              }}
+                            >
+                              Accept
+                            </button>
+                            <button
+                              className="decline-btn"
+                              onClick={() => {
+                                axios.delete(
+                                  "http://localhost:8080/deleteinvitation/" +
+                                    i.ID,
+                                  {
+                                    headers: {
+                                      Authorization: "Bearer " + token,
+                                    },
+                                  }
+                                );
+                                fetch_user();
+                              }}
+                            >
+                              Decline
+                            </button>
                           </div>
                         </a>
                       </div>

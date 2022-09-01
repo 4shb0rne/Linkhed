@@ -15,6 +15,7 @@ import { PostsProvider } from "./utils/postContext";
 import UserProfile from "./pages/userprofile";
 import SearchPage from "./pages/searchpage";
 import NetworkPage from "./pages/networkpage";
+import Connection from "./pages/connection";
 import "../index.css";
 function App() {
   return (
@@ -70,6 +71,14 @@ function App() {
                   element={
                     <RequireAuth>
                       <NetworkPage></NetworkPage>
+                    </RequireAuth>
+                  }
+                ></Route>
+                <Route
+                  path="/connection"
+                  element={
+                    <RequireAuth>
+                      <Connection></Connection>
                     </RequireAuth>
                   }
                 ></Route>
