@@ -7,24 +7,30 @@ import Cookies from "universal-cookie";
 const login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const submit = async () => {
     const data = {
       email: email,
       password: password,
     };
-    axios.post("http://localhost:8080/login", data).then((response) => {
-      const status = response.status;
-      const data = response.data;
-      if (status == 200) {
-        //success
-        const cookies = new Cookies();
-        const date = new Date();
-        date.setTime(date.getTime() + 6 * 60 * 60 * 1000);
-        cookies.set("token", data, { path: "/", expires: date });
-        navigate("/home");
-      }
-    });
+    axios
+      .post("http://localhost:8080/login", data)
+      .then((response) => {
+        const status = response.status;
+        const data = response.data;
+        if (status == 200) {
+          const cookies = new Cookies();
+          const date = new Date();
+          date.setTime(date.getTime() + 6 * 60 * 60 * 1000);
+          cookies.set("token", data, { path: "/", expires: date });
+          setError("");
+          navigate("/home");
+        }
+      })
+      .catch(() => {
+        setError("Email or password is wrong");
+      });
   };
   return (
     <div className="container-login">
@@ -58,6 +64,7 @@ const login = () => {
             }}
           />
         </div>
+        {error && <div className="text-red">{error}</div>}
       </div>
       <a href="#" className="forgot-password-link">
         Forgot Password?

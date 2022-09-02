@@ -1,19 +1,29 @@
 import "../../styles/auth.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import axios from "axios";
 
 const register = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
   const submit = () => {
-    navigate('/registerdata', {
-      state:{
-        email: email,
-        password: password
+    axios.get("http://localhost:8080/users").then((response) => {
+      if (
+        response.data.find((o: any) => o.email == email) == null &&
+        password != ""
+      ) {
+        navigate("/registerdata", {
+          state: {
+            email: email,
+            password: password,
+          },
+        });
+      } else {
+        setError("Email must be unique and password must be filled");
       }
-    })
+    });
   };
   return (
     <div>
@@ -22,7 +32,7 @@ const register = () => {
       </h1>
       <div className="container-register">
         <div className="your-input">
-          <div className="input mb-1">
+          <div className="input mt-2">
             <label htmlFor="email">Email</label>
             <input
               type="text"
@@ -32,7 +42,7 @@ const register = () => {
               }}
             ></input>
           </div>
-          <div className="input mb-1">
+          <div className="input mt-2">
             <label htmlFor="password">Password (6 or more characters)</label>
             <input
               type="password"
@@ -43,6 +53,7 @@ const register = () => {
             ></input>
           </div>
         </div>
+        {error && <div className="text-red mt-2">{error}</div>}
         <button
           className="register-btn"
           onClick={() => {

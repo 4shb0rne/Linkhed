@@ -23,7 +23,6 @@ const userlist = (props: any) => {
   const checkConnect = () => {
     if (auth.user) {
       if (auth.user.Connections.find((o: any) => o.id === props.u.id)) {
-        console.log("True");
         return true;
       } else {
         return false;
@@ -63,10 +62,18 @@ const userlist = (props: any) => {
           <button
             className="connect-btn"
             onClick={() => {
-              
+              const data = {
+                user_id: auth.user.id,
+                connection_id: props.u.id,
+              };
+              axios.post("http://localhost:8080/sendinvitation", data, {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              });
               setConnect(true);
             }}
-          > 
+          >
             Connect
           </button>
         ) : (
@@ -74,7 +81,10 @@ const userlist = (props: any) => {
             className="connect-btn"
             onClick={() => {
               axios.delete(
-                "http://localhost:8080/disconnectuser/"+props.u.id+"/"+auth.user.id,
+                "http://localhost:8080/disconnectuser/" +
+                  props.u.id +
+                  "/" +
+                  auth.user.id,
                 {
                   headers: {
                     Authorization: "Bearer " + token,
@@ -82,7 +92,10 @@ const userlist = (props: any) => {
                 }
               );
               axios.delete(
-                "http://localhost:8080/disconnectuser/"+auth.user.id+"/"+props.u.id,
+                "http://localhost:8080/disconnectuser/" +
+                  auth.user.id +
+                  "/" +
+                  props.u.id,
                 {
                   headers: {
                     Authorization: "Bearer " + token,
@@ -92,7 +105,7 @@ const userlist = (props: any) => {
               setConnect(false);
             }}
           >
-            Delete Connection 
+            Delete Connection
           </button>
         )}
       </div>

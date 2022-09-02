@@ -15,8 +15,8 @@
 }
 
 .container-login {
-  display:flex; 
-  flex-direction:column; 
+  display: flex;
+  flex-direction: column;
   width: 350px;
   height: 480px;
   background: #fff;
@@ -43,8 +43,8 @@
 }
 
 .container-register {
-  display:flex; 
-  flex-direction:column; 
+  display: flex;
+  flex-direction: column;
   width: 450px;
   height: 350px;
   background: #fff;
@@ -61,8 +61,8 @@
 }
 @media only screen and (max-width: 500px) {
   .container-register {
-    display:flex; 
-    flex-direction:column; 
+    display: flex;
+    flex-direction: column;
     width: 350px;
     height: 300px;
     background: #fff;
@@ -90,7 +90,7 @@
   margin-bottom: 0.5rem;
 }
 
-.mb-1 {
+.mt-2 {
   margin-top: 2rem;
 }
 
@@ -177,4 +177,8 @@
   color: gray;
   text-decoration: none;
   font-weight: bold;
+}
+
+.text-red {
+  color: red;
 }

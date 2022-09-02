@@ -16,6 +16,7 @@ import UserProfile from "./pages/userprofile";
 import SearchPage from "./pages/searchpage";
 import NetworkPage from "./pages/networkpage";
 import Connection from "./pages/connection";
+import { GuestAuth } from "./utils/GuestAuth";
 import "../index.css";
 function App() {
   return (
@@ -27,21 +28,54 @@ function App() {
             <div className="body">
               <Routes>
                 <Route path="/"></Route>
-                <Route path="/login" element={<Login></Login>}></Route>
-                <Route path="/register" element={<Register></Register>}></Route>
+                <Route
+                  path="/login"
+                  element={
+                    <GuestAuth>
+                      <Login></Login>
+                    </GuestAuth>
+                  }
+                ></Route>
+                <Route
+                  path="/register"
+                  element={
+                    <GuestAuth>
+                      <Register></Register>
+                    </GuestAuth>
+                  }
+                ></Route>
                 <Route
                   path="/forgetpassword"
-                  element={<ForgetPassword></ForgetPassword>}
+                  element={
+                    <GuestAuth>
+                      <ForgetPassword></ForgetPassword>
+                    </GuestAuth>
+                  }
                 ></Route>
                 <Route
                   path="/resetpassword"
-                  element={<ResetPassword></ResetPassword>}
+                  element={
+                    <GuestAuth>
+                      <ResetPassword></ResetPassword>
+                    </GuestAuth>
+                  }
                 ></Route>
                 <Route
                   path="/registerdata"
-                  element={<RegisterData></RegisterData>}
+                  element={
+                    <GuestAuth>
+                      <RegisterData></RegisterData>
+                    </GuestAuth>
+                  }
                 ></Route>
-                <Route path="/home" element={<MainPage></MainPage>}></Route>
+                <Route
+                  path="/home"
+                  element={
+                    <RequireAuth>
+                      <MainPage></MainPage>
+                    </RequireAuth>
+                  }
+                ></Route>
                 <Route
                   path="/profile"
                   element={
