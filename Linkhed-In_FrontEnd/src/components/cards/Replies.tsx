@@ -3,8 +3,12 @@ import { decode } from "html-entities";
 import axios from "axios";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-
+import Cookies from "universal-cookie";
+import { useAuth } from "../../utils/authContext";
 const replies = (props: any) => {
+  const cookies = new Cookies();
+  const token = cookies.get("token");
+  const auth = useAuth();
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -32,6 +36,24 @@ const replies = (props: any) => {
         </div>
         <div id="post-data">
           <div>{parse(decode(data.content))}</div>
+        </div>
+        <div id="post-interactions">
+          <div id="interactions-btns">
+            {auth.user.id == data.User.id && (
+              <button
+                onClick={() => {
+                  axios.delete("http://localhost:8080/deletereply/" + data.id, {
+                    headers: {
+                      Authorization: "Bearer " + token,
+                    },
+                  });
+                  props.fetch_posts();
+                }}
+              >
+                <span>Delete</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

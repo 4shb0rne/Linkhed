@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/auth"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/utils/formaterror"
@@ -62,4 +63,36 @@ func (server *Server) GetComments(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	responses.JSON(w, http.StatusOK, commentsReceived)
+}
+
+func (server *Server) DeleteComment(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	uid, err := auth.ExtractTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+	comment := models.Comment{}
+	err = server.DB.Debug().Model(models.Comment{}).Where("id = ?", pid).Take(&comment).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
+		return
+	}
+	if uid != comment.UserID {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+	_, err = comment.DeleteComment(server.DB, pid)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+	responses.JSON(w, http.StatusNoContent, "")
 }

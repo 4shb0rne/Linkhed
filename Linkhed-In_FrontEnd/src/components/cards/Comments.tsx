@@ -34,7 +34,7 @@ const comments = (props: any) => {
               <div>
                 <AdvancedImage cldImg={data.Image} />
                 <div>
-                  <div>
+                  <div className="flex justify-space-between">
                     <strong id="post-author-name">
                       {data.c.User.firstname} {data.c.User.lastname}
                     </strong>
@@ -114,6 +114,26 @@ const comments = (props: any) => {
               >
                 <span>Reply</span>
               </button>
+              {auth.user.id == data.c.User.id && (
+                <button
+                  onClick={() => {
+                    axios
+                      .delete(
+                        "http://localhost:8080/deletecomment/" + props.c.id,
+                        {
+                          headers: {
+                            Authorization: "Bearer " + token,
+                          },
+                        }
+                      )
+                      .then(() => {
+                        data.fetch_posts();
+                      });
+                  }}
+                >
+                  <span>Delete</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -151,7 +171,13 @@ const comments = (props: any) => {
             </button>
           </div>
           {data.c.Replies.map((r: any) => {
-            return <Replies data={r} key={r.id}></Replies>;
+            return (
+              <Replies
+                data={r}
+                key={r.id}
+                fetch_posts={data.fetch_posts}
+              ></Replies>
+            );
           })}
         </div>
       </article>

@@ -29,22 +29,16 @@ const home = () => {
     auth.login(User);
   };
   const fetch_posts = async () => {
-    const posts = await getPost(length);
-    setPosts(posts);
+    const Posts = await getPost(length);
+    setPosts(Posts);
   };
 
   const load_posts = () => {
     setLength(length + 1);
-    if (length + 1 == Posts.length) {
-      setHasMore(false);
-    } else {
-      setHasMore(true);
-    }
     setTimeout(() => {
       axios
         .get("http://localhost:8080/posts/" + (length + 1))
         .then((response) => {
-          console.log(response.data);
           setPosts(response.data);
         });
     }, 1000);
@@ -57,7 +51,7 @@ const home = () => {
   const myImage = cld.image(
     auth.user ? auth.user.profile_picture : "blank_bjt7w5"
   );
-    
+
   return (
     <div className="container">
       <Modal
@@ -82,11 +76,17 @@ const home = () => {
             <div id="profile-links">
               <a>
                 <span> Who's viewed your profile </span>
-                <span className="profile-number"> {auth.user && auth.user.ProfileVisited} </span>
+                <span className="profile-number">
+                  {" "}
+                  {auth.user && auth.user.ProfileVisited}{" "}
+                </span>
               </a>
               <a>
                 <span> Connections </span>
-                <span className="profile-number"> {auth.user && auth.user.Connections.length} </span>
+                <span className="profile-number">
+                  {" "}
+                  {auth.user && auth.user.Connections.length}{" "}
+                </span>
               </a>
             </div>
           </div>
@@ -126,7 +126,7 @@ const home = () => {
           <InfiniteScroll
             dataLength={posts.length}
             next={load_posts}
-            hasMore={hasmore}
+            hasMore={true}
             loader={
               <div className="loading-center">
                 <div className="lds-ring">

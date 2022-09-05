@@ -8,6 +8,7 @@ import getExperience from "../utils/getExperience";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
+import getUser from "../utils/getUser";
 const userprofile = () => {
   const params = useParams();
   const auth = useAuth();
@@ -20,7 +21,22 @@ const userprofile = () => {
       setUser(response.data);
     });
   };
-
+  const fetch_current_user = async () => {
+    const User = await getUser();
+    auth.login(User);
+  };
+  const checkConnect = () => {
+    if (auth.user) {
+      if (auth.user.Connections.find((o: any) => o.id === id)) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+    fetch_current_user();
+    return false;
+  };
+  const [connect, setConnect] = useState(checkConnect());
   const [educations, setEducations] = useState<any[]>([]);
   const [experiences, setExperiences] = useState<any[]>([]);
   const fetch_educations = async () => {
@@ -42,6 +58,7 @@ const userprofile = () => {
       cloudName: "ashbornee",
     },
   });
+  console.log(connect);
   if (user && auth.user) {
     const myImage = cld.image(user["profile_picture"]);
     const myBackgroundImage = cld.image(user["background_picture"]);
@@ -74,17 +91,46 @@ const userprofile = () => {
               <h1>
                 {user["firstname"]} {user["lastname"]}
               </h1>
-              {auth.user.id != id && <button onClick={()=>{
-                const data = {
-                  user_id: auth.user.id,
-                  connection_id: id
-                }
-                axios.post("http://localhost:8080/sendinvitation", data, {
-                  headers: {
-                    Authorization: "Bearer " + token,
-                  },
-                })
-              }}>Connect</button>}
+              {auth.user.id != id && connect == false ? (
+                <button
+                  className="connect-btn"
+                  onClick={() => {
+                    const data = {
+                      user_id: auth.user.id,
+                      connection_id: id,
+                    };
+                    axios.post("http://localhost:8080/sendinvitation", data, {
+                      headers: {
+                        Authorization: "Bearer " + token,
+                      },
+                    });
+                  }}
+                >
+                  Connect
+                </button>
+              ) : (
+                <div></div>
+              )}
+              {auth.user.id != id && connect == true ? (
+                <button
+                  className="decline-btn"
+                  onClick={() => {
+                    const data = {
+                      user_id: auth.user.id,
+                      connection_id: id,
+                    };
+                    axios.post("http://localhost:8080/sendinvitation", data, {
+                      headers: {
+                        Authorization: "Bearer " + token,
+                      },
+                    });
+                  }}
+                >
+                  Remove Connection
+                </button>
+              ) : (
+                <div></div>
+              )}
             </div>
           </div>
           <div className="flex ml-5">{user["Headline"]}</div>

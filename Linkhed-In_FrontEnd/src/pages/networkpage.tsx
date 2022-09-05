@@ -6,16 +6,14 @@ import { useAuth } from "../utils/authContext";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import getUser from "../utils/getUser";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 const networkpage = () => {
   const auth = useAuth();
   const cookies = new Cookies();
   const token = cookies.get("token");
-  const [user, setUser] = useState(null);
   const fetch_user = async () => {
     const User = await getUser();
-    setUser(User);
     auth.login(User);
   };
   useEffect(() => {

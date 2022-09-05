@@ -57,14 +57,13 @@ func (server *Server) DeleteInvitation(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
-
 	invitation := models.Invitation{}
 	err = server.DB.Debug().Model(models.Invitation{}).Where("id = ?", pid).Take(&invitation).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
 		return
 	}
-	if uid != invitation.ConnectionID {
+	if uid != invitation.UserID {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}

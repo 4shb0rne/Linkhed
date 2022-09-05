@@ -77,3 +77,16 @@ func (c *Comment) FindComments(db *gorm.DB, pid uint64) (*[]Comment, error) {
 	}
 	return &comments, nil
 }
+
+func (c *Comment) DeleteComment(db *gorm.DB, pid uint64) (int64, error) {
+
+	db = db.Debug().Model(&Comment{}).Where("id = ?", pid).Take(&Comment{}).Delete(&Comment{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Comment not found")
+		}
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}

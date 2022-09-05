@@ -3,18 +3,24 @@ import "../styles/mainpage.scss";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { useAuth } from "../utils/authContext";
-import axios from "axios";
-import Cookies from "universal-cookie";
-import getUser from "../utils/getUser";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Cookies from "universal-cookie";
+import axios from "axios";
+import getUser from "../utils/getUser";
 const connection = () => {
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
     },
   });
+  const fetch_user = async () => {
+    const User = await getUser();
+    auth.login(User);
+  };
+
+  const cookies = new Cookies();
   const auth = useAuth();
+  const token = cookies.get("token");
   if (auth.user) {
     return (
       <div className="container">
@@ -58,6 +64,28 @@ const connection = () => {
                               </div>
                               <span>{c.Headline}</span>
                             </div>
+                            <button
+                              className="decline-btn"
+                              onClick={() => {
+                                axios
+                                  .delete(
+                                    "http://localhost:8080/disconnectuser/" +
+                                      auth.user.id +
+                                      "/" +
+                                      c.id,
+                                    {
+                                      headers: {
+                                        Authorization: "Bearer " + token,
+                                      },
+                                    }
+                                  )
+                                  .then(() => {
+                                    fetch_user();
+                                  });
+                              }}
+                            >
+                              Remove Connection
+                            </button>
                           </div>
                         </a>
                       </div>

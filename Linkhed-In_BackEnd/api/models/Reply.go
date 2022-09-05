@@ -74,3 +74,16 @@ func (r *Reply) FindReplies(db *gorm.DB, pid uint64) (*[]Reply, error) {
 	}
 	return &replies, nil
 }
+
+func (r *Reply) DeleteReply(db *gorm.DB, pid uint64) (int64, error) {
+
+	db = db.Debug().Model(&Reply{}).Where("id = ?", pid).Take(&Reply{}).Delete(&Reply{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Reply not found")
+		}
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}

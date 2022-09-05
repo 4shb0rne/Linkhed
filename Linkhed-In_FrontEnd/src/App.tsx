@@ -16,6 +16,7 @@ import UserProfile from "./pages/userprofile";
 import SearchPage from "./pages/searchpage";
 import NetworkPage from "./pages/networkpage";
 import Connection from "./pages/connection";
+import Notification from "./pages/notification";
 import { GuestAuth } from "./utils/GuestAuth";
 import "../index.css";
 function App() {
@@ -116,8 +117,17 @@ function App() {
                     </RequireAuth>
                   }
                 ></Route>
+                <Route
+                  path="/notification"
+                  element={
+                    <RequireAuth>
+                      <Notification></Notification>
+                    </RequireAuth>
+                  }
+                ></Route>
               </Routes>
             </div>
+            <div className="gap"></div>
             <Footer></Footer>
           </BrowserRouter>
         </ModalProvider>

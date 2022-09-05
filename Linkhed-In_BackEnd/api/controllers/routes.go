@@ -26,8 +26,14 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/experiences/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetExperience))).Methods("GET")
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
+	
 	s.Router.HandleFunc("/addcomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddComment))).Methods("POST")
+	s.Router.HandleFunc("/deletecomment/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteComment))).Methods("DELETE")
+
 	s.Router.HandleFunc("/addreply", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddReply))).Methods("POST")
+	s.Router.HandleFunc("/deletereply/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteReply))).Methods("DELETE")
+	
+	
 	s.Router.HandleFunc("/likepost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.LikePost))).Methods("POST")
 	s.Router.HandleFunc("/dislikepost/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DislikePost))).Methods("DELETE")
 	s.Router.HandleFunc("/likecomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.LikeComment))).Methods("POST")
@@ -37,7 +43,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(s.GetPosts)).Methods("GET")
 	s.Router.HandleFunc("/post/{id}", middlewares.SetMiddlewareJSON(s.GetPost)).Methods("GET")
 	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdatePost))).Methods("PUT")
-	s.Router.HandleFunc("/posts/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
+	s.Router.HandleFunc("/deletepost/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 
 	//Search
 	s.Router.HandleFunc("/searchuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchUser))).Methods("POST")

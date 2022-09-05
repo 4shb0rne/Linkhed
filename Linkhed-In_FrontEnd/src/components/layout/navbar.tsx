@@ -81,7 +81,7 @@ const navbar = () => {
           <nav>
             <ul>
               <li>
-                <Link to="/home" className="text-white">
+                <Link to="/home">
                   <div className="header_logo">
                     <span className="fas fa-home"></span>
                     <span className="nav-item-text">Home</span>
@@ -89,7 +89,7 @@ const navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/networkpage" className="text-white">
+                <Link to="/networkpage">
                   <div className="header_logo">
                     <span className="fas fa-user-friends"></span>
                     <span className="nav-item-text">My Network</span>
@@ -109,10 +109,12 @@ const navbar = () => {
                 </div>
               </li>
               <li>
-                <div className="header_logo">
-                  <span className="fas fa-bell"></span>
-                  <span className="nav-item-text">Notifications</span>
-                </div>
+                <Link to="/notification">
+                  <div className="header_logo">
+                    <span className="fas fa-bell"></span>
+                    <span className="nav-item-text">Notifications</span>
+                  </div>
+                </Link>
               </li>
               <li>
                 <div
@@ -129,7 +131,7 @@ const navbar = () => {
                 </div>
               </li>
               <li>
-                <Link to="/profile" className="text-white">
+                <Link to="/profile">
                   <div id="right-border">
                     <AdvancedImage cldImg={myImage} />
                     <span className="nav-item-text">Profile</span>

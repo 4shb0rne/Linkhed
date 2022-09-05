@@ -78,7 +78,7 @@ const userlist = (props: any) => {
           </button>
         ) : (
           <button
-            className="connect-btn"
+            className="decline-btn"
             onClick={() => {
               axios.delete(
                 "http://localhost:8080/disconnectuser/" +

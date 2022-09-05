@@ -29,6 +29,7 @@ type User struct {
 	CommentLikes      []*Comment    `gorm:"many2many:user_comments;"`
 	Connections       []*User       `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
 	Invitations       []*Invitation `gorm:"foreignKey:ConnectionID"`
+	Notifications 	  []*Notification `gorm:"foreignKey:UserID"`
 	ProfileVisited    uint32
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
@@ -137,7 +138,7 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Preload("Connections").Find(&users).Error
+	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Preload("Connections").Preload("Notifications").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}
@@ -145,7 +146,7 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 }
 
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
-	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Take(&u).Error
+	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -192,7 +193,7 @@ func (u *User) UpdateVisited(db *gorm.DB, uid uint32, counts uint32) (*User, err
 		return &User{}, db.Error
 	}
 	// This is the display the updated user
-	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Take(&u).Error
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -252,7 +253,7 @@ func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 func (u *User) SearchUser(db *gorm.DB, query SearchQuery) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("Connections").Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Find(&users).Error
+	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("Connections").Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Preload("Notifications").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}

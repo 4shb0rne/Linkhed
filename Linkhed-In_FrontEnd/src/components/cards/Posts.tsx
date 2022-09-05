@@ -18,6 +18,7 @@ const posts = (props: any) => {
       cloudName: "ashbornee",
     },
   });
+
   const auth = useAuth();
   const checkLike = () => {
     if (auth.user) {
@@ -38,15 +39,20 @@ const posts = (props: any) => {
         <a href="#">
           <div
             onClick={() => {
-              if(auth.user.id == props.p.user.id){
-                navigate("/profile")
-              } else{
-                axios
-                .get("http://localhost:8080/updateprofileview/"+props.p.user.id+"/"+(props.p.user.ProfileVisited+1), {
-                  headers: {
-                    Authorization: "Bearer " + token,
-                  },
-                })
+              if (auth.user.id == props.p.user.id) {
+                navigate("/profile");
+              } else {
+                axios.get(
+                  "http://localhost:8080/updateprofileview/" +
+                    props.p.user.id +
+                    "/" +
+                    (props.p.user.ProfileVisited + 1),
+                  {
+                    headers: {
+                      Authorization: "Bearer " + token,
+                    },
+                  }
+                );
                 navigate("/openprofile/" + props.p.user.id);
               }
             }}
@@ -63,11 +69,23 @@ const posts = (props: any) => {
             </div>
           </div>
         </a>
-        <div>
-          <span className="fas fa-circle"></span>
-          <span className="fas fa-circle"></span>
-          <span className="fas fa-circle"></span>
-        </div>
+        {auth.user.id == props.p.user.id && (
+          <i
+            className="fa fa-trash-o text-red cursor-pointer"
+            onClick={async () => {
+              console.log(props);
+              await axios.delete(
+                "http://localhost:8080/deletepost/" + props.p.id,
+                {
+                  headers: {
+                    Authorization: "Bearer " + token,
+                  },
+                }
+              );
+              props.fetch_posts();
+            }}
+          ></i>
+        )}
       </div>
       <div id="post-data">
         <div>{parse(decode(props.p.content))}</div>
