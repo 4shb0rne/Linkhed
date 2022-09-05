@@ -1,38 +1,64 @@
 package controllers
 
 import (
+	"encoding/json"
+	"errors"
+	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strconv"
+
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/utils/formaterror"
+	"github.com/gorilla/mux"
 )
 
-func (server *Server) CreateNotification(w http.ResponseWriter, r *http.Request) {
+func (server *Server) AddNotification(w http.ResponseWriter, r *http.Request) {
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	notification := models.Notification{}
+	err = json.Unmarshal(body, &notification)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	err = notification.Validate()
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	if err != nil {
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
+		return
+	}
+	notificationCreated, err := notification.AddNotification(server.DB)
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, notificationCreated.ID))
+	responses.JSON(w, http.StatusCreated, notificationCreated)
+}
 
-	// body, err := ioutil.ReadAll(r.Body)
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusUnprocessableEntity, err)
-	// 	return
-	// }
-	// notification := models.Notification{}
-	// err = json.Unmarshal(body, &notification)
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusUnprocessableEntity, err)
-	// 	return
-	// }
-	// post.Prepare()
-	// err = post.Validate()
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusUnprocessableEntity, err)
-	// 	return
-	// }
-	// if err != nil {
-	// 	responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
-	// 	return
-	// }
-	// postCreated, err := post.SavePost(server.DB)
-	// if err != nil {
-	// 	formattedError := formaterror.FormatError(err.Error())
-	// 	responses.ERROR(w, http.StatusInternalServerError, formattedError)
-	// 	return
-	// }
-	// w.Header().Set("Location", fmt.Sprintf("%s%s/%d", r.Host, r.URL.Path, postCreated.ID))
-	// responses.JSON(w, http.StatusCreated, postCreated)
+func (server *Server) GetNotification(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	notification := models.Notification{}
+	
+	notifications, err := notification.GetNotifications(server.DB, uint32(pid))
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, notifications)
 }

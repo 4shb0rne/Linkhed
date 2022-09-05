@@ -76,7 +76,8 @@ func (r *Reply) FindReplies(db *gorm.DB, pid uint64) (*[]Reply, error) {
 	if len(replies) > 0 {
 		for i := range replies {
 			err := db.Debug().Model(&User{}).Where("id = ?", replies[i].UserID).Take(&replies[i].User).Error
-			if err != nil {
+			err2 := db.Debug().Model(&User{}).Where("id = ?", r.MentionID).Take(&r.MentionUser).Error
+			if err != nil || err2 != nil {
 				return &[]Reply{}, err
 			}
 		}

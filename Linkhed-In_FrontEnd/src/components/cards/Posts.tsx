@@ -33,7 +33,7 @@ const posts = (props: any) => {
   const [liked, setLiked] = useState(checkLike());
   const cookies = new Cookies();
   const token = cookies.get("token");
-  if(props.p.user && auth.user.id){
+  if (props.p.user && auth.user) {
     return (
       <article key={props.p.id}>
         <div id="post-author">
@@ -190,8 +190,9 @@ const posts = (props: any) => {
                   .then(() => {
                     props.fetch_posts();
                   });
-                document.getElementById(`comment-post-${props.p.id}`)!.innerHTML =
-                  "";
+                document.getElementById(
+                  `comment-post-${props.p.id}`
+                )!.innerHTML = "";
               }}
             >
               Submit
@@ -211,6 +212,8 @@ const posts = (props: any) => {
         </div>
       </article>
     );
+  } else {
+    return <div>Loading</div>;
   }
 };
 

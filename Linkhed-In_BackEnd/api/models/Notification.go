@@ -29,3 +29,13 @@ func (n *Notification) AddNotification(db *gorm.DB) (*Notification, error) {
 	}
 	return n, nil
 }
+
+func (n *Notification) GetNotifications(db *gorm.DB, uid uint32) (*[]Notification, error) {
+	var err error
+	notifications := []Notification{}
+	err = db.Debug().Model(&Notification{}).Where("user_id = ?", uid).Find(&notifications).Error
+	if err != nil {
+		return &[]Notification{}, err
+	}
+	return &notifications, err
+}

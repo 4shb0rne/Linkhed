@@ -75,7 +75,9 @@ func (p *Post) FindAllPosts(db *gorm.DB, count uint64) (*[]Post, error) {
 					if len(posts[i].Comments[j].Replies) > 0 {
 						for z := range posts[i].Comments[j].Replies {
 							err5 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
+							err6 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].MentionID).Take(&posts[i].Comments[j].Replies[z].MentionUser).Error
 							_ = err5
+							_ = err6
 						}
 					}
 				}
@@ -106,23 +108,6 @@ func (p *Post) FindPostByID(db *gorm.DB, pid uint64) (*Post, error) {
 func (p *Post) UpdateAPost(db *gorm.DB) (*Post, error) {
 
 	var err error
-	// db = db.Debug().Model(&Post{}).Where("id = ?", pid).Take(&Post{}).UpdateColumns(
-	// 	map[string]interface{}{
-	// 		"title":      p.Title,
-	// 		"content":    p.Content,
-	// 		"updated_at": time.Now(),
-	// 	},
-	// )
-	// err = db.Debug().Model(&Post{}).Where("id = ?", pid).Take(&p).Error
-	// if err != nil {
-	// 	return &Post{}, err
-	// }
-	// if p.ID != 0 {
-	// 	err = db.Debug().Model(&User{}).Where("id = ?", p.AuthorID).Take(&p.Author).Error
-	// 	if err != nil {
-	// 		return &Post{}, err
-	// 	}
-	// }
 	err = db.Debug().Model(&Post{}).Where("id = ?", p.ID).Updates(Post{Content: p.Content, UpdatedAt: time.Now()}).Error
 	if err != nil {
 		return &Post{}, err
@@ -166,7 +151,9 @@ func (p *Post) SearchPost(db *gorm.DB, query SearchQuery) (*[]Post, error) {
 					if len(posts[i].Comments[j].Replies) > 0 {
 						for z := range posts[i].Comments[j].Replies {
 							err5 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].UserID).Take(&posts[i].Comments[j].Replies[z].User).Error
+							err6 := db.Debug().Model(&User{}).Where("id = ?", posts[i].Comments[j].Replies[z].MentionID).Take(&posts[i].Comments[j].Replies[z].MentionUser).Error
 							_ = err5
+							_ = err6
 						}
 					}
 				}
