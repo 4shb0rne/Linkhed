@@ -58,7 +58,7 @@ const userprofile = () => {
       cloudName: "ashbornee",
     },
   });
-  console.log(connect);
+
   if (user && auth.user) {
     const myImage = cld.image(user["profile_picture"]);
     const myBackgroundImage = cld.image(user["background_picture"]);

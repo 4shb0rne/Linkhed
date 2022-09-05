@@ -11,13 +11,15 @@ import (
 )
 
 type Reply struct {
-	ID        uint64 `gorm:"primary_key;auto_increment" json:"id"`
-	CommentID uint32 `sql:"type:int REFERENCES comments(id)" json:"comment_id"`
-	Content   string `gorm:"size:255;not null;" json:"content"`
-	User      User
-	UserID    uint32
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
+	ID          uint64 `gorm:"primary_key;auto_increment" json:"id"`
+	CommentID   uint32 `sql:"type:int REFERENCES comments(id)" json:"comment_id"`
+	Content     string `gorm:"size:255;not null;" json:"content"`
+	User        User
+	UserID      uint32
+	MentionID   *uint32
+	MentionUser User
+	CreatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
+	UpdatedAt   time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
 
 func (r *Reply) Prepare() {
@@ -52,6 +54,13 @@ func (r *Reply) AddReply(db *gorm.DB) (*Reply, error) {
 		if err != nil {
 			fmt.Print(&Reply{})
 			return &Reply{}, err
+		}
+		if r.MentionID != nil {
+			err = db.Debug().Model(&User{}).Where("id = ?", r.MentionID).Take(&r.MentionUser).Error
+			if err != nil {
+				fmt.Print(&Reply{})
+				return &Reply{}, err
+			}
 		}
 	}
 	return r, nil

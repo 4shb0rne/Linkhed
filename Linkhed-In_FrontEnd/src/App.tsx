@@ -127,7 +127,6 @@ function App() {
                 ></Route>
               </Routes>
             </div>
-            <div className="gap"></div>
             <Footer></Footer>
           </BrowserRouter>
         </ModalProvider>

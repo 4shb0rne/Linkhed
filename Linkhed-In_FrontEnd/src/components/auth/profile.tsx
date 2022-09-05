@@ -190,7 +190,7 @@ const profile = () => {
             {auth.user.City && ","} {auth.user.Country}
           </div>
         </div>
-        <div className="box-shadow m-10 mt-1">
+        <div className="box-shadow m-10 mt-1 pb-3">
           <div className="flex flex-space-between">
             <h1 className="p-3">Education</h1>
             <button
@@ -217,7 +217,7 @@ const profile = () => {
               );
             })}
         </div>
-        <div className="box-shadow m-10 mt-1">
+        <div className="box-shadow m-10 mt-1 pb-3">
           <div className="flex flex-space-between">
             <h1 className="p-3">Experience</h1>
             <button
