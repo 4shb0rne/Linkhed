@@ -18,7 +18,10 @@ const posts = (props: any) => {
       cloudName: "ashbornee",
     },
   });
-
+  const fetch_user = async () => {
+    const User = await getUser();
+    auth.login(User);
+  };
   const auth = useAuth();
   const checkLike = () => {
     if (auth.user) {
@@ -55,7 +58,17 @@ const posts = (props: any) => {
                     }
                   );
                   navigate("/openprofile/" + props.p.user.id);
-                  addNotification()
+                  const data = {
+                    user_id: props.p.user.id,
+                    content:
+                      auth.user.firstname +
+                      " " +
+                      auth.user.lastname +
+                      " viewed your profile",
+                    actor_id: auth.user.id,
+                  };
+                  addNotification(data);
+                  fetch_user();
                 }
               }}
             >
@@ -117,6 +130,16 @@ const posts = (props: any) => {
                       Authorization: "Bearer " + token,
                     },
                   });
+                  const temp = {
+                    user_id: props.p.user.id,
+                    content:
+                      auth.user.firstname +
+                      " " +
+                      auth.user.lastname +
+                      " liked your post",
+                    actor_id: auth.user.id,
+                  };
+                  addNotification(temp);
                   setLiked(true);
                 } else {
                   await axios.delete(

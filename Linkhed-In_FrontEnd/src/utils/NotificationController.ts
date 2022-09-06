@@ -1,23 +1,28 @@
-import axios from "axios"
-import Cookies from 'universal-cookie'
+import axios from "axios";
+import Cookies from "universal-cookie";
 const cookies = new Cookies();
-const token = cookies.get('token')
+const token = cookies.get("token");
 
-export const getNotifications = async(id : number) => {
-    const response = await axios.get('http://localhost:8080/getnotification/'+id, {
-        headers: {
-            'Authorization': 'Bearer ' + token,
-        }
-    })
-    return response.data;
+export const getNotifications = async (id: number) => {
+  const response = await axios.get(
+    "http://localhost:8080/getnotification/" + id,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    }
+  );
+  return response.data;
 };
 
-export const addNotification = async(data : any) =>{
-    const response = await axios.post('http://localhost:8080/addnotification/', data, {
-        headers: {
-            'Authorization': 'Bearer ' + token,
-        }
+export const addNotification = async (data: any) => {
+  axios
+    .post("http://localhost:8080/addnotification", data, {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
     })
-    return response.data;
+    .then((response) => {
+      return response.data;
+    });
 };
-
