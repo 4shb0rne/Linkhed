@@ -9,7 +9,7 @@ import { useState } from "react";
 import Comments from "./Comments";
 import getUser from "../../utils/getUser";
 import { useNavigate } from "react-router-dom";
-
+import { addNotification } from "../../utils/NotificationController";
 const posts = (props: any) => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -55,6 +55,7 @@ const posts = (props: any) => {
                     }
                   );
                   navigate("/openprofile/" + props.p.user.id);
+                  addNotification()
                 }
               }}
             >
