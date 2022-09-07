@@ -189,6 +189,10 @@
   padding: 1rem;
 }
 
+.p-menu {
+  padding: 1rem;
+}
+
 .network-menu {
   cursor: pointer;
   color: black;
@@ -311,13 +315,23 @@
   justify-content: flex-end;
 }
 
-.pb-3{
+.pb-3 {
   padding-bottom: 3rem;
 }
 
 @media screen and (max-width: 600px) {
-  .m-10{
+  .m-10 {
     margin-left: 0rem;
     margin-right: 0rem;
+  }
+
+  .p-3 {
+    padding-right: 0;
+    padding-left: 2.5rem;
+  }
+
+  .p-menu {
+    padding: 0.5rem;
+    font-size: 12px;
   }
 }

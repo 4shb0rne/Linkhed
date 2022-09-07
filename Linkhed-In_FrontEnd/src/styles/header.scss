@@ -287,14 +287,16 @@ header#main-header > div nav ul li div span.nav-item-text span {
   header#main-header > div {
     padding-right: 14px;
   }
-
-  header#main-header > div nav {
+  input#search {
     display: none;
   }
+  // header#main-header > div nav {
+  //   display: none;
+  // }
 
-  header#main-header > div > div > img#header-logo {
-    display: none;
-  }
+  // header#main-header > div > div > img#header-logo {
+  //   display: none;
+  // }
 
   header#main-header > div > div > img#header-picture-menu {
     display: block;
@@ -352,10 +354,13 @@ header#main-header > div nav ul li div span.nav-item-text span {
     max-width: 100%;
     width: 200px;
   }
-
 }
 
 @media (max-width: 600px) {
+  header#main-header > div nav ul li div {
+    width: 35px;
+    justify-content: center;
+  }
   .nav > .nav-btn {
     display: inline-block;
     position: absolute;

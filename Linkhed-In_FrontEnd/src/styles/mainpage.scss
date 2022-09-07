@@ -143,7 +143,11 @@ div.container main#main-section {
   margin: 0 25px;
   width: 550px;
 }
-
+#main-section-secondary {
+  grid-area: main-section;
+  margin: 0 25px;
+  width: 550px;
+}
 main#main-section div#share-box {
   background: #fff;
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15), 0 2px 3px rgba(0, 0, 0, 0.2);
@@ -649,6 +653,15 @@ main#main-section
     grid-area: main-section;
     margin: 0 20px;
     width: 200px;
+  }
+  #main-section-secondary {
+    grid-area: main-section;
+    margin: 0 15px;
+    width: 215px;
+  }
+
+  .p-3 {
+    padding-right: 0;
   }
 
   aside#left-aside div#profile-card div#profile-info {

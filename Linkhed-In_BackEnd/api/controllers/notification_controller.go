@@ -62,3 +62,26 @@ func (server *Server) GetNotification(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, notifications)
 }
+
+func (server *Server) DeleteNotification(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["id"], 10, 64)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	notification := models.Notification{}
+	err = server.DB.Debug().Model(models.Notification{}).Where("id = ?", pid).Take(&notification).Error
+	if err != nil {
+		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
+		return
+	}
+	_, err = notification.DeleteNotification(server.DB, pid)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
+	responses.JSON(w, http.StatusNoContent, "")
+}

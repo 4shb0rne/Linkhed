@@ -59,9 +59,6 @@ const navbar = () => {
               src="/linkedin.png"
               alt="Profile picture"
             />
-            <span id="header-picture-menu-bars">
-              <span className="fas fa-bars"></span>
-            </span>
             <div>
               <form
                 onSubmit={() => {

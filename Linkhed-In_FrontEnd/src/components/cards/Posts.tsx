@@ -18,10 +18,7 @@ const posts = (props: any) => {
       cloudName: "ashbornee",
     },
   });
-  const fetch_user = async () => {
-    const User = await getUser();
-    auth.login(User);
-  };
+
   const auth = useAuth();
   const checkLike = () => {
     if (auth.user) {
@@ -58,14 +55,12 @@ const posts = (props: any) => {
                     }
                   );
                   navigate("/openprofile/" + props.p.user.id);
-                  const data = {
+                  const temp = {
                     user_id: props.p.user.id,
-                    content:`<b>${auth.user.firstname} ${auth.user.lastname}</b> viewed your profile`,
+                    content: `<b>${auth.user.firstname} ${auth.user.lastname}</b> viewed your profile`,
                     actor_id: auth.user.id,
                   };
-                  console.log(data)
-                  addNotification(data);
-                  fetch_user();
+                  addNotification(temp);
                 }
               }}
             >
@@ -129,7 +124,7 @@ const posts = (props: any) => {
                   });
                   const temp = {
                     user_id: props.p.user.id,
-                    content:`<b>${auth.user.firstname} ${auth.user.lastname}</b> liked your post`,
+                    content: `<b>${auth.user.firstname} ${auth.user.lastname}</b> liked your post`,
                     actor_id: auth.user.id,
                   };
                   addNotification(temp);

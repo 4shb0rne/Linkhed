@@ -29,20 +29,20 @@ const connection = () => {
             <div className="box-shadow p-1">
               <div>Manage your networks</div>
               <div>
-                <div className="network-menu p-1">
+                <div className="network-menu p-menu">
                   <Link to="/connection" className="text-black">
                     Connections
                   </Link>
                 </div>
-                <div className="network-menu p-1">Contacts</div>
-                <div className="network-menu p-1">People | Follow</div>
-                <div className="network-menu p-1">Group</div>
+                <div className="network-menu p-menu">Contacts</div>
+                <div className="network-menu p-menu">People | Follow</div>
+                <div className="network-menu p-menu">Group</div>
               </div>
             </div>
           </aside>
         </div>
         <div id="main-wrapper">
-          <main id="main-section">
+          <main id="main-section-secondary">
             <div className="box-shadow">
               <div className="flex flex-space-between btm-border">
                 <h1 className="p-3">Connection</h1>

@@ -56,5 +56,6 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/deleteinvitation/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteInvitation))).Methods("DELETE")
 
 	s.Router.HandleFunc("/addnotification", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddNotification))).Methods("POST")	
-	s.Router.HandleFunc("/getnotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetNotification))).Methods("GET")	
+	s.Router.HandleFunc("/getnotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetNotification))).Methods("GET")
+	s.Router.HandleFunc("/deletenotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteNotification))).Methods("DELETE")		
 }

@@ -49,3 +49,16 @@ func (n *Notification) GetNotifications(db *gorm.DB, uid uint32) (*[]Notificatio
 	}
 	return &notifications, err
 }
+
+func (n *Notification) DeleteNotification(db *gorm.DB, pid uint64) (int64, error) {
+
+	db = db.Debug().Model(&Notification{}).Where("id = ?", pid).Take(&Notification{}).Delete(&Notification{})
+
+	if db.Error != nil {
+		if gorm.IsRecordNotFoundError(db.Error) {
+			return 0, errors.New("Notification not found")
+		}
+		return 0, db.Error
+	}
+	return db.RowsAffected, nil
+}
