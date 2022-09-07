@@ -1,6 +1,9 @@
 import { useAuth } from "../utils/authContext";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
+import parse from "html-react-parser";
+import { decode } from "html-entities";
+
 const notification = () => {
   const auth = useAuth();
   const cld = new Cloudinary({
@@ -38,7 +41,7 @@ const notification = () => {
                             <AdvancedImage cldImg={profileImage} />
                             <div>
                               <div>
-                                <a id="post-author-name">{i.content}</a>
+                                <a id="post-author-name">{parse(decode(i.content))}</a>
                               </div>
                             </div>
                           </div>

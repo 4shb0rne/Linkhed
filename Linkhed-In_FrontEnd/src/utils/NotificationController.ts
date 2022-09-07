@@ -23,6 +23,7 @@ export const addNotification = async (data: any) => {
       },
     })
     .then((response) => {
+      console.log(response)
       return response.data;
     });
 };

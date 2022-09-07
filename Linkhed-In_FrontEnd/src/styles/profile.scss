@@ -314,3 +314,10 @@
 .pb-3{
   padding-bottom: 3rem;
 }
+
+@media screen and (max-width: 600px) {
+  .m-10{
+    margin-left: 0rem;
+    margin-right: 0rem;
+  }
+}

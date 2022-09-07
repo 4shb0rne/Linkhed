@@ -60,13 +60,10 @@ const posts = (props: any) => {
                   navigate("/openprofile/" + props.p.user.id);
                   const data = {
                     user_id: props.p.user.id,
-                    content:
-                      auth.user.firstname +
-                      " " +
-                      auth.user.lastname +
-                      " viewed your profile",
+                    content:`<b>${auth.user.firstname} ${auth.user.lastname}</b> viewed your profile`,
                     actor_id: auth.user.id,
                   };
+                  console.log(data)
                   addNotification(data);
                   fetch_user();
                 }
@@ -132,11 +129,7 @@ const posts = (props: any) => {
                   });
                   const temp = {
                     user_id: props.p.user.id,
-                    content:
-                      auth.user.firstname +
-                      " " +
-                      auth.user.lastname +
-                      " liked your post",
+                    content:`<b>${auth.user.firstname} ${auth.user.lastname}</b> liked your post`,
                     actor_id: auth.user.id,
                   };
                   addNotification(temp);
