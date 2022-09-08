@@ -39,6 +39,9 @@ const home = () => {
       axios
         .get("http://localhost:8080/posts/" + (length + 1))
         .then((response) => {
+          if(response.data.length == posts.length){
+            setHasMore(false)
+          }
           setPosts(response.data);
         });
     }, 1000);
@@ -51,7 +54,6 @@ const home = () => {
   const myImage = cld.image(
     auth.user ? auth.user.profile_picture : "blank_bjt7w5"
   );
-
   return (
     <div className="container">
       <Modal
@@ -126,7 +128,7 @@ const home = () => {
           <InfiniteScroll
             dataLength={posts.length}
             next={load_posts}
-            hasMore={true}
+            hasMore={hasmore}
             loader={
               <div className="loading-center">
                 <div className="lds-ring">

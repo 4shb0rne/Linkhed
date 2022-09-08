@@ -357,6 +357,18 @@ header#main-header > div nav ul li div span.nav-item-text span {
 }
 
 @media (max-width: 600px) {
+  header#main-header > div div div span#search-icon{
+    display: none;
+  }
+
+  header#main-header > div nav{
+    margin-right: 0;
+  }
+
+  header#main-header > div {
+    padding-right: 0;
+    padding-left: 0;
+  }
   header#main-header > div nav ul li div {
     width: 35px;
     justify-content: center;
