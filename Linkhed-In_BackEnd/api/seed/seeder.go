@@ -16,8 +16,8 @@ var users = []models.User{
 		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 		Headline:          "Student at somewhere",
-		City:			   "Tangerang",
-		Country:		   "Indonesia",
+		City:              "Tangerang",
+		Country:           "Indonesia",
 	},
 	models.User{
 		Firstname:         "user",
@@ -27,8 +27,8 @@ var users = []models.User{
 		ProfilePicture:    "blank_bjt7w5.png",
 		BackgroundPicture: "defaultbackground_adjqkt.jpg",
 		Headline:          "Student at somewhere",
-		City:			   "Tangerang",
-		Country:		   "Indonesia",
+		City:              "Tangerang",
+		Country:           "Indonesia",
 	},
 }
 
@@ -43,11 +43,11 @@ var posts = []models.Post{
 
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.UserPosts{}, &models.Invitation{}, &models.UserComments{}, &models.UserConnections{}, &models.Reply{}, &models.Notification{}, &models.Comment{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.User{}).Error
+	err := db.Debug().DropTableIfExists(&models.UserPosts{}, &models.Invitation{}, &models.UserComments{}, &models.UserConnections{}, &models.Reply{}, &models.Notification{}, &models.Comment{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Job{}, &models.User{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
-	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Comment{}, &models.Reply{}, &models.UserPosts{}, &models.UserComments{}, &models.UserConnections{}, &models.Invitation{}, &models.Notification{}).Error
+	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Comment{}, &models.Reply{}, &models.UserPosts{}, &models.UserComments{}, &models.UserConnections{}, &models.Invitation{}, &models.Notification{}, &models.Job{}).Error
 	if err != nil {
 		log.Fatalf("cannot migrate table: %v", err)
 	}

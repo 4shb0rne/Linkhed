@@ -1,7 +1,4 @@
-import { useNavigate } from "react-router-dom";
-
-const job = () => {
-    const navigate = useNavigate();
+const managejob = () => {
     return (
         <div className="container">
             <div id="left-aside-wrapper">
@@ -22,24 +19,14 @@ const job = () => {
                     <div className="box-shadow p-1">
                         <div className="network-menu p-menu">
                             <div>
-                                <button
-                                    className="job-post-btn"
-                                    onClick={() => {
-                                        navigate("/jobform");
-                                    }}
-                                >
+                                <button className="job-post-btn">
                                     <i className="fa fa-pencil-square-o"></i>
                                     <span className="span-ml-3">
                                         Post a free job
                                     </span>
                                 </button>
                             </div>
-                            <div
-                                className="mt-1"
-                                onClick={() => {
-                                    navigate("/managejob");
-                                }}
-                            >
+                            <div className="mt-1">
                                 <i className="fa fa-suitcase"></i>
                                 <span className="manage-job-menu">
                                     Manage job posts
@@ -56,4 +43,4 @@ const job = () => {
     );
 };
 
-export default job;
+export default managejob;

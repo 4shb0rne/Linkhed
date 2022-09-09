@@ -26,14 +26,13 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/experiences/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetExperience))).Methods("GET")
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
-	
+
 	s.Router.HandleFunc("/addcomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddComment))).Methods("POST")
 	s.Router.HandleFunc("/deletecomment/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteComment))).Methods("DELETE")
 
 	s.Router.HandleFunc("/addreply", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddReply))).Methods("POST")
 	s.Router.HandleFunc("/deletereply/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteReply))).Methods("DELETE")
-	
-	
+
 	s.Router.HandleFunc("/likepost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.LikePost))).Methods("POST")
 	s.Router.HandleFunc("/dislikepost/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DislikePost))).Methods("DELETE")
 	s.Router.HandleFunc("/likecomment", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.LikeComment))).Methods("POST")
@@ -52,10 +51,13 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/connectuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.ConnectUser))).Methods("POST")
 	s.Router.HandleFunc("/disconnectuser/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DisconnectUser))).Methods("DELETE")
 
-	s.Router.HandleFunc("/sendinvitation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddInvitation))).Methods("POST")	
+	s.Router.HandleFunc("/sendinvitation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddInvitation))).Methods("POST")
 	s.Router.HandleFunc("/deleteinvitation/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteInvitation))).Methods("DELETE")
 
-	s.Router.HandleFunc("/addnotification", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddNotification))).Methods("POST")	
+	s.Router.HandleFunc("/addnotification", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddNotification))).Methods("POST")
 	s.Router.HandleFunc("/getnotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetNotification))).Methods("GET")
-	s.Router.HandleFunc("/deletenotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteNotification))).Methods("DELETE")		
+	s.Router.HandleFunc("/deletenotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteNotification))).Methods("DELETE")
+
+	s.Router.HandleFunc("/addjob", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddJob))).Methods("POST")
+	s.Router.HandleFunc("/getjobs/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetJobs))).Methods("GET")
 }
