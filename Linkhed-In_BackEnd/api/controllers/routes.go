@@ -59,5 +59,5 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/deletenotification/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DeleteNotification))).Methods("DELETE")
 
 	s.Router.HandleFunc("/addjob", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddJob))).Methods("POST")
-	s.Router.HandleFunc("/getjobs/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetJobs))).Methods("GET")
+	s.Router.HandleFunc("/getmanagedjobs", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetJobs))).Methods("GET")
 }

@@ -2,15 +2,15 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"strconv"
 
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/auth"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/utils/formaterror"
-	"github.com/gorilla/mux"
 )
 
 func (server *Server) AddJob(w http.ResponseWriter, r *http.Request) {
@@ -42,15 +42,14 @@ func (server *Server) AddJob(w http.ResponseWriter, r *http.Request) {
 
 func (server *Server) GetJobs(w http.ResponseWriter, r *http.Request) {
 
-	vars := mux.Vars(r)
-	uid, err := strconv.ParseUint(vars["id"], 10, 64)
+	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
-		responses.ERROR(w, http.StatusBadRequest, err)
+		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 	job := models.Job{}
 
-	jobs, err := job.GetJobs(server.DB, uid)
+	jobs, err := job.GetJobs(server.DB, uint64(uid))
 	if err != nil {
 		responses.ERROR(w, http.StatusInternalServerError, err)
 		return

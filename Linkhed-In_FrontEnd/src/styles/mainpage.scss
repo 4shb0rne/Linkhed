@@ -986,20 +986,20 @@ main#main-section
   color: blue !important;
 }
 
-.manage-job-menu{
+.manage-job-menu {
   margin-left: 5px;
 }
 
-
 .job-post-btn {
-  background-color: #FFFFFF;
-  border: 1px solid #1E90FF;
-  color: #1E90FF;
+  background-color: #ffffff;
+  border: 1px solid #1e90ff;
+  color: #1e90ff;
   border-radius: 8px;
   box-sizing: border-box;
   cursor: pointer;
   display: inline-block;
-  font-family: Circular,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",sans-serif;
+  font-family: Circular, -apple-system, BlinkMacSystemFont, Roboto,
+    "Helvetica Neue", sans-serif;
   font-size: 16px;
   font-weight: 600;
   line-height: 20px;
@@ -1010,16 +1010,17 @@ main#main-section
   text-align: center;
   text-decoration: none;
   touch-action: manipulation;
-  transition: box-shadow .2s,-ms-transform .1s,-webkit-transform .1s,transform .1s;
+  transition: box-shadow 0.2s, -ms-transform 0.1s, -webkit-transform 0.1s,
+    transform 0.1s;
   user-select: none;
   -webkit-user-select: none;
   width: auto;
 }
 
-.mt-1{
+.mt-1 {
   margin-top: 10px;
 }
 
-.span-ml-3{
+.span-ml-3 {
   margin-left: 3px;
 }

@@ -8,6 +8,7 @@ import (
 
 type Job struct {
 	gorm.Model
+	JobPicture string
 	JobTitle       string
 	JobDescription string
 	Company        string

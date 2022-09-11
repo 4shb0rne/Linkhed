@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/4shb0rne/Linkhed-In_BackEnd/api/auth"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/models"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/responses"
 	"github.com/4shb0rne/Linkhed-In_BackEnd/api/utils/formaterror"
@@ -52,7 +51,6 @@ func (server *Server) DeleteInvitation(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return
 	}
-	uid, err := auth.ExtractTokenID(r)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
@@ -61,10 +59,6 @@ func (server *Server) DeleteInvitation(w http.ResponseWriter, r *http.Request) {
 	err = server.DB.Debug().Model(models.Invitation{}).Where("id = ?", pid).Take(&invitation).Error
 	if err != nil {
 		responses.ERROR(w, http.StatusNotFound, errors.New("Unauthorized"))
-		return
-	}
-	if uid != invitation.UserID {
-		responses.ERROR(w, http.StatusUnauthorized, errors.New("Unauthorized"))
 		return
 	}
 	_, err = invitation.DeleteInvitation(server.DB, pid)
