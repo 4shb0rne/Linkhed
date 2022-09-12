@@ -66,9 +66,9 @@ const login = () => {
         </div>
         {error && <div className="text-red">{error}</div>}
       </div>
-      <a href="#" className="forgot-password-link">
+      <Link className="forgot-password-link" to="/forgetpassword">
         Forgot Password?
-      </a>
+      </Link>
       <button
         className="login-btn"
         onClick={() => {

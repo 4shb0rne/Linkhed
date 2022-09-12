@@ -75,6 +75,18 @@ func (server *Server) GetUser(w http.ResponseWriter, r *http.Request) {
 	responses.JSON(w, http.StatusOK, userGotten)
 }
 
+func (server *Server) GetUserByEmail(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	email := vars["email"];
+	user := models.User{}
+	userGotten, err := user.FindUserByEmail(server.DB, email)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, userGotten)
+}
+
 func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
 
 	body, err := ioutil.ReadAll(r.Body)
@@ -117,6 +129,31 @@ func (server *Server) UpdateProfileViews(w http.ResponseWriter, r *http.Request)
 	}
 	responses.JSON(w, http.StatusOK, updatedUser)
 }
+
+func (server *Server) UpdateUserVerified(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	uid, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	user := models.User{}
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	updatedUser, err := user.UpdateVerified(server.DB, uint32(uid))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, updatedUser)
+}
+
+
+
 
 func (server *Server) UpdateUser(w http.ResponseWriter, r *http.Request) {
 
@@ -190,11 +227,34 @@ func (server *Server) UpdateProfilePicture(w http.ResponseWriter, r *http.Reques
 		return
 	}
 	user.Prepare()
+	updatedUser, err := user.UpdateProfilePicture(server.DB, uint32(uid))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, updatedUser)
+}
+
+func (server *Server) UpdatePassword(w http.ResponseWriter, r *http.Request) {
+	uid, err := auth.ExtractPasswordTokenID(r)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-	updatedUser, err := user.UpdateProfilePicture(server.DB, uint32(uid))
+	user := models.User{}
+	err = json.Unmarshal(body, &user)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	user.Prepare()
+	updatedUser, err := user.UpdatePassword(server.DB, uint32(uid))
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
 		responses.ERROR(w, http.StatusInternalServerError, formattedError)
@@ -232,10 +292,6 @@ func (server *Server) UpdateBackgroundPicture(w http.ResponseWriter, r *http.Req
 		return
 	}
 	user.Prepare()
-	if err != nil {
-		responses.ERROR(w, http.StatusUnprocessableEntity, err)
-		return
-	}
 	updatedUser, err := user.UpdateBackgroundPicture(server.DB, uint32(uid))
 	if err != nil {
 		formattedError := formaterror.FormatError(err.Error())
@@ -243,6 +299,18 @@ func (server *Server) UpdateBackgroundPicture(w http.ResponseWriter, r *http.Req
 		return
 	}
 	responses.JSON(w, http.StatusOK, updatedUser)
+}
+
+func (server *Server) GeneratePasswordToken(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	uid, _ := strconv.ParseUint(vars["id"], 10, 32)
+	token, err := auth.CreatePasswordToken(uint32(uid))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusUnprocessableEntity, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, token)
 }
 
 func (server *Server) DeleteUser(w http.ResponseWriter, r *http.Request) {

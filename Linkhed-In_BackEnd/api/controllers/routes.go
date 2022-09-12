@@ -4,6 +4,8 @@ import "github.com/4shb0rne/Linkhed-In_BackEnd/api/middlewares"
 
 func (s *Server) initializeRoutes() {
 
+	s.Router.HandleFunc("/generatetoken/{id}", middlewares.SetMiddlewareJSON(s.GeneratePasswordToken)).Methods("GET")
+
 	// Home Route
 	s.Router.HandleFunc("/", middlewares.SetMiddlewareJSON(s.Home)).Methods("GET")
 
@@ -20,10 +22,14 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/updateprofilepicture/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateProfilePicture))).Methods("POST")
 	s.Router.HandleFunc("/updatebackgroundpicture/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateBackgroundPicture))).Methods("POST")
 	s.Router.HandleFunc("/updateprofile/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateUser))).Methods("PUT")
+	s.Router.HandleFunc("/updateverified/{id}", middlewares.SetMiddlewareJSON(s.UpdateUserVerified)).Methods("PUT")
+	s.Router.HandleFunc("/updatepassword", middlewares.SetMiddlewareJSON(s.UpdatePassword)).Methods("PUT")
 	s.Router.HandleFunc("/addeducation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddEducation))).Methods("POST")
 	s.Router.HandleFunc("/educations/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetEducation))).Methods("GET")
 	s.Router.HandleFunc("/addexperience", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddExperience))).Methods("POST")
 	s.Router.HandleFunc("/experiences/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetExperience))).Methods("GET")
+	
+	
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
 
@@ -46,6 +52,7 @@ func (s *Server) initializeRoutes() {
 
 	//Search
 	s.Router.HandleFunc("/searchuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchUser))).Methods("POST")
+	s.Router.HandleFunc("/searchuserbyemail/{email}", middlewares.SetMiddlewareJSON(s.GetUserByEmail)).Methods("GET")
 	s.Router.HandleFunc("/searchpost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchPost))).Methods("POST")
 
 	s.Router.HandleFunc("/connectuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.ConnectUser))).Methods("POST")

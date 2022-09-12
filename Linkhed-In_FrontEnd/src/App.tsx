@@ -21,6 +21,7 @@ import JobDetail from "./pages/JobDetail";
 import JobForm from "./pages/JobForm";
 import Job from "./pages/job";
 import ManageJob from "./pages/managejob";
+import VerificationCode from "./components/auth/verificationcode";
 import { GuestAuth } from "./utils/GuestAuth";
 import "../index.css";
 function App() {
@@ -70,6 +71,14 @@ function App() {
                   element={
                     <GuestAuth>
                       <RegisterData></RegisterData>
+                    </GuestAuth>
+                  }
+                ></Route>
+                <Route
+                  path="/verificationcode"
+                  element={
+                    <GuestAuth>
+                      <VerificationCode></VerificationCode>
                     </GuestAuth>
                   }
                 ></Route>

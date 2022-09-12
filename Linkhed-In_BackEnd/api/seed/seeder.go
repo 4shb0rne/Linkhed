@@ -18,6 +18,7 @@ var users = []models.User{
 		Headline:          "Student at somewhere",
 		City:              "Tangerang",
 		Country:           "Indonesia",
+		Verified: true,
 	},
 	models.User{
 		Firstname:         "user",
@@ -29,6 +30,7 @@ var users = []models.User{
 		Headline:          "Student at somewhere",
 		City:              "Tangerang",
 		Country:           "Indonesia",
+		Verified: true,
 	},
 }
 

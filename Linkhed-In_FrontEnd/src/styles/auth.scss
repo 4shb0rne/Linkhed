@@ -42,6 +42,34 @@
   padding-left: 0.1rem;
 }
 
+.container-forgot {
+  display: flex;
+  flex-direction: column;
+  width: 350px;
+  height: 350px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  padding: 1rem;
+}
+
+.container-forgot h2 {
+  color: #0a66c3;
+  font-size: 1rem;
+}
+
+.container-forgot h2 i {
+  font-size: 1.5rem;
+  padding-left: 0.1rem;
+}
+
 .container-register {
   display: flex;
   flex-direction: column;
@@ -174,6 +202,7 @@
 .join-link {
   text-decoration: none;
   font-weight: bolder;
+  margin-top: 15px;
 }
 
 .join-now {

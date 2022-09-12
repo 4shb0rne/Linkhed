@@ -1,6 +1,7 @@
 package models
 
 import (
+	"crypto/rand"
 	"errors"
 	"fmt"
 	"html"
@@ -28,9 +29,10 @@ type User struct {
 	PostsLikes        []*Post       `gorm:"many2many:user_posts;"`
 	CommentLikes      []*Comment    `gorm:"many2many:user_comments;"`
 	Connections       []*User       `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
+	Verified bool
+	VerificationCode string
 	Invitations       []*Invitation `gorm:"foreignKey:ConnectionID"`
 	Notifications 	  []*Notification `gorm:"foreignKey:UserID"`
-	ProfileVisited    uint32
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
 	UpdatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"updated_at"`
 }
@@ -39,6 +41,24 @@ type SearchQuery struct {
 	Content string
 }
 
+const otpChars = "1234567890"
+
+func GenerateOTP(length int) (string, error) {
+    buffer := make([]byte, length)
+    _, err := rand.Read(buffer)
+    if err != nil {
+        return "", err
+    }
+
+    otpCharsLength := len(otpChars)
+    for i := 0; i < length; i++ {
+        buffer[i] = otpChars[int(buffer[i])%otpCharsLength]
+    }
+
+    return string(buffer), nil
+}
+
+
 func Hash(password string) ([]byte, error) {
 	return bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 }
@@ -46,6 +66,7 @@ func Hash(password string) ([]byte, error) {
 func VerifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
+
 
 func (u *User) BeforeSave() error {
 	hashedPassword, err := Hash(u.Password)
@@ -74,6 +95,8 @@ func (u *User) PrepareCreate() {
 	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
 	u.ProfilePicture = "blank_bjt7w5"
 	u.BackgroundPicture = "defaultbackground_adjqkt.jpg"
+	u.Verified = false
+	u.VerificationCode, _ = GenerateOTP(6);
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
 }
@@ -156,6 +179,17 @@ func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	return u, err
 }
 
+func (u *User) FindUserByEmail(db *gorm.DB, email string) (*User, error) {
+	var err error = db.Debug().Model(User{}).Where("email = ?", email).Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	if gorm.IsRecordNotFoundError(err) {
+		return &User{}, errors.New("User Not Found")
+	}
+	return u, err
+}
+
 func (u *User) UpdateAUser(db *gorm.DB, uid uint32) (*User, error) {
 	err := u.BeforeSave()
 	if err != nil {
@@ -199,6 +233,43 @@ func (u *User) UpdateVisited(db *gorm.DB, uid uint32, counts uint32) (*User, err
 	}
 	return u, nil
 }
+
+func (u *User) UpdateVerified(db *gorm.DB, uid uint32) (*User, error) {
+	err := u.BeforeSave()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Update("verified", true)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+	// This is the display the updated user
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
+
+func (u *User) UpdatePassword(db *gorm.DB, uid uint32) (*User, error) {
+	err := u.BeforeSave()
+	if err != nil {
+		log.Fatal(err)
+	}
+	db = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&User{}).Update(
+		"password", u.Password,
+	)
+	if db.Error != nil {
+		return &User{}, db.Error
+	}
+	// This is the display the updated user
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Take(&u).Error
+	if err != nil {
+		return &User{}, err
+	}
+	return u, nil
+}
+
 
 func (u *User) UpdateProfilePicture(db *gorm.DB, uid uint32) (*User, error) {
 	err := u.BeforeSave()

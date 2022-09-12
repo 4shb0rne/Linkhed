@@ -1,7 +1,8 @@
 import "../../styles/auth.scss";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
+import sendEmail from "../../utils/sendEmail";
 
 interface LocationState {
   state: {
@@ -24,9 +25,18 @@ const registerdata = () => {
     };
     axios.post("http://localhost:8080/register", data).then((response) => {
       const status = response.status;
+      const responsedata = response.data;
       if (status == 201) {
         //success
-        navigate("/login");
+        sendEmail(
+          "Your Verification Code : " + responsedata.VerificationCode,
+          responsedata.email
+        );
+        navigate("/verificationcode", {
+          state: {
+            responsedata: responsedata,
+          },
+        });
       } else {
         console.log("invalid");
       }
