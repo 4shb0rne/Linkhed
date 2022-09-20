@@ -11,8 +11,10 @@ import { useAuth } from "../utils/authContext";
 const searchpage = () => {
   const params = useParams();
   const cookies = new Cookies();
-  const auth = useAuth()
+  const auth = useAuth();
   const token = cookies.get("token");
+  const [post, setPost] = useState(true);
+  const [people, setPeople] = useState(true);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -54,55 +56,91 @@ const searchpage = () => {
     searchUser();
     searchPost();
   }, []);
-  if(auth.user){
+  if (auth.user) {
     return (
       <div>
-        {users.length != 0 && 
-        <div className="box-shadow m-10 mt-1">
-          <div className="flex flex-space-between">
-            <h1 className="p-3">Users</h1>
-          </div>
-          { users.map((u) => {
+        <div className="box-shadow m-10 mt-1 flex">
+          <button
+            className="filter-btn m-1"
+            onClick={() => {
+              if (!people && !post) {
+                setPeople(true);
+              } else {
+                if (post == false) {
+                  setPost(true);
+                } else {
+                  setPost(false);
+                }
+              }
+            }}
+          >
+            People
+          </button>
+          <button
+            className="filter-btn m-1"
+            onClick={() => {
+              if (!people && !post) {
+                setPost(true);
+              } else {
+                if (people == false) {
+                  setPeople(true);
+                } else {
+                  setPeople(false);
+                }
+              }
+            }}
+          >
+            Post
+          </button>
+        </div>
+        {users.length != 0 && people ? (
+          <div className="box-shadow m-10 mt-1">
+            <div className="flex flex-space-between">
+              <h1 className="p-3">Users</h1>
+            </div>
+            {users.map((u) => {
               return <Userlist u={u}></Userlist>;
             })}
-        </div>}
-        {
-          posts.length != 0 &&
-          <div className="box-shadow m-10 mt-1">
-          <div className="flex flex-space-between">
-            <h1 className="p-3">Posts</h1>
           </div>
-          <main id="main-section">
-            {posts &&
-              posts.map((p) => {
-                const postImage = cld.image(p.attachment);
-                const profileimage = cld.image(p.user.profile_picture);
-                var hours = Math.floor(
-                  Math.abs(
-                    new Date().valueOf() - new Date(p.updated_at).valueOf()
-                  ) / 36e5
-                );
-                return (
-                  <Posts
-                    key={p.id}
-                    p={p}
-                    hours={hours}
-                    fetch_posts={searchPost}
-                    profileimage={profileimage}
-                    postImage={postImage}
-                  ></Posts>
-                );
-              })}
-          </main>
-        </div>}
+        ) : (
+          <div></div>
+        )}
+        {posts.length != 0 && post ? (
+          <div className="box-shadow m-10 mt-1">
+            <div className="flex flex-space-between">
+              <h1 className="p-3">Posts</h1>
+            </div>
+            <main id="main-section">
+              {posts &&
+                posts.map((p) => {
+                  const postImage = cld.image(p.attachment);
+                  const profileimage = cld.image(p.user.profile_picture);
+                  var hours = Math.floor(
+                    Math.abs(
+                      new Date().valueOf() - new Date(p.updated_at).valueOf()
+                    ) / 36e5
+                  );
+                  return (
+                    <Posts
+                      key={p.id}
+                      p={p}
+                      hours={hours}
+                      fetch_posts={searchPost}
+                      profileimage={profileimage}
+                      postImage={postImage}
+                    ></Posts>
+                  );
+                })}
+            </main>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
     );
-  } else{
-    return(
-      <div>Loading</div>
-    ) 
+  } else {
+    return <div>Loading</div>;
   }
-  
 };
 
 export default searchpage;

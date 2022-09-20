@@ -50,9 +50,15 @@ const resetpassword = () => {
             const temp = {
               password: password,
             };
-            axios.put("http://localhost:8080/updatepassword", temp).then(() => {
-              navigate("/login");
-            });
+            axios
+              .put("http://localhost:8080/updatepassword", temp, {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              })
+              .then(() => {
+                navigate("/login");
+              });
           }
         }}
       >

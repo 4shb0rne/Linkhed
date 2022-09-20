@@ -35,7 +35,11 @@ const connection = () => {
                   </Link>
                 </div>
                 <div className="network-menu p-menu">Contacts</div>
-                <div className="network-menu p-menu">People | Follow</div>
+                <div className="network-menu p-menu">
+                  <Link to="/follow" className="text-black">
+                    People | Follow
+                  </Link>
+                </div>
                 <div className="network-menu p-menu">Group</div>
               </div>
             </div>

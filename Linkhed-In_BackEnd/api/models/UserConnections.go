@@ -32,7 +32,7 @@ func (uc *UserConnections) ConnectUser(db *gorm.DB) (*UserConnections, error) {
 }
 
 func (uc *UserConnections) DisconnectUser(db *gorm.DB, pid uint64, uid uint64) (int64, error) {
-	db = db.Debug().Model(&UserPosts{}).Where("connection_id = ? and user_id = ?", pid, uid).Take(&UserConnections{}).Delete(&UserConnections{})
+	db = db.Debug().Model(&UserConnections{}).Where("connection_id = ? and user_id = ?", pid, uid).Take(&UserConnections{}).Delete(&UserConnections{})
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
 			return 0, errors.New("not found")

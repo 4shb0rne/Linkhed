@@ -4,7 +4,6 @@ import { Cloudinary } from "@cloudinary/url-gen";
 import { useAuth } from "../utils/authContext";
 import { useEffect, useState } from "react";
 import getJob from "../utils/getJob";
-import getUser from "../utils/getUser";
 
 const managejob = () => {
   const auth = useAuth();

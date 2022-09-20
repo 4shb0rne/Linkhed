@@ -68,3 +68,36 @@ func (server *Server) GetExperience(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, experiences)
 }
+
+func (server *Server) UpdateExperience(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	experience := models.Experience{}
+	err = json.Unmarshal(body, &experience)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	err = experience.Validate()
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	updatedExperience, err := experience.UpdateExperience(server.DB, uint32(pid))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, updatedExperience)
+}

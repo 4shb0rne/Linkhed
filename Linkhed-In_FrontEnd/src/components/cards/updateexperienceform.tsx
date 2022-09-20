@@ -3,14 +3,21 @@ import "../../styles/profileform.scss";
 import { useAuth } from "../../utils/authContext";
 import Cookies from "universal-cookie";
 import { useModal } from "../../utils/modalContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const experienceform = (props: any) => {
+const updateexperienceform = (props: any) => {
   const auth = useAuth();
   const cookies = new Cookies();
   const modal = useModal();
   const token = cookies.get("token");
   const [monthError, setMonthError] = useState("");
+  const Selected = () => {
+    (document.getElementById("employment") as HTMLInputElement).value =
+      experience.EmploymentType;
+  };
+  useEffect(() => {
+    Selected();
+  }, []);
   const submit = (
     title: string,
     employment: string,
@@ -35,21 +42,31 @@ const experienceform = (props: any) => {
       endyear: parseInt(endyear),
     };
     axios
-      .post("http://localhost:8080/addexperience", data, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
+      .put(
+        "http://localhost:8080/updateexperience/" + props.experience.ID,
+        data,
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      )
       .then(() => {
         props.fetch_experiences();
       });
   };
+  const experience = props.experience;
   return (
     <div>
       <div className="form-input">
         <label>Title*</label>
         <div>
-          <input type="text" className="input-text" id="title"></input>
+          <input
+            type="text"
+            className="input-text"
+            id="title"
+            defaultValue={experience.Title}
+          ></input>
         </div>
       </div>
       <div className="form-input">
@@ -70,32 +87,57 @@ const experienceform = (props: any) => {
       <div className="form-input">
         <label>Company Name*</label>
         <div>
-          <input type="text" className="input-text" id="companyname"></input>
+          <input
+            type="text"
+            className="input-text"
+            id="companyname"
+            defaultValue={experience.CompanyName}
+          ></input>
         </div>
       </div>
       <div className="form-input">
         <label>Location*</label>
         <div>
-          <input type="text" className="input-text" id="location"></input>
+          <input
+            type="text"
+            className="input-text"
+            id="location"
+            defaultValue={experience.Location}
+          ></input>
         </div>
       </div>
       <div className="form-input">
         <label>Industry*</label>
         <div>
-          <input type="text" className="input-text" id="industry"></input>
+          <input
+            type="text"
+            className="input-text"
+            id="industry"
+            defaultValue={experience.Industry}
+          ></input>
         </div>
       </div>
       <div className="form-input col-2">
         <div>
           <label>Start Month*</label>
           <div>
-            <input type="number" className="input-text" id="startmonth"></input>
+            <input
+              type="number"
+              className="input-text"
+              id="startmonth"
+              defaultValue={experience.StartMonth}
+            ></input>
           </div>
         </div>
         <div>
           <label>Start Year*</label>
           <div>
-            <input type="number" className="input-text" id="startyear"></input>
+            <input
+              type="number"
+              className="input-text"
+              id="startyear"
+              defaultValue={experience.StartYear}
+            ></input>
           </div>
         </div>
       </div>
@@ -103,13 +145,23 @@ const experienceform = (props: any) => {
         <div>
           <label>End Month(optional)</label>
           <div>
-            <input type="number" className="input-text" id="endmonth"></input>
+            <input
+              type="number"
+              className="input-text"
+              id="endmonth"
+              defaultValue={experience.EndMonth}
+            ></input>
           </div>
         </div>
         <div>
           <label>End Year(optional)</label>
           <div>
-            <input type="number" className="input-text" id="endyear"></input>
+            <input
+              type="number"
+              className="input-text"
+              id="endyear"
+              defaultValue={experience.EndYear}
+            ></input>
           </div>
         </div>
       </div>
@@ -118,7 +170,6 @@ const experienceform = (props: any) => {
         <button
           className="submit-btn"
           onClick={() => {
-            setMonthError("");
             const title = (document.getElementById("title") as HTMLInputElement)
               .value;
             const employment = (
@@ -175,7 +226,7 @@ const experienceform = (props: any) => {
                   endmonth,
                   endyear
                 );
-                modal.setIsOpen3(false);
+                modal.setIsOpen5(false);
               }
             }
           }}
@@ -187,4 +238,4 @@ const experienceform = (props: any) => {
   );
 };
 
-export default experienceform;
+export default updateexperienceform;

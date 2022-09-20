@@ -4,6 +4,7 @@ import (
 	"errors"
 	"html"
 	"strings"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -72,4 +73,26 @@ func (e *Experience) GetExperiences(db *gorm.DB, pid uint64) (*[]Experience, err
 		return &[]Experience{}, err
 	}
 	return &experiences, nil
+}
+func (e *Experience) UpdateExperience(db *gorm.DB, pid uint32) (*Experience, error) {
+
+	var err error
+	err = db.Debug().Model(&Experience{}).Where("id = ?", pid).UpdateColumns(
+		map[string]interface{}{
+			"title": e.Title,
+			"employment_type": e.EmploymentType,
+			"company_name": e.CompanyName,
+			"location": e.Location,
+			"industry": e.Industry,
+			"start_year": e.StartYear,
+			"start_month": e.StartMonth,
+			"end_month": e.EndMonth,
+			"end_year": e.EndYear,
+			"updated_at": time.Now(),
+		},
+	).Error
+	if err != nil {
+		return &Experience{}, err
+	}
+	return e, nil
 }

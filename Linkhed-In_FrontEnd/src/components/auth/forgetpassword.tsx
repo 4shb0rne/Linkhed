@@ -1,9 +1,13 @@
 import axios from "axios";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import "../../styles/auth.scss";
 import getUserEmail from "../../utils/getUserEmail";
 import sendEmail from "../../utils/sendEmail";
+
 const forgetpassword = () => {
+  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
   return (
     <div className="container-forgot">
       <div className="text">
@@ -21,21 +25,34 @@ const forgetpassword = () => {
           />
         </div>
       </div>
-
+      {error && <div className="text-red">{error}</div>}
+      {message && <div className="text-green">{message}</div>}
       <button
         className="login-btn"
         onClick={async () => {
+          setError("");
+          setMessage("");
           const email = (document.getElementById("email") as HTMLInputElement)
             .value;
-          const user = await getUserEmail(email);
-          const token = await axios.get(
-            "http://localhost:8080/generatetoken/" + user.id
-          );
-          sendEmail(
-            "Click this link to reset your password => localhost:5173/resetpassword?token=" +
-              token.data,
-            email
-          );
+          if (email == "") {
+            setError("Email must be filled");
+          } else {
+            await getUserEmail(email).then(async (response) => {
+              if (response.status != 400) {
+                const token = await axios.get(
+                  "http://localhost:8080/generatetoken/" + response.data.id
+                );
+                sendEmail(
+                  "Click this link to reset your password => localhost:5173/resetpassword?token=" +
+                    token.data,
+                  email
+                );
+                setMessage("Check your email for link to reset your password");
+              } else {
+                setError("Account with that email doesn't exist");
+              }
+            });
+          }
         }}
       >
         Reset Password

@@ -9,6 +9,7 @@ import { Cloudinary } from "@cloudinary/url-gen";
 
 const addpost = ({ fetch_posts }: any) => {
   const [image, setImage] = useState<FileList | null>(null);
+  const [error, setError] = useState("");
   const auth = useAuth();
   const modal = useModal();
   const cookies = new Cookies();
@@ -20,11 +21,14 @@ const addpost = ({ fetch_posts }: any) => {
   });
   const submit = (content: any) => {
     const formData = new FormData();
-    if(image){
+    if (image) {
       formData.append("file", image![0]);
       formData.append("upload_preset", "linkhed");
       axios
-        .post("https://api.cloudinary.com/v1_1/ashbornee/image/upload", formData)
+        .post(
+          "https://api.cloudinary.com/v1_1/ashbornee/image/upload",
+          formData
+        )
         .then((response) => {
           console.log(response);
           const data = {
@@ -42,11 +46,10 @@ const addpost = ({ fetch_posts }: any) => {
               fetch_posts();
             });
         });
-    } else
-    {
+    } else {
       const data = {
         user_id: auth.user.id,
-        content: content
+        content: content,
       };
       axios
         .post("http://localhost:8080/addpost", data, {
@@ -58,7 +61,6 @@ const addpost = ({ fetch_posts }: any) => {
           fetch_posts();
         });
     }
-    
   };
   const myImage = cld.image(auth.user.profile_picture);
   return (
@@ -89,6 +91,22 @@ const addpost = ({ fetch_posts }: any) => {
           image.src = URL.createObjectURL(e.target.files![0]);
         }}
       ></input>
+      {error && <div className="text-red">{error}</div>}
+      {image && (
+        <div className="flex flex-row-reverse">
+          <button
+            className="btn-none"
+            onClick={() => {
+              const image: any = document.getElementById("image-test");
+              image.src = "";
+              image.className = "";
+              setImage(null);
+            }}
+          >
+            <i className="fa fa-times"></i>
+          </button>
+        </div>
+      )}
       <div>
         <img id="image-test"></img>
       </div>
@@ -100,6 +118,8 @@ const addpost = ({ fetch_posts }: any) => {
             if (content?.length != 0) {
               submit(content);
               modal.setIsOpen(false);
+            } else {
+              setError("Post content must be filled");
             }
           }}
         >

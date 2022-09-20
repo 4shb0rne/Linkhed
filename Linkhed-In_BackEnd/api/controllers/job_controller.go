@@ -56,3 +56,15 @@ func (server *Server) GetJobs(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, jobs)
 }
+
+func (server *Server) GetAllJobs(w http.ResponseWriter, r *http.Request) {
+
+	job := models.Job{}
+
+	jobs, err := job.GetAllJobs(server.DB)
+	if err != nil {
+		responses.ERROR(w, http.StatusInternalServerError, err)
+		return
+	}
+	responses.JSON(w, http.StatusOK, jobs)
+}

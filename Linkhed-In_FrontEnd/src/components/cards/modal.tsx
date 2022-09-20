@@ -17,7 +17,7 @@ const Modal = ({
       isOpen={modal}
       onDismiss={() => setModal(false)}
       aria-label={ariaText}
-      className="modal-z fade-in"
+      className="modal modal-z fade-in"
     >
       <div className="flex justify-end">
         <div>

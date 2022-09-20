@@ -69,3 +69,36 @@ func (server *Server) GetEducation(w http.ResponseWriter, r *http.Request) {
 	}
 	responses.JSON(w, http.StatusOK, educations)
 }
+
+func (server *Server) UpdateEducation(w http.ResponseWriter, r *http.Request) {
+
+	vars := mux.Vars(r)
+	pid, err := strconv.ParseUint(vars["id"], 10, 32)
+	if err != nil {
+		responses.ERROR(w, http.StatusBadRequest, err)
+		return
+	}
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	education := models.Education{}
+	err = json.Unmarshal(body, &education)
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	err = education.Validate()
+	if err != nil {
+		responses.ERROR(w, http.StatusUnprocessableEntity, err)
+		return
+	}
+	updatedEducation, err := education.UpdateEducation(server.DB, uint32(pid))
+	if err != nil {
+		formattedError := formaterror.FormatError(err.Error())
+		responses.ERROR(w, http.StatusInternalServerError, formattedError)
+		return
+	}
+	responses.JSON(w, http.StatusOK, updatedEducation)
+}

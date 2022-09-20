@@ -9,6 +9,9 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import getUser from "../utils/getUser";
+import { useModal } from "../utils/modalContext";
+import Modal from "../components/cards/modal";
+import BlockModal from "../components/cards/modal/blockmodal";
 const userprofile = () => {
   const params = useParams();
   const auth = useAuth();
@@ -16,6 +19,7 @@ const userprofile = () => {
   const [user, setUser]: any = useState(null);
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const modal = useModal();
   const fetch_user = async () => {
     axios.get("http://localhost:8080/users/" + params.id).then((response) => {
       setUser(response.data);
@@ -36,7 +40,7 @@ const userprofile = () => {
     fetch_current_user();
     return false;
   };
-  const [connect, setConnect] = useState(checkConnect());
+
   const [educations, setEducations] = useState<any[]>([]);
   const [experiences, setExperiences] = useState<any[]>([]);
   const fetch_educations = async () => {
@@ -47,11 +51,13 @@ const userprofile = () => {
     const experience = await getExperience(id);
     setExperiences(experience);
   };
+
   useEffect(() => {
     fetch_user();
     fetch_educations();
     fetch_experiences();
   }, []);
+  const [connect, setConnect] = useState(checkConnect());
 
   const cld = new Cloudinary({
     cloud: {
@@ -63,8 +69,17 @@ const userprofile = () => {
     const myImage = cld.image(user["profile_picture"]);
     const myBackgroundImage = cld.image(user["background_picture"]);
     myImage.resize(fill().width(250).height(250));
+
     return (
       <div>
+        <Modal modal={modal.isOpen} setModal={modal.setIsOpen} ariaText="Block">
+          <BlockModal
+            user={user}
+            currentuser={auth.user}
+            fetch={fetch_current_user}
+          ></BlockModal>
+        </Modal>
+        ;
         <div className="box-shadow m-10">
           <div id="profile-upper">
             <div id="profile-banner-image">
@@ -87,7 +102,7 @@ const userprofile = () => {
             <div id="black-grd"></div>
           </div>
           <div className="ml-5">
-            <div className="flex flex-space-between mt-5">
+            <div className="flex mt-5">
               <h1>
                 {user["firstname"]} {user["lastname"]}
               </h1>
@@ -115,15 +130,29 @@ const userprofile = () => {
                 <button
                   className="decline-btn"
                   onClick={() => {
-                    const data = {
-                      user_id: auth.user.id,
-                      connection_id: id,
-                    };
-                    axios.post("http://localhost:8080/sendinvitation", data, {
-                      headers: {
-                        Authorization: "Bearer " + token,
-                      },
-                    });
+                    axios.delete(
+                      "http://localhost:8080/disconnectuser/" +
+                        id +
+                        "/" +
+                        auth.user.id,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    axios.delete(
+                      "http://localhost:8080/disconnectuser/" +
+                        auth.user.id +
+                        "/" +
+                        id,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    setConnect(false);
                   }}
                 >
                   Remove Connection
@@ -131,6 +160,62 @@ const userprofile = () => {
               ) : (
                 <div></div>
               )}
+              {auth.user.id != id &&
+              !user.Followers.find(
+                (o: any) => o.FollowerID === auth.user.id
+              ) ? (
+                <button
+                  className="follow-btn"
+                  onClick={() => {
+                    const data = {
+                      userid: id,
+                      followerid: auth.user.id,
+                    };
+                    axios.post("http://localhost:8080/followuser", data, {
+                      headers: {
+                        Authorization: "Bearer " + token,
+                      },
+                    });
+                    fetch_user();
+                  }}
+                >
+                  <i className="fa fa-plus"></i> Follow
+                </button>
+              ) : (
+                <div></div>
+              )}
+              {auth.user.id != id &&
+              user.Followers.find((o: any) => o.FollowerID === auth.user.id) ? (
+                <button
+                  className="follow-btn"
+                  onClick={() => {
+                    axios.delete(
+                      "http://localhost:8080/unfollowuser/" +
+                        id +
+                        "/" +
+                        auth.user.id,
+                      {
+                        headers: {
+                          Authorization: "Bearer " + token,
+                        },
+                      }
+                    );
+                    fetch_user();
+                  }}
+                >
+                  <i className="fa fa-plus"></i> Unfollow
+                </button>
+              ) : (
+                <div></div>
+              )}
+              <button
+                className="block-btn"
+                onClick={() => {
+                  modal.setIsOpen(true);
+                }}
+              >
+                Block
+              </button>
             </div>
           </div>
           <div className="flex ml-5">{user["Headline"]}</div>

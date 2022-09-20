@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { addNotification } from "../../utils/NotificationController";
 const posts = (props: any) => {
   const [open, setOpen] = useState(false);
+  const [count, setCount] = useState(1);
   const navigate = useNavigate();
   const cld = new Cloudinary({
     cloud: {
@@ -35,7 +36,7 @@ const posts = (props: any) => {
   const token = cookies.get("token");
   if (props.p.user && auth.user) {
     return (
-      <article key={props.p.id}>
+      <article key={props.p.id} className="article-bs">
         <div id="post-author">
           <a href="#">
             <div
@@ -210,7 +211,7 @@ const posts = (props: any) => {
               Submit
             </button>
           </div>
-          {props.p.Comments.map((c: any) => {
+          {props.p.Comments.slice(0, count).map((c: any) => {
             const Image = cld.image(c.User.profile_picture);
             return (
               <Comments
@@ -221,6 +222,16 @@ const posts = (props: any) => {
               ></Comments>
             );
           })}
+          {props.p.Comments.length > count && (
+            <button
+              className="none-btn"
+              onClick={() => {
+                setCount(count + 1);
+              }}
+            >
+              Load more comments
+            </button>
+          )}
         </div>
       </article>
     );

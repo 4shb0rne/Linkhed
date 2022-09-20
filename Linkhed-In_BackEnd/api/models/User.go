@@ -29,8 +29,12 @@ type User struct {
 	PostsLikes        []*Post       `gorm:"many2many:user_posts;"`
 	CommentLikes      []*Comment    `gorm:"many2many:user_comments;"`
 	Connections       []*User       `gorm:"many2many:user_connections;association_jointable_foreignkey:connection_id"`
+	ProfileVisited int
 	Verified bool
 	VerificationCode string
+	Followers []*Follower `gorm:"foreignKey:UserID"`
+	Blocking []*Block `gorm:"foreignKey:UserID"`
+	Following []*Follower `gorm:"foreignKey:FollowerID"`
 	Invitations       []*Invitation `gorm:"foreignKey:ConnectionID"`
 	Notifications 	  []*Notification `gorm:"foreignKey:UserID"`
 	CreatedAt         time.Time `gorm:"default:CURRENT_TIMESTAMP" json:"created_at"`
@@ -96,10 +100,25 @@ func (u *User) PrepareCreate() {
 	u.ProfilePicture = "blank_bjt7w5"
 	u.BackgroundPicture = "defaultbackground_adjqkt.jpg"
 	u.Verified = false
+	u.ProfileVisited = 0;
 	u.VerificationCode, _ = GenerateOTP(6);
 	u.CreatedAt = time.Now()
 	u.UpdatedAt = time.Now()
 }
+
+func (u *User) PrepareGoogle() {
+	u.ID = 0
+	u.Firstname = html.EscapeString(strings.TrimSpace(u.Firstname))
+	u.Lastname = html.EscapeString(strings.TrimSpace(u.Lastname))
+	u.Email = html.EscapeString(strings.TrimSpace(u.Email))
+	u.BackgroundPicture = "defaultbackground_adjqkt.jpg"
+	u.Verified = true
+	u.ProfileVisited = 0;
+	u.VerificationCode, _ = GenerateOTP(6);
+	u.CreatedAt = time.Now()
+	u.UpdatedAt = time.Now()
+}
+
 
 func (u *User) Validate(action string) error {
 	switch strings.ToLower(action) {
@@ -161,7 +180,7 @@ func (u *User) SaveUser(db *gorm.DB) (*User, error) {
 func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Find(&users).Error
+	err = db.Debug().Model(&User{}).Preload("PostsLikes").Preload("CommentLikes").Preload("Invitations").Preload("Invitations.User").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Preload("Followers").Preload("Following").Preload("Following.User").Preload("Followers.Follower").Preload("Blocking").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}
@@ -169,7 +188,7 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 }
 
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
-	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Take(&u).Error
+	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Preload("Followers").Preload("Following").Preload("Following.User").Preload("Followers.Follower").Preload("Blocking").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -227,7 +246,7 @@ func (u *User) UpdateVisited(db *gorm.DB, uid uint32, counts uint32) (*User, err
 		return &User{}, db.Error
 	}
 	// This is the display the updated user
-	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Take(&u).Error
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Preload("Followers").Preload("Following").Preload("Following.User").Preload("Followers.Follower").Preload("Blocking").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -244,7 +263,7 @@ func (u *User) UpdateVerified(db *gorm.DB, uid uint32) (*User, error) {
 		return &User{}, db.Error
 	}
 	// This is the display the updated user
-	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Take(&u).Error
+	err = db.Debug().Model(&User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Preload("Followers").Preload("Following").Preload("Following.User").Preload("Followers.Follower").Preload("Blocking").Take(&u).Error
 	if err != nil {
 		return &User{}, err
 	}

@@ -16,4 +16,9 @@ const getJob = async () => {
   }
 };
 
+export const getAllJobs = async () => {
+  const response = await axios.get("http://localhost:8080/getjobs");
+  return response.data;
+};
+
 export default getJob;

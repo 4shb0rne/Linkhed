@@ -230,10 +230,40 @@
   white-space: nowrap;
 }
 
+.follow-btn {
+  margin-left: 10px;
+  padding: 8px 0.8em;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  color: gray;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans",
+    sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  order: 3;
+}
+
+.block-btn {
+  margin-left: 10px;
+  padding: 8px 0.8em;
+  background-color: rgb(255, 72, 43);
+  border: 1px solid transparent;
+  box-sizing: border-box;
+  color: white;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans",
+    sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  order: 3;
+}
+
 .decline-btn {
   background-color: red;
   border: 1px solid transparent;
-  border-radius: 3px;
   box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0 0 inset;
   box-sizing: border-box;
   color: #fff;
@@ -244,19 +274,20 @@
   font-size: 13px;
   border-radius: 50px;
   font-weight: 400;
-  line-height: 1.15385;
   margin-left: auto;
   order: 2;
   outline: none;
   padding: 8px 0.8em;
   position: relative;
   text-align: center;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
   touch-action: manipulation;
   vertical-align: baseline;
   white-space: nowrap;
+}
+
+.right-side {
+  margin-left: auto;
+  order: 2;
 }
 
 .connect-btn {
@@ -321,6 +352,42 @@
   padding-bottom: 3rem;
 }
 
+.yes-btn {
+  background-color: #0095ff;
+  border: 1px solid transparent;
+  border-radius: 3px;
+  box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans",
+    sans-serif;
+  font-size: 13px;
+  line-height: 1.15385;
+  outline: none;
+  padding: 8px 0.8em;
+  position: relative;
+  text-align: center;
+}
+
+.no-btn {
+  background-color: red;
+  border: 1px solid transparent;
+  box-shadow: rgba(255, 255, 255, 0.4) 0 1px 0 0 inset;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", "Liberation Sans",
+    sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  padding: 8px 0.8em;
+  position: relative;
+  text-align: center;
+}
+
 @media screen and (max-width: 600px) {
   .m-10 {
     margin-left: 0rem;
@@ -335,5 +402,9 @@
   .p-menu {
     padding: 0.5rem;
     font-size: 12px;
+  }
+
+  .p-1 {
+    padding: 0.1rem;
   }
 }

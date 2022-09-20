@@ -52,3 +52,13 @@ func (j *Job) GetJobs(db *gorm.DB, uid uint64) (*[]Job, error) {
 	}
 	return &jobs, nil
 }
+
+func (j *Job) GetAllJobs(db *gorm.DB) (*[]Job, error) {
+	var err error
+	jobs := []Job{}
+	err = db.Debug().Model(&Job{}).Find(&jobs).Error
+	if err != nil {
+		return &[]Job{}, err
+	}
+	return &jobs, nil
+}

@@ -13,6 +13,7 @@ const comments = (props: any) => {
   const auth = useAuth();
   const cookies = new Cookies();
   const token = cookies.get("token");
+  const [replyCount, setReplyCount] = useState(1);
   const checkLike = () => {
     if (auth.user) {
       if (auth.user.CommentLikes.find((o: any) => o.id === props.c.id)) {
@@ -170,7 +171,7 @@ const comments = (props: any) => {
               Submit
             </button>
           </div>
-          {data.c.Replies.map((r: any) => {
+          {data.c.Replies.slice(0, replyCount).map((r: any) => {
             return (
               <Replies
                 data={r}
@@ -179,6 +180,16 @@ const comments = (props: any) => {
               ></Replies>
             );
           })}
+          {data.c.Replies.length > replyCount && (
+            <button
+              className="none-btn"
+              onClick={() => {
+                setReplyCount(replyCount + 1);
+              }}
+            >
+              Load more replies
+            </button>
+          )}
         </div>
       </article>
     </div>

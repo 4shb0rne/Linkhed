@@ -4,6 +4,7 @@ import (
 	"errors"
 	"html"
 	"strings"
+	"time"
 
 	"github.com/jinzhu/gorm"
 )
@@ -64,4 +65,25 @@ func (e *Education) GetEducations(db *gorm.DB, pid uint64) (*[]Education, error)
 		return &[]Education{}, err
 	}
 	return &educations, nil
+}
+
+func (e *Education) UpdateEducation(db *gorm.DB, pid uint32) (*Education, error) {
+
+	var err error
+	err = db.Debug().Model(&Education{}).Where("id = ?", pid).UpdateColumns(
+		map[string]interface{}{
+			"school":  e.School,
+			"degree":   e.Degree,
+			"field_of_study":   e.FieldOfStudy,
+			"start_year":    e.StartYear,
+			"end_year":       e.EndYear,
+			"activities":   e.Activities,
+			"description": e.Description,
+			"updated_at": time.Now(),
+		},
+	).Error
+	if err != nil {
+		return &Education{}, err
+	}
+	return e, nil
 }

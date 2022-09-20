@@ -1,6 +1,8 @@
 package controllers
 
-import "github.com/4shb0rne/Linkhed-In_BackEnd/api/middlewares"
+import (
+	"github.com/4shb0rne/Linkhed-In_BackEnd/api/middlewares"
+)
 
 func (s *Server) initializeRoutes() {
 
@@ -11,8 +13,9 @@ func (s *Server) initializeRoutes() {
 
 	// Login Route
 	s.Router.HandleFunc("/login", middlewares.SetMiddlewareJSON(s.Login)).Methods("POST")
+	s.Router.HandleFunc("/googlelogin", middlewares.SetMiddlewareJSON(s.GoogleLogin)).Methods("POST")
 	s.Router.HandleFunc("/register", middlewares.SetMiddlewareJSON(s.CreateUser)).Methods("POST")
-
+	s.Router.HandleFunc("/registergoogle", middlewares.SetMiddlewareJSON(s.RegisterGoogle)).Methods("POST")
 	//Users routes
 	s.Router.HandleFunc("/getuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetCurrentUser))).Methods("GET")
 	s.Router.HandleFunc("/updateprofileview/{id}/{count}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateProfileViews))).Methods("GET")
@@ -26,9 +29,14 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/updatepassword", middlewares.SetMiddlewareJSON(s.UpdatePassword)).Methods("PUT")
 	s.Router.HandleFunc("/addeducation", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddEducation))).Methods("POST")
 	s.Router.HandleFunc("/educations/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetEducation))).Methods("GET")
+	s.Router.HandleFunc("/updateeducation/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateEducation))).Methods("PUT")
 	s.Router.HandleFunc("/addexperience", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddExperience))).Methods("POST")
 	s.Router.HandleFunc("/experiences/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetExperience))).Methods("GET")
-	
+	s.Router.HandleFunc("/updateexperience/{id}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateExperience))).Methods("PUT")
+	s.Router.HandleFunc("/followuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.FollowUser))).Methods("POST")
+	s.Router.HandleFunc("/unfollowuser/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UnfollowUser))).Methods("DELETE")
+	s.Router.HandleFunc("/blockuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.BlockUser))).Methods("POST")
+	s.Router.HandleFunc("/unblockuser/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UnblockUser))).Methods("DELETE")
 	
 	//Posts routes
 	s.Router.HandleFunc("/addpost", middlewares.SetMiddlewareJSON(s.CreatePost)).Methods("POST")
@@ -67,4 +75,8 @@ func (s *Server) initializeRoutes() {
 
 	s.Router.HandleFunc("/addjob", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddJob))).Methods("POST")
 	s.Router.HandleFunc("/getmanagedjobs", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetJobs))).Methods("GET")
+	s.Router.HandleFunc("/getjobs", middlewares.SetMiddlewareJSON(s.GetAllJobs)).Methods("GET")
+	s.Router.HandleFunc("/ws", middlewares.SetMiddlewareJSON(s.WebsocketInit)).Methods("GET")
+	
+
 }

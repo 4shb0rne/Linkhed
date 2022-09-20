@@ -277,3 +277,22 @@
   margin-top: auto;
   height: auto;
 }
+
+@media screen and (max-width: 600px) {
+  .container-job {
+    display: flex;
+    flex-direction: column;
+    width: 330px;
+    height: 300px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+  }
+}

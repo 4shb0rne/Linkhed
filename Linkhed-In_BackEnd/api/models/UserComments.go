@@ -32,7 +32,7 @@ func (uc *UserComments) LikeComment(db *gorm.DB) (*UserComments, error) {
 }
 
 func (uc *UserComments) DislikeComment(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
-	db = db.Debug().Model(&UserPosts{}).Where("comment_id = ? and user_id = ?", pid, uid).Take(&UserComments{}).Delete(&UserComments{})
+	db = db.Debug().Model(&UserComments{}).Where("comment_id = ? and user_id = ?", pid, uid).Take(&UserComments{}).Delete(&UserComments{})
 	if db.Error != nil {
 		if gorm.IsRecordNotFoundError(db.Error) {
 			return 0, errors.New("not found")

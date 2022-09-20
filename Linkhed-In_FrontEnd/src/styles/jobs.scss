@@ -10,3 +10,16 @@
 .job-desc {
   font-size: 14px;
 }
+
+.btn-text {
+  font-size: 14px;
+}
+
+@media screen and (max-width: 600px) {
+  .btn-text {
+    font-size: 10px;
+  }
+  .left-menu-p {
+    padding: 8px;
+  }
+}

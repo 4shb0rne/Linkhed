@@ -13,10 +13,15 @@ import { useModal } from "../../utils/modalContext";
 import getEducation from "../../utils/getEducation";
 import getUser from "../../utils/getUser";
 import ExperienceForm from "../cards/experienceform";
-import getExperience from "../../utils/getExperience";
+import getExperience, { getMonth } from "../../utils/getExperience";
+import UpdateEducationForm from "../cards/updateeducationform";
+import UpdateExperienceForm from "../cards/updateexperienceform";
+
 const profile = () => {
   const auth = useAuth();
   const modal = useModal();
+  const [edu, setEdu] = useState(null);
+  const [exp, setExp] = useState(null);
   const [educations, setEducations] = useState<any[]>([]);
   const [experiences, setExperiences] = useState<any[]>([]);
   const cld = new Cloudinary({
@@ -133,6 +138,26 @@ const profile = () => {
               fetch_experiences={fetch_experiences}
             ></ExperienceForm>
           </Modal>
+          <Modal
+            modal={modal.isOpen4}
+            setModal={modal.setIsOpen4}
+            ariaText="Update Education"
+          >
+            <UpdateEducationForm
+              fetch_educations={fetch_educations}
+              education={edu}
+            ></UpdateEducationForm>
+          </Modal>
+          <Modal
+            modal={modal.isOpen5}
+            setModal={modal.setIsOpen5}
+            ariaText="Update Experience"
+          >
+            <UpdateExperienceForm
+              fetch_experiences={fetch_experiences}
+              experience={exp}
+            ></UpdateExperienceForm>
+          </Modal>
           <div id="profile-upper">
             <div id="profile-banner-image">
               <label htmlFor="backgroundupload">
@@ -206,7 +231,18 @@ const profile = () => {
             educations.map((e) => {
               return (
                 <div className="m-3 mt-1">
-                  <h2>{e.School}</h2>
+                  <div className="flex flex-space-between">
+                    <h2>{e.School}</h2>
+                    <button
+                      className="btn-none"
+                      onClick={() => {
+                        setEdu(e);
+                        modal.setIsOpen4(true);
+                      }}
+                    >
+                      <i className="fa fa-pencil"></i>
+                    </button>
+                  </div>
                   <p>
                     {e.Degree}, {e.FieldOfStudy}
                   </p>
@@ -233,12 +269,25 @@ const profile = () => {
             experiences.map((e) => {
               return (
                 <div className="m-3 mt-1">
-                  <h1>{e.CompanyName}</h1>
+                  <div className="flex flex-space-between">
+                    <h1>{e.CompanyName}</h1>
+                    <button
+                      className="btn-none"
+                      onClick={() => {
+                        setExp(e);
+                        modal.setIsOpen5(true);
+                      }}
+                    >
+                      <i className="fa fa-pencil"></i>
+                    </button>
+                  </div>
                   <h2>{e.Title}</h2>
                   <p>{e.EmploymentType}</p>
                   <p className="text-gray">
-                    {e.StartMonth}-{e.StartYear} -{" "}
-                    {e.EndYear == 0 ? "Present" : e.EndMonth + "-" + e.EndYear}
+                    {getMonth(e.StartMonth)}-{e.StartYear} -{" "}
+                    {e.EndYear == 0
+                      ? "Present"
+                      : getMonth(e.EndMonth) + "-" + e.EndYear}
                   </p>
                 </div>
               );
