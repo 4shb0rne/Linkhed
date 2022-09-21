@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faLinkedin } from "@fortawesome/free-brands-svg-icons";
 import getUser from "../../utils/getUser";
 import { useEffect } from "react";
-import Cookies from "universal-cookie";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../utils/authContext";
 import { AdvancedImage } from "@cloudinary/react";
@@ -48,6 +47,7 @@ const navbar = () => {
       </div>
     );
   } else {
+    console.log(auth.user);
     const myImage = cld.image(auth.user.profile_picture);
     //home selected
     return (
@@ -105,7 +105,10 @@ const navbar = () => {
               </li>
               <li>
                 <Link to="/notification">
-                  <div className="header_logo">
+                  <div
+                    className="header_logo"
+                    id={`${auth.user.Notifications.length != 0 ? "mark" : ""}`}
+                  >
                     <span className="fas fa-bell"></span>
                     <span className="nav-item-text">Notifications</span>
                   </div>
@@ -114,9 +117,7 @@ const navbar = () => {
               <li>
                 <div
                   className="header_logo"
-                  onClick={() => {
-                    const cookies = new Cookies();
-                    cookies.remove("token");
+                  onClick={async () => {
                     auth.logout();
                     googleLogout();
                     navigate("/");

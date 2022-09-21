@@ -45,6 +45,10 @@ type SearchQuery struct {
 	Content string
 }
 
+type Result struct{
+	ConnectionID int
+}
+
 const otpChars = "1234567890"
 
 func GenerateOTP(length int) (string, error) {
@@ -186,6 +190,30 @@ func (u *User) FindAllUsers(db *gorm.DB) (*[]User, error) {
 	}
 	return &users, err
 }
+
+func (u *User) FindSuggestedUser(db *gorm.DB, uid uint32) (*[]User, error) {
+	var err error
+	users := []User{}
+	connectedids := []Result{}
+	suggestedids := []Result{}
+	db.Raw("SELECT DISTINCT connection_id FROM user_connections WHERE user_id = ?", uid).Find(&connectedids);
+	ids1 := make([]int, len(connectedids))
+	for i := range connectedids{
+		ids1[i] = int(connectedids[i].ConnectionID)
+	}
+	db.Raw("SELECT DISTINCT connection_id FROM user_connections WHERE user_id IN(?)", ids1).Find(&suggestedids);
+	ids2 := make([]int, len(suggestedids))
+	for i := range suggestedids{
+		ids2[i] = int(suggestedids[i].ConnectionID)
+	}
+	err = db.Debug().Model(&User{}).Where("id IN(?)", ids2).Not("id = ?", uid).Find(&users).Error
+	if err != nil {
+		return &[]User{}, err
+	}																						
+	return &users, err
+}
+
+
 
 func (u *User) FindUserByID(db *gorm.DB, uid uint32) (*User, error) {
 	var err error = db.Debug().Model(User{}).Where("id = ?", uid).Preload("PostsLikes").Preload("Invitations").Preload("Invitations.User").Preload("CommentLikes").Preload("Connections").Preload("Notifications").Preload("Notifications.User").Preload("Followers").Preload("Following").Preload("Following.User").Preload("Followers.Follower").Preload("Blocking").Take(&u).Error

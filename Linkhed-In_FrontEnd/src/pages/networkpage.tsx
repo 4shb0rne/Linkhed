@@ -6,8 +6,10 @@ import { useAuth } from "../utils/authContext";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import getUser from "../utils/getUser";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import userSuggestion from "../utils/userSuggestion";
+import updateView from "../utils/updateView";
 const networkpage = () => {
   const auth = useAuth();
   const cookies = new Cookies();
@@ -16,14 +18,21 @@ const networkpage = () => {
     const User = await getUser();
     auth.login(User);
   };
+  const [suggestion, setSuggestion] = useState<any[]>([]);
+  const fetch_suggestion = async () => {
+    const temp = await userSuggestion();
+    setSuggestion(temp);
+  };
   useEffect(() => {
     fetch_user();
+    fetch_suggestion();
   }, []);
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
     },
   });
+  const navigate = useNavigate();
   if (auth.user) {
     return (
       <div className="container">
@@ -54,6 +63,11 @@ const networkpage = () => {
               <div className="flex flex-space-between btm-border">
                 <h1 className="p-3">Invitation</h1>
               </div>
+              {auth.user.Invitations.length == 0 && (
+                <div className="text-center mt-2">
+                  There is no invitation yet..
+                </div>
+              )}
               {auth.user.Invitations &&
                 auth.user.Invitations.map((i: any) => {
                   const profileImage = cld.image(i.User.profile_picture);
@@ -71,6 +85,7 @@ const networkpage = () => {
                               </div>
                               <span>{i.User.Headline}</span>
                             </div>
+                            <div></div>
                             <button
                               className="accept-btn"
                               onClick={() => {
@@ -131,6 +146,45 @@ const networkpage = () => {
                             >
                               Decline
                             </button>
+                          </div>
+                        </a>
+                      </div>
+                    </article>
+                  );
+                })}
+            </div>
+            <div className="box-shadow mt-10">
+              <div className="flex flex-space-between btm-border">
+                <h1 className="p-3">User you might know</h1>
+              </div>
+              {suggestion.length == 0 && (
+                <div className="text-center mt-2">
+                  There is no recommendation yet..
+                </div>
+              )}
+              {suggestion &&
+                suggestion.map((s) => {
+                  const profileImage = cld.image(s.profile_picture);
+                  return (
+                    <article key={s.id}>
+                      <div id="post-author">
+                        <a>
+                          <div
+                            className="network-menu"
+                            onClick={() => {
+                              updateView(s, auth.user);
+                              navigate("/openprofile/" + s.id);
+                            }}
+                          >
+                            <AdvancedImage cldImg={profileImage} />
+                            <div>
+                              <div>
+                                <strong id="post-author-name">
+                                  {s.firstname} {s.lastname}
+                                </strong>
+                              </div>
+                              <span>{s.Headline}</span>
+                            </div>
                           </div>
                         </a>
                       </div>

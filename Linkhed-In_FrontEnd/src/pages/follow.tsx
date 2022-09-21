@@ -73,6 +73,12 @@ const follow = () => {
                   {follow == true ? <>Following</> : <>Followers</>}
                 </h1>
               </div>
+              {auth.user.Following.length == 0 && follow && (
+                <div className="text-center mt-2">You don't follow anyone</div>
+              )}
+              {auth.user.Followers.length == 0 && !follow && (
+                <div className="text-center mt-2">You have no followers</div>
+              )}
               {auth.user.Following && follow
                 ? auth.user.Following.map((u: any) => {
                     const profileImage = cld.image(u.User.profile_picture);

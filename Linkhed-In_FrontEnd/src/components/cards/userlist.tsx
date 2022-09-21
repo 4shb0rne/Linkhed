@@ -71,7 +71,6 @@ const userlist = (props: any) => {
                   Authorization: "Bearer " + token,
                 },
               });
-              setConnect(true);
             }}
           >
             Connect

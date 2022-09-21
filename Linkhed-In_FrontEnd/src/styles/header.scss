@@ -202,18 +202,17 @@ header#main-header > div nav ul li div:hover {
   color: black;
 }
 
-header#main-header > div nav ul li div#home {
+header#main-header > div nav ul li div#mark {
   position: relative;
 }
 
-header#main-header > div nav ul li div#home::after {
+header#main-header > div nav ul li div#mark::after {
   position: absolute;
   right: 23px;
   top: 5px;
   width: 13px;
   height: 13px;
   background: #d11124;
-  border: 2px solid #283e4a;
   content: "";
   border-radius: 50%;
 }
@@ -357,11 +356,11 @@ header#main-header > div nav ul li div span.nav-item-text span {
 }
 
 @media (max-width: 600px) {
-  header#main-header > div div div span#search-icon{
+  header#main-header > div div div span#search-icon {
     display: none;
   }
 
-  header#main-header > div nav{
+  header#main-header > div nav {
     margin-right: 0;
   }
 

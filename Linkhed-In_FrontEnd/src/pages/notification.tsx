@@ -39,6 +39,11 @@ const notification = () => {
               <div className="flex flex-space-between btm-border">
                 <h1 className="p-3">Notification</h1>
               </div>
+              {auth.user.Notifications.length == 0 && (
+                <div className="text-center mt-2">
+                  There is no Notification yet..
+                </div>
+              )}
               {auth.user.Notifications &&
                 auth.user.Notifications.map((i: any) => {
                   const profileImage = cld.image(i.User.profile_picture);

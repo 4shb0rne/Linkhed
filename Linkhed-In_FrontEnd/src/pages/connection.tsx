@@ -51,6 +51,11 @@ const connection = () => {
               <div className="flex flex-space-between btm-border">
                 <h1 className="p-3">Connection</h1>
               </div>
+              {auth.user.Connections.length == 0 && (
+                <div className="text-center mt-2">
+                  You Have no Connections...
+                </div>
+              )}
               {auth.user.Connections &&
                 auth.user.Connections.map((c: any) => {
                   const profileImage = cld.image(c.profile_picture);

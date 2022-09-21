@@ -69,3 +69,4 @@ func (server *Server) DisconnectUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Entity", fmt.Sprintf("%d", pid))
 	responses.JSON(w, http.StatusNoContent, "")
 }
+

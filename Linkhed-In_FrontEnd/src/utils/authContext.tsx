@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-
+import Cookies from "universal-cookie";
 interface AuthContextInterface {
   user: any;
   login: any;
@@ -11,12 +11,14 @@ const AuthContext = createContext<AuthContextInterface>(
 
 export const AuthProvider = ({ children }: { children: any }) => {
   const [user, setUser] = useState(null);
+  const cookies = new Cookies();
 
   const login = (user: any) => {
     setUser(user);
   };
 
   const logout = async () => {
+    cookies.remove("token", { path: "/" });
     setUser(null);
   };
   const authContextData: AuthContextInterface = {

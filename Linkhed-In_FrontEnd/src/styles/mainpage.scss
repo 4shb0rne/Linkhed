@@ -88,6 +88,10 @@ aside#left-aside div#profile-card div#profile-links {
   flex-direction: column;
 }
 
+.text-center {
+  text-align: center;
+}
+
 aside#left-aside div#profile-card div#profile-links a {
   display: flex;
   justify-content: space-between;
@@ -1027,6 +1031,10 @@ main#main-section
 
 .mt-1 {
   margin-top: 10px;
+}
+
+.mt-10 {
+  margin-top: 100px;
 }
 
 .m-1 {

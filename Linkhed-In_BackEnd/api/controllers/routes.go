@@ -18,6 +18,7 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/registergoogle", middlewares.SetMiddlewareJSON(s.RegisterGoogle)).Methods("POST")
 	//Users routes
 	s.Router.HandleFunc("/getuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetCurrentUser))).Methods("GET")
+	s.Router.HandleFunc("/getsuggesteduser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetSuggestedUser))).Methods("GET")
 	s.Router.HandleFunc("/updateprofileview/{id}/{count}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.UpdateProfileViews))).Methods("GET")
 	s.Router.HandleFunc("/users", middlewares.SetMiddlewareJSON(s.GetUsers)).Methods("GET")
 	s.Router.HandleFunc("/users/{id}", middlewares.SetMiddlewareJSON(s.GetUser)).Methods("GET")

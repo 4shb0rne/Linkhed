@@ -10,9 +10,13 @@ import Comments from "./Comments";
 import getUser from "../../utils/getUser";
 import { useNavigate } from "react-router-dom";
 import { addNotification } from "../../utils/NotificationController";
+import updateView from "../../utils/updateView";
+import { useModal } from "../../utils/modalContext";
+
 const posts = (props: any) => {
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(1);
+  const modal = useModal();
   const navigate = useNavigate();
   const cld = new Cloudinary({
     cloud: {
@@ -44,24 +48,8 @@ const posts = (props: any) => {
                 if (auth.user.id == props.p.user.id) {
                   navigate("/profile");
                 } else {
-                  axios.get(
-                    "http://localhost:8080/updateprofileview/" +
-                      props.p.user.id +
-                      "/" +
-                      (props.p.user.ProfileVisited + 1),
-                    {
-                      headers: {
-                        Authorization: "Bearer " + token,
-                      },
-                    }
-                  );
+                  updateView(props.p.user, auth.user);
                   navigate("/openprofile/" + props.p.user.id);
-                  const temp = {
-                    user_id: props.p.user.id,
-                    content: `<b>${auth.user.firstname} ${auth.user.lastname}</b> viewed your profile`,
-                    actor_id: auth.user.id,
-                  };
-                  addNotification(temp);
                 }
               }}
             >

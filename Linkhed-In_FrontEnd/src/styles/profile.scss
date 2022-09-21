@@ -218,16 +218,11 @@
   border-radius: 50px;
   line-height: 1.15385;
   outline: none;
-  margin-left: 200px;
+  order: 2;
+  margin-left: 250px;
   padding: 8px 0.8em;
   position: relative;
   text-align: center;
-  text-decoration: none;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: baseline;
-  white-space: nowrap;
 }
 
 .follow-btn {
@@ -275,7 +270,7 @@
   border-radius: 50px;
   font-weight: 400;
   margin-left: auto;
-  order: 2;
+  order: 3;
   outline: none;
   padding: 8px 0.8em;
   position: relative;
@@ -383,11 +378,17 @@
     sans-serif;
   font-size: 13px;
   font-weight: 400;
+  margin-left: 1rem;
   padding: 8px 0.8em;
   position: relative;
   text-align: center;
 }
 
+@media screen and (max-width: 880px) {
+  .accept-btn {
+    margin-left: 90px;
+  }
+}
 @media screen and (max-width: 600px) {
   .m-10 {
     margin-left: 0rem;
@@ -406,5 +407,15 @@
 
   .p-1 {
     padding: 0.1rem;
+  }
+
+  .accept-btn {
+    font-size: 9px;
+    margin-left: auto;
+  }
+  .decline-btn {
+    border-radius: 20px;
+    font-size: 8px;
+    max-width: 90px;
   }
 }
