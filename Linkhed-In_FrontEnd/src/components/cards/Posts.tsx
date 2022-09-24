@@ -69,16 +69,8 @@ const posts = (props: any) => {
             <i
               className="fa fa-trash-o text-red cursor-pointer"
               onClick={async () => {
-                console.log(props);
-                await axios.delete(
-                  "http://localhost:8080/deletepost/" + props.p.id,
-                  {
-                    headers: {
-                      Authorization: "Bearer " + token,
-                    },
-                  }
-                );
-                props.fetch_posts();
+                modal.setIsOpen2(true);
+                props.setPost(props.p);
               }}
             ></i>
           )}

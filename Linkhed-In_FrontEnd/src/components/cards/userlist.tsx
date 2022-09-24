@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import getUser from "../../utils/getUser";
 import { useAuth } from "../../utils/authContext";
+import { useModal } from "../../utils/modalContext";
 
 const userlist = (props: any) => {
   const cookies = new Cookies();
   const auth = useAuth();
   const token = cookies.get("token");
+  const modal = useModal();
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -58,24 +60,17 @@ const userlist = (props: any) => {
             </div>
           </div>
         </a>
-        {connect == false ? (
+        {connect == false && auth.user.id != props.u.id ? (
           <button
             className="connect-btn"
             onClick={() => {
-              const data = {
-                user_id: auth.user.id,
-                connection_id: props.u.id,
-              };
-              axios.post("http://localhost:8080/sendinvitation", data, {
-                headers: {
-                  Authorization: "Bearer " + token,
-                },
-              });
+              props.setInvitedUser(props.u);
+              modal.setIsOpen(true);
             }}
           >
             Connect
           </button>
-        ) : (
+        ) : connect == true && auth.user.id != props.u.id ? (
           <button
             className="decline-btn"
             onClick={() => {
@@ -106,6 +101,8 @@ const userlist = (props: any) => {
           >
             Delete Connection
           </button>
+        ) : (
+          <div></div>
         )}
       </div>
     );

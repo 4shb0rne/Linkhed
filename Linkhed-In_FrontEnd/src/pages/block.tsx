@@ -1,13 +1,12 @@
-import "../styles/profile.scss";
-import "../styles/mainpage.scss";
+import { useAuth } from "../utils/authContext";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
-import { useAuth } from "../utils/authContext";
 import { Link } from "react-router-dom";
-import Cookies from "universal-cookie";
 import axios from "axios";
 import getUser from "../utils/getUser";
-const connection = () => {
+import Cookies from "universal-cookie";
+
+const block = () => {
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -17,11 +16,12 @@ const connection = () => {
     const User = await getUser();
     auth.login(User);
   };
-
   const cookies = new Cookies();
   const auth = useAuth();
   const token = cookies.get("token");
+  console.log(auth.user);
   if (auth.user) {
+    console.log(auth.user);
     return (
       <div className="container">
         <div id="left-aside-wrapper">
@@ -54,16 +54,16 @@ const connection = () => {
           <main id="main-section-secondary">
             <div className="box-shadow">
               <div className="flex flex-space-between btm-border">
-                <h1 className="p-3">Connection</h1>
+                <h1 className="p-3">Block List</h1>
               </div>
               {auth.user.Connections.length == 0 && (
                 <div className="text-center mt-2">
-                  You Have no Connections...
+                  You don't blocked anyone..
                 </div>
               )}
-              {auth.user.Connections &&
-                auth.user.Connections.map((c: any) => {
-                  const profileImage = cld.image(c.profile_picture);
+              {auth.user.Blocking &&
+                auth.user.Blocking.map((c: any) => {
+                  const profileImage = cld.image(c.Block.profile_picture);
                   return (
                     <article key={c.id}>
                       <div id="post-author">
@@ -73,20 +73,20 @@ const connection = () => {
                             <div>
                               <div>
                                 <strong id="post-author-name">
-                                  {c.firstname} {c.lastname}
+                                  {c.Block.firstname} {c.Block.lastname}
                                 </strong>
                               </div>
-                              <span>{c.Headline}</span>
+                              <span>{c.Block.Headline}</span>
                             </div>
                             <button
                               className="decline-btn"
                               onClick={() => {
                                 axios
                                   .delete(
-                                    "http://localhost:8080/disconnectuser/" +
+                                    "http://localhost:8080/unblockuser/" +
                                       auth.user.id +
                                       "/" +
-                                      c.id,
+                                      c.Block.id,
                                     {
                                       headers: {
                                         Authorization: "Bearer " + token,
@@ -98,7 +98,7 @@ const connection = () => {
                                   });
                               }}
                             >
-                              Remove Connection
+                              Unblock
                             </button>
                           </div>
                         </a>
@@ -116,4 +116,4 @@ const connection = () => {
   }
 };
 
-export default connection;
+export default block;

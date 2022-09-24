@@ -43,6 +43,11 @@ const follow = () => {
                   </Link>
                 </div>
                 <div className="network-menu p-menu">Group</div>
+                <div className="network-menu p-menu">
+                  <Link to="/block" className="text-black">
+                    Block
+                  </Link>
+                </div>
               </div>
             </div>
           </aside>

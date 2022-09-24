@@ -65,32 +65,42 @@ const job = () => {
         </div>
         <div id="main-wrapper">
           <main id="main-section">
-            {jobs &&
-              jobs.map((j: any) => {
-                const profileImage = cld.image(j.JobPicture);
-                return (
-                  <article key={j.id}>
-                    <div id="post-author">
-                      <a>
-                        <div>
-                          <AdvancedImage cldImg={profileImage} />
+            <div className="box-shadow">
+              <div className="flex flex-space-between btm-border">
+                <h1 className="p-3">Jobs</h1>
+              </div>
+              {jobs.length == 0 && (
+                <div className="text-center mt-2">
+                  There is no jobs post yet..
+                </div>
+              )}
+              {jobs &&
+                jobs.map((j: any) => {
+                  const profileImage = cld.image(j.JobPicture);
+                  return (
+                    <article key={j.id}>
+                      <div id="post-author">
+                        <a>
                           <div>
+                            <AdvancedImage cldImg={profileImage} />
                             <div>
-                              <strong className="job-title">
-                                {j.JobTitle}
-                              </strong>
+                              <div>
+                                <strong className="job-title">
+                                  {j.JobTitle}
+                                </strong>
+                              </div>
+                              <span>{j.JobDescription}</span>
+                              <span>
+                                {j.JobLocation} ({j.WorkplaceType})
+                              </span>
                             </div>
-                            <span>{j.JobDescription}</span>
-                            <span>
-                              {j.JobLocation} ({j.WorkplaceType})
-                            </span>
                           </div>
-                        </div>
-                      </a>
-                    </div>
-                  </article>
-                );
-              })}
+                        </a>
+                      </div>
+                    </article>
+                  );
+                })}
+            </div>
           </main>
         </div>
       </div>

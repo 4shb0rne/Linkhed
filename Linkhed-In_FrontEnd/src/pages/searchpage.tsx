@@ -8,6 +8,9 @@ import Posts from "../components/cards/Posts";
 import "../styles/mainpage.scss";
 import Userlist from "../components/cards/userlist";
 import { useAuth } from "../utils/authContext";
+import { useModal } from "../utils/modalContext";
+import Modal from "../components/cards/modal";
+import InviteModal from "../components/cards/modal/invitemodal";
 const searchpage = () => {
   const params = useParams();
   const cookies = new Cookies();
@@ -15,6 +18,8 @@ const searchpage = () => {
   const token = cookies.get("token");
   const [post, setPost] = useState(true);
   const [people, setPeople] = useState(true);
+  const [invitedUser, setInvitedUser] = useState(null);
+  const modal = useModal();
   const cld = new Cloudinary({
     cloud: {
       cloudName: "ashbornee",
@@ -56,9 +61,16 @@ const searchpage = () => {
     searchUser();
     searchPost();
   }, []);
+
   if (auth.user) {
     return (
       <div>
+        <Modal modal={modal.isOpen} setModal={modal.setIsOpen} ariaText="Block">
+          <InviteModal
+            invitedUser={invitedUser}
+            curruser={auth.user}
+          ></InviteModal>
+        </Modal>
         <div className="box-shadow m-10 mt-1 flex">
           <button
             className="filter-btn m-1"
@@ -99,7 +111,9 @@ const searchpage = () => {
               <h1 className="p-3">Users</h1>
             </div>
             {users.map((u) => {
-              return <Userlist u={u}></Userlist>;
+              return (
+                <Userlist u={u} setInvitedUser={setInvitedUser}></Userlist>
+              );
             })}
           </div>
         ) : (

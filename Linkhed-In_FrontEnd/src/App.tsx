@@ -30,6 +30,9 @@ import { useState } from "react";
 import Chat from "./pages/chat";
 import GoogleRegister from "./components/auth/googleregister";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Block from "./pages/block";
+import Messaging from "./pages/messaging";
+
 function App() {
   const [theme, setTheme] = useState("light");
   return (
@@ -70,10 +73,10 @@ function App() {
                       }
                     ></Route>
                     <Route
-                      path="/chat"
+                      path="/message"
                       element={
                         <RequireAuth>
-                          <Chat></Chat>
+                          <Messaging></Messaging>
                         </RequireAuth>
                       }
                     ></Route>
@@ -122,6 +125,14 @@ function App() {
                       element={
                         <RequireAuth>
                           <MainPage></MainPage>
+                        </RequireAuth>
+                      }
+                    ></Route>
+                    <Route
+                      path="/block"
+                      element={
+                        <RequireAuth>
+                          <Block></Block>
                         </RequireAuth>
                       }
                     ></Route>

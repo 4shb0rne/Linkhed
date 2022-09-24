@@ -64,6 +64,11 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/searchuserbyemail/{email}", middlewares.SetMiddlewareJSON(s.GetUserByEmail)).Methods("GET")
 	s.Router.HandleFunc("/searchpost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchPost))).Methods("POST")
 
+	s.Router.HandleFunc("/addchathistory", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddChatHistory))).Methods("POST")
+	s.Router.HandleFunc("/addchat", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddChat))).Methods("POST")
+	s.Router.HandleFunc("/getchats/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.GetChats))).Methods("GET")
+
+
 	s.Router.HandleFunc("/connectuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.ConnectUser))).Methods("POST")
 	s.Router.HandleFunc("/disconnectuser/{uid}/{pid}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.DisconnectUser))).Methods("DELETE")
 

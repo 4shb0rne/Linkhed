@@ -53,6 +53,11 @@ const networkpage = () => {
                   </Link>
                 </div>
                 <div className="network-menu p-menu">Group</div>
+                <div className="network-menu p-menu">
+                  <Link to="/block" className="text-black">
+                    Block
+                  </Link>
+                </div>
               </div>
             </div>
           </aside>
@@ -149,6 +154,11 @@ const networkpage = () => {
                           </div>
                         </a>
                       </div>
+                      {i.Content && (
+                        <div className="box-shadow ml-5 mr-1 p-1 mt-1">
+                          {i.Content}
+                        </div>
+                      )}
                     </article>
                   );
                 })}

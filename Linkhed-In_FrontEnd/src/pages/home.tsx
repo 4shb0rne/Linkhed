@@ -12,8 +12,10 @@ import Modal from "../components/cards/modal";
 import Posts from "../components/cards/Posts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import axios from "axios";
+import DeleteModal from "../components/cards/modal/deletemodal";
 const home = () => {
   const [posts, setPosts] = useState<any[]>([]);
+  const [post, setPost] = useState(null);
   const [length, setLength] = useState(3);
   const [hasmore, setHasMore] = useState(true);
   const modal = useModal();
@@ -63,6 +65,13 @@ const home = () => {
           ariaText="Profile Settings"
         >
           <AddPost fetch_posts={fetch_posts}></AddPost>
+        </Modal>
+        <Modal
+          modal={modal.isOpen2}
+          setModal={modal.setIsOpen2}
+          ariaText="Block"
+        >
+          <DeleteModal post={post} fetch_posts={fetch_posts}></DeleteModal>
         </Modal>
         <div id="left-aside-wrapper">
           <aside id="left-aside">
@@ -163,6 +172,7 @@ const home = () => {
                       fetch_posts={fetch_posts}
                       profileimage={profileimage}
                       postImage={postImage}
+                      setPost={setPost}
                     ></Posts>
                   );
                 })}

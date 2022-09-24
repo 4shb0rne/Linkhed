@@ -8,7 +8,28 @@ import { useAuth } from "../../utils/authContext";
 import { AdvancedImage } from "@cloudinary/react";
 import { Cloudinary } from "@cloudinary/url-gen";
 import { googleLogout } from "@react-oauth/google";
+import useSWR from "swr";
+import axios from "axios";
+import Cookies from "universal-cookie";
+const cookies = new Cookies();
+const token = cookies.get("token");
 const navbar = () => {
+  const fetcher = (url: any) => {
+    if (auth.user) {
+      axios
+        .get(url, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((res: any) => {
+          auth.login(res.data);
+        });
+    }
+  };
+  const { data, error } = useSWR("http://localhost:8080/getuser", fetcher, {
+    refreshInterval: 1000,
+  });
   const navigate = useNavigate();
   const auth = useAuth();
   const cld = new Cloudinary({
@@ -47,7 +68,6 @@ const navbar = () => {
       </div>
     );
   } else {
-    console.log(auth.user);
     const myImage = cld.image(auth.user.profile_picture);
     //home selected
     return (
@@ -98,10 +118,12 @@ const navbar = () => {
                 </Link>
               </li>
               <li>
-                <div className="header_logo">
-                  <span className="fas fa-envelope"></span>
-                  <span className="nav-item-text">Messaging</span>
-                </div>
+                <Link to="/message">
+                  <div className="header_logo">
+                    <span className="fas fa-envelope"></span>
+                    <span className="nav-item-text">Messaging</span>
+                  </div>
+                </Link>
               </li>
               <li>
                 <Link to="/notification">

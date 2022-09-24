@@ -8,8 +8,9 @@ import (
 )
 
 type Block struct {
-	UserID       uint64 `gorm:"primaryKey"`
-	BlockID uint64 `gorm:"primaryKey"`
+	UserID       uint64 `gorm:"primaryKey" sql:"type:int REFERENCES users(id)"`
+	BlockID uint64 `gorm:"primaryKey" sql:"type:int REFERENCES users(id)"`
+	Block User
 	CreatedAt    time.Time
 }
 

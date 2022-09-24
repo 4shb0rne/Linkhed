@@ -12,6 +12,7 @@ import getUser from "../utils/getUser";
 import { useModal } from "../utils/modalContext";
 import Modal from "../components/cards/modal";
 import BlockModal from "../components/cards/modal/blockmodal";
+import { addChatHistory } from "../utils/chatController";
 const userprofile = () => {
   const params = useParams();
   const auth = useAuth();
@@ -208,6 +209,14 @@ const userprofile = () => {
               ) : (
                 <div></div>
               )}
+              <button
+                className="message-btn"
+                onClick={() => {
+                  addChatHistory(auth.user.id, id);
+                }}
+              >
+                Message
+              </button>
               <button
                 className="block-btn"
                 onClick={() => {

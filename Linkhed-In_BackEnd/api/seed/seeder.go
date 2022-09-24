@@ -79,11 +79,11 @@ var connections = []models.UserConnections{
 
 func Load(db *gorm.DB) {
 
-	err := db.Debug().DropTableIfExists(&models.UserPosts{}, &models.Invitation{}, &models.UserComments{}, &models.UserConnections{}, &models.Reply{}, &models.Notification{}, &models.Comment{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Job{}, &models.Follower{}, &models.User{}, &models.Block{}).Error
+	err := db.Debug().DropTableIfExists(&models.UserPosts{}, &models.Invitation{}, &models.UserComments{}, &models.UserConnections{}, &models.Reply{}, &models.Notification{}, &models.Comment{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Job{}, &models.Follower{}, &models.Block{}, &models.Chat{}, &models.ChatHistory{}, &models.User{}).Error
 	if err != nil {
 		log.Fatalf("cannot drop table: %v", err)
 	}
-	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Comment{}, &models.Reply{}, &models.UserPosts{}, &models.UserComments{}, &models.UserConnections{}, &models.Invitation{}, &models.Notification{}, &models.Job{}, &models.Follower{}, &models.Block{}).Error
+	err = db.Debug().AutoMigrate(&models.User{}, &models.Post{}, &models.Education{}, &models.Experience{}, &models.Comment{}, &models.Reply{}, &models.UserPosts{}, &models.UserComments{}, &models.UserConnections{}, &models.Invitation{}, &models.Notification{}, &models.Job{}, &models.Follower{}, &models.Block{}, &models.Chat{}, &models.ChatHistory{}).Error
 	if err != nil {
 		log.Fatalf("cannot migrate table: %v", err)
 	}

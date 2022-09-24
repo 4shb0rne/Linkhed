@@ -10,6 +10,7 @@ type Invitation struct {
 	gorm.Model
 	UserID       uint32 `sql:"type:int REFERENCES users(id)" json:"user_id"`
 	ConnectionID uint32 `sql:"type:int REFERENCES users(id)" json:"connection_id"`
+	Content string
 	User         User   `gorm:"references:connection_id"`
 }
 
