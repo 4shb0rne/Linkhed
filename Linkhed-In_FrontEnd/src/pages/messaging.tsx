@@ -71,6 +71,9 @@ const messaging = () => {
               <div className="flex flex-space-between btm-border">
                 <h1 className="p-3">Messages</h1>
               </div>
+              {messages.length == 0 && (
+                <div className="text-center mt-2">No Messages</div>
+              )}
               {messages &&
                 messages.map((m) => {
                   const profileImage = cld.image(m.User.profile_picture);
@@ -94,7 +97,7 @@ const messaging = () => {
                 })}
             </div>
             {otherId != 0 && (
-              <div className="commentbox">
+              <div className="commentbox mt-1">
                 <input type="text" id="input-message"></input>
                 <button
                   className="comment-btn"
