@@ -369,10 +369,10 @@ func (u *User) DeleteAUser(db *gorm.DB, uid uint32) (int64, error) {
 	return db.RowsAffected, nil
 }
 
-func (u *User) SearchUser(db *gorm.DB, query SearchQuery) (*[]User, error) {
+func (u *User) SearchUser(db *gorm.DB, query SearchQuery, count uint64) (*[]User, error) {
 	var err error
 	users := []User{}
-	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Preload("Connections").Preload("Invitations").Preload("Invitations.User").Find(&users).Error
+	err = db.Debug().Model(&User{}).Where("firstname ILIKE ? OR lastname ILIKE ?", "%"+query.Content+"%", "%"+query.Content+"%").Limit(count).Preload("Connections").Preload("Invitations").Preload("Invitations.User").Find(&users).Error
 	if err != nil {
 		return &[]User{}, err
 	}

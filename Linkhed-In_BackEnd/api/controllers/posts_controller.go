@@ -190,7 +190,8 @@ func (server *Server) DeletePost(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) SearchPost(w http.ResponseWriter, r *http.Request) {
-	
+	vars := mux.Vars(r)
+	count, err := strconv.ParseUint(vars["count"], 10, 64)
 	body, err := ioutil.ReadAll(r.Body)
 	query := models.SearchQuery{}
 	err = json.Unmarshal(body, &query)
@@ -198,7 +199,7 @@ func (server *Server) SearchPost(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 	post := models.Post{}
-	postList, err := post.SearchPost(server.DB, query)
+	postList, err := post.SearchPost(server.DB, query, count)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

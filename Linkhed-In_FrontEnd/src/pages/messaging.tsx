@@ -31,6 +31,7 @@ const messaging = () => {
     },
   });
   if (auth.user) {
+    console.log(auth.user);
     return (
       <div className="container">
         <div id="left-aside-wrapper">

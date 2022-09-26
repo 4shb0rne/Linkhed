@@ -133,7 +133,8 @@ func (server *Server) GetUserByEmail(w http.ResponseWriter, r *http.Request) {
 }
 
 func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
-
+	vars := mux.Vars(r)
+	count, err := strconv.ParseUint(vars["count"], 10, 64)
 	body, err := ioutil.ReadAll(r.Body)
 	query := models.SearchQuery{}
 	err = json.Unmarshal(body, &query)
@@ -141,7 +142,7 @@ func (server *Server) SearchUser(w http.ResponseWriter, r *http.Request) {
 		responses.ERROR(w, http.StatusUnprocessableEntity, err)
 	}
 	user := models.User{}
-	userList, err := user.SearchUser(server.DB, query)
+	userList, err := user.SearchUser(server.DB, query, count)
 	if err != nil {
 		responses.ERROR(w, http.StatusBadRequest, err)
 		return

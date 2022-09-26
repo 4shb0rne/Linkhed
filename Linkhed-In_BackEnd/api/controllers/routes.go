@@ -60,9 +60,9 @@ func (s *Server) initializeRoutes() {
 	s.Router.HandleFunc("/deletepost/{id}", middlewares.SetMiddlewareAuthentication(s.DeletePost)).Methods("DELETE")
 
 	//Search
-	s.Router.HandleFunc("/searchuser", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchUser))).Methods("POST")
+	s.Router.HandleFunc("/searchuser/{count}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchUser))).Methods("POST")
 	s.Router.HandleFunc("/searchuserbyemail/{email}", middlewares.SetMiddlewareJSON(s.GetUserByEmail)).Methods("GET")
-	s.Router.HandleFunc("/searchpost", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchPost))).Methods("POST")
+	s.Router.HandleFunc("/searchpost/{count}", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.SearchPost))).Methods("POST")
 
 	s.Router.HandleFunc("/addchathistory", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddChatHistory))).Methods("POST")
 	s.Router.HandleFunc("/addchat", middlewares.SetMiddlewareJSON(middlewares.SetMiddlewareAuthentication(s.AddChat))).Methods("POST")

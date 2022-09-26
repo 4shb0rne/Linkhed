@@ -11,6 +11,7 @@ import { useAuth } from "../utils/authContext";
 import { useModal } from "../utils/modalContext";
 import Modal from "../components/cards/modal";
 import InviteModal from "../components/cards/modal/invitemodal";
+import InfiniteScroll from "react-infinite-scroll-component";
 const searchpage = () => {
   const params = useParams();
   const cookies = new Cookies();
@@ -19,6 +20,8 @@ const searchpage = () => {
   const [post, setPost] = useState(true);
   const [people, setPeople] = useState(true);
   const [invitedUser, setInvitedUser] = useState(null);
+  const [morePost, setMorePost] = useState(true);
+  const [moreUser, setMoreUser] = useState(true);
   const modal = useModal();
   const cld = new Cloudinary({
     cloud: {
@@ -27,34 +30,48 @@ const searchpage = () => {
   });
   const [users, setUsers] = useState<any[]>([]);
   const [posts, setPosts] = useState<any[]>([]);
+  const [postCount, setPostCount] = useState(1);
+  const [userCount, setUserCount] = useState(1);
   const searchUser = () => {
     const data = {
       content: params.query,
     };
-    axios
-      .post("http://localhost:8080/searchuser", data, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        setUsers(response.data);
-      });
+    setUserCount(userCount + 1);
+    setTimeout(() => {
+      axios
+        .post("http://localhost:8080/searchuser/" + userCount, data, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((response) => {
+          if (response.data.length == users.length) {
+            setMoreUser(false);
+          }
+          setUsers(response.data);
+        });
+    }, 1000);
   };
 
   const searchPost = () => {
     const data = {
       content: params.query,
     };
-    axios
-      .post("http://localhost:8080/searchpost", data, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      })
-      .then((response) => {
-        setPosts(response.data);
-      });
+    setPostCount(postCount + 1);
+    setTimeout(() => {
+      axios
+        .post("http://localhost:8080/searchpost/" + postCount, data, {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        })
+        .then((response) => {
+          if (response.data.length == posts.length) {
+            setMorePost(false);
+          }
+          setPosts(response.data);
+        });
+    }, 1000);
   };
 
   useEffect(() => {
@@ -110,46 +127,78 @@ const searchpage = () => {
             <div className="flex flex-space-between">
               <h1 className="p-3">Users</h1>
             </div>
-            {users.map((u) => {
-              return (
-                <Userlist u={u} setInvitedUser={setInvitedUser}></Userlist>
-              );
-            })}
+            <InfiniteScroll
+              dataLength={posts.length}
+              next={searchUser}
+              hasMore={moreUser}
+              loader={
+                <div className="loading-center">
+                  <div className="lds-ring">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                  </div>
+                </div>
+              }
+            >
+              {users.map((u) => {
+                return (
+                  <Userlist u={u} setInvitedUser={setInvitedUser}></Userlist>
+                );
+              })}
+            </InfiniteScroll>
           </div>
         ) : (
           <div></div>
         )}
-        {posts.length != 0 && post ? (
-          <div className="box-shadow m-10 mt-1">
-            <div className="flex flex-space-between">
-              <h1 className="p-3">Posts</h1>
+        <InfiniteScroll
+          dataLength={posts.length}
+          next={searchPost}
+          hasMore={morePost}
+          loader={
+            <div className="loading-center">
+              <div className="lds-ring">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
             </div>
-            <main id="main-section">
-              {posts &&
-                posts.map((p) => {
-                  const postImage = cld.image(p.attachment);
-                  const profileimage = cld.image(p.user.profile_picture);
-                  var hours = Math.floor(
-                    Math.abs(
-                      new Date().valueOf() - new Date(p.updated_at).valueOf()
-                    ) / 36e5
-                  );
-                  return (
-                    <Posts
-                      key={p.id}
-                      p={p}
-                      hours={hours}
-                      fetch_posts={searchPost}
-                      profileimage={profileimage}
-                      postImage={postImage}
-                    ></Posts>
-                  );
-                })}
-            </main>
-          </div>
-        ) : (
-          <div></div>
-        )}
+          }
+        >
+          {posts.length != 0 && post ? (
+            <div className="box-shadow m-10 mt-1">
+              <div className="flex flex-space-between">
+                <h1 className="p-3">Posts</h1>
+              </div>
+              <main id="main-section">
+                {posts &&
+                  posts.map((p) => {
+                    const postImage = cld.image(p.attachment);
+                    const profileimage = cld.image(p.user.profile_picture);
+                    var hours = Math.floor(
+                      Math.abs(
+                        new Date().valueOf() - new Date(p.updated_at).valueOf()
+                      ) / 36e5
+                    );
+                    return (
+                      <Posts
+                        key={p.id}
+                        p={p}
+                        hours={hours}
+                        fetch_posts={searchPost}
+                        profileimage={profileimage}
+                        postImage={postImage}
+                      ></Posts>
+                    );
+                  })}
+              </main>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </InfiniteScroll>
       </div>
     );
   } else {

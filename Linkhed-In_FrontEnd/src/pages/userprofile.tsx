@@ -5,7 +5,7 @@ import { fill } from "@cloudinary/url-gen/actions/resize";
 import { useEffect, useState } from "react";
 import getEducation from "../utils/getEducation";
 import getExperience from "../utils/getExperience";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import Cookies from "universal-cookie";
 import getUser from "../utils/getUser";
@@ -16,6 +16,7 @@ import { addChatHistory } from "../utils/chatController";
 const userprofile = () => {
   const params = useParams();
   const auth = useAuth();
+  const navigate = useNavigate();
   const id = parseInt(params.id!);
   const [user, setUser]: any = useState(null);
   const cookies = new Cookies();
@@ -212,7 +213,14 @@ const userprofile = () => {
               <button
                 className="message-btn"
                 onClick={() => {
-                  addChatHistory(auth.user.id, id);
+                  if (
+                    !auth.user.ChatHistories.find(
+                      (ch: any) => ch.UserID == auth.user.id
+                    )
+                  ) {
+                    addChatHistory(auth.user.id, id);
+                  }
+                  navigate("/message");
                 }}
               >
                 Message

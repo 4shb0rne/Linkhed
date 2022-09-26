@@ -134,10 +134,10 @@ func (p *Post) DeleteAPost(db *gorm.DB, pid uint64, uid uint32) (int64, error) {
 	return db.RowsAffected, nil
 }
 
-func (p *Post) SearchPost(db *gorm.DB, query SearchQuery) (*[]Post, error) {
+func (p *Post) SearchPost(db *gorm.DB, query SearchQuery, count uint64) (*[]Post, error) {
 	var err error
 	posts := []Post{}
-	err = db.Debug().Model(&Post{}).Where("content ILIKE ?", "%"+query.Content+"%").Preload("Users").Find(&posts).Error
+	err = db.Debug().Model(&Post{}).Where("content ILIKE ?", "%"+query.Content+"%").Limit(count).Preload("Users").Find(&posts).Error
 	if len(posts) > 0 {
 		for i := range posts {
 			err := db.Debug().Model(&User{}).Where("id = ?", posts[i].UserID).Take(&posts[i].User).Error
